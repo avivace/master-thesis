@@ -1,10 +1,11 @@
-\documentclass[12pt,a4paper]{report}
+\documentclass[oneside]{memoir}
 
 \usepackage{setspace}
 \usepackage{wrapfig}
 \usepackage{graphicx}
+\usepackage{lipsum}
 \usepackage{fontspec}
-    \setmainfont{Tiempos Headline Light}
+    \setmainfont{Adobe Caslon Pro}
     \newfontfamily\bold{Tiempos Headline Medium}
 
 \usepackage[font=footnotesize, labelfont=bf]{caption}
@@ -13,6 +14,9 @@
 
 %\graphicspath{ {images/} }
 %\definecolor{gray75}{gray}{0.75}
+
+\renewcommand{\abstractnamefont}{\normalfont\Large\bfseries}
+\renewcommand{\abstracttextfont}{\normalfont\normalsize}
 
 \newcommand{\code}{\texttt}
 
@@ -24,6 +28,7 @@
 
 \tableofcontents
 \thispagestyle{empty}
+
 
 \chapter{Introduction}
 
