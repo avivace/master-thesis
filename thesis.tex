@@ -1,0 +1,33 @@
+\documentclass[12pt,a4paper]{report}
+
+\usepackage{setspace}
+\usepackage{wrapfig}
+\usepackage{graphicx}
+\usepackage{fontspec}
+    \setmainfont{Tiempos Headline Light}
+    \newfontfamily\bold{Tiempos Headline Medium}
+
+\usepackage[font=footnotesize, labelfont=bf]{caption}
+\captionsetup[table]{position=below}
+\captionsetup[figure]{position=below}
+
+%\graphicspath{ {images/} }
+%\definecolor{gray75}{gray}{0.75}
+
+\newcommand{\code}{\texttt}
+
+\begin{document}
+
+\input{0_front}
+\input{1_abstract}
+\input{2_ack}
+
+\tableofcontents
+\thispagestyle{empty}
+
+\chapter{Introduction}
+
+\bibliographystyle{unsrt}
+\bibliography{bibliography.bib}
+
+\end{document}
