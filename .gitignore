@@ -1,4 +1,5 @@
-*.pdf
+# Ignore the produced thesis build, but not any other PDF file (some scalable figures are imported as PDF)
+thesis.pdf
 
 # Created by https://www.gitignore.io/api/latex
 # Edit at https://www.gitignore.io/?templates=latex
