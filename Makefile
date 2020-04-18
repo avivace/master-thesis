@@ -1,7 +1,9 @@
-betterbib:
+betterbib=bibliography_better.bib
+
+$(betterbib): bibliography.bib
 	betterbib bibliography.bib bibliography_better.bib
 
-pdf: betterbib
+pdf: $(betterbib)
 	latexmk --xelatex thesis
 
 publish: pdf
