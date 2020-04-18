@@ -1,4 +1,5 @@
-\documentclass[oneside,9pt]{memoir}
+\documentclass[oneside, 9pt]{memoir}
+
 
 \usepackage{setspace}
 \usepackage{wrapfig}
@@ -21,9 +22,16 @@
 
 \newcommand{\code}{\texttt}
 
+
 \begin{document}
 
 \input{0_front}
+
+%\setlrmarginsandblock{3.5cm}{3cm}{*}
+%\setulmarginsandblock{2.5cm}{*}{1}
+%\checkandfixthelayout 
+
+
 \input{1_abstract}
 \input{2_ack}
 
@@ -31,13 +39,6 @@
 \thispagestyle{empty}
 
 \input{3_intro}
-
-\begin{figure}
-\centerline{
-	\includegraphics[width=0.75\paperwidth]{cms_160312_06b}}
-	\caption{Cutaway diagram of the CMS detector \cite{Sakuma_2014}}
-
-\end{figure}
 
 \bibliographystyle{unsrt}
 \bibliography{bibliography_better.bib}
