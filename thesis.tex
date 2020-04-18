@@ -1,46 +1,54 @@
-\documentclass[oneside, 10pt]{memoir}
+\documentclass[a4, oneside, 10pt]{memoir}
 
-
+% Misc imports
 \usepackage{setspace}
 \usepackage{wrapfig}
 \usepackage{graphicx}
 \usepackage{lipsum}
+
+% Typeface
 \usepackage{fontspec}
 	% Numbers={OldStyle,Proportional},Ligatures=TeX
 	\setmainfont[]{Adobe Caslon Pro}
 	%\newfontfamily\bold{Tiempos Headline Medium}
 
+% Captions
 \usepackage[font=footnotesize, labelfont=bf]{caption}
 \captionsetup[table]{position=below}
 \captionsetup[figure]{position=below}
 
+% Figures
 \graphicspath{ {figures/} }
 %\definecolor{gray75}{gray}{0.75}
 
-\renewcommand{\abstractnamefont}{\normalfont\Large\bfseries}
+% Abstract (and Acknowledgements)
+\renewcommand{\abstractnamefont}{\normalfont\huge\bfseries}
 \renewcommand{\abstracttextfont}{\normalfont\normalsize}
 
+% Utilities
 \newcommand{\code}{\texttt}
 
+%\settypeblocksize{20cm}{16.5cm}{*}%
 
 \begin{document}
 
+%\setlrmarginsandblock{2.5cm}{2.5cm}{*}
+%\setulmarginsandblock{2.5cm}{*}{1}
+%\checkandfixthelayout 
+
+% Front, Abstract and Acknowledgements
 \input{0_front}
-
-
-
 \input{1_abstract}
 \input{2_ack}
 
-\setlrmarginsandblock{3.5cm}{2.5cm}{*}
-\setulmarginsandblock{2.5cm}{*}{1}
-\checkandfixthelayout 
-
+% Table of Contents
 \tableofcontents
 \thispagestyle{empty}
 
+% Import parts
 \input{3_intro}
 
+% Bibliography
 \bibliographystyle{unsrt}
 \bibliography{bibliography_better.bib}
 

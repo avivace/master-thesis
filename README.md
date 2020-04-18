@@ -1,6 +1,6 @@
 # Master Thesis
 
-*Experimental Anomaly Detection on CERN CMS Trigger Rates*
+*Experimental Anomaly Detection on CERN CMS Trigger Rates*, a master thesis typeset in LaTeX using the memoir class.
 
 Prerequisites: XeLaTeX, latexmk, betterbib
 
