@@ -1,8 +1,20 @@
 
 \begin{vplace}[0.7]
+\renewcommand*\abstractname{Abstract}
+
 \begin{abstract}
 
-\lipsum[1]
+High Energy Physics experiments involve large amount of complex systems subject to anomalies and malfunctioning. They generate a lot of high dimensional data that must be monitored and analysed by a Data Quality Monitoring team to validate and deliver certified data for physics analysis.
+
+At the European Organization for Nuclear Research (CERN), in Large Hadron Collider (LHC), the Compact Moun Solenoid (CMS) experiment generates events at a rate of 40 MHz, each one carrying payloads averaging 1 MB. It is the job of the Trigger System to discard the large majority of this data and retain the most interesting ones.
+
+This is a crucial phase and sensible to malfunctions of many of the underlying parts, from sub detectors to the trigger algorithms configurations.
+
+Shifters in the CMS Control Room use a Rate Monitoring software to monitor Trigger Rates and spot potential problems.
+
+We proceed to improve and renovate this sofware, exploiting the new features to integrate this data with the Run Registry offline logs, obtaining a dataset of genuine and labeled anomalous runs.
+
+On this dataset, we build an experimental Anomaly Detection framework aiming to provide an ML based tool to support the spotting of anomalies from Trigger Rates.
 
 \end{abstract}
 
