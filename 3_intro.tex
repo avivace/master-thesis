@@ -26,4 +26,21 @@
 
 \section{CMS Trigger System}
 
-The first level (L1) of this system restricts the output rate to 100 kHz, the upper limit imposed by the CMS readout electronics. The second level (HLT), implemented in software, further refines this stream, selecting an average rate of 400 Hz for offline event storage and certification \cite{Khachatryan_2017}.
+HEP experiments need to collect a large quantity of data to attack the statistical nature of particle physics and find interesting phenomena.
+
+The LHC generates 40 milions events per second. Each CMS event, on average, carries a payload of 1 MB of unprocessed raw informations. It is technologically impossible to retain this amount of data, due to hardware, software, network and storage constraints.
+
+Furthermore, most events represent uninteresting information for the current state of physics knowledge.
+
+The \textit{CMS Trigger System} is designed to reduce the output stream to 1000 events per second, while preserving the physics reach of the experiment.
+It is composed by a hierchical set of rules, called Trigger Nodes (or Paths): each one probes a specific patterns (physics signature) in the event or looks for specific physics objects.
+
+This happens in two steps:
+
+\begin{enumerate}
+
+	\item The first level (L1) \cite{Bayatyan:706847} brings the 40 MHz to a 100 kHz rate. Here, N Trigger Algorithms are implemented on custom electronics (FPGAs and ASICs) exploiting informations from sub-detector components.
+
+	\item A configurable set of L1 Trigger Nodes seeds Triggers in the second level (HLT), implemented in software. The event stream is further refined, selecting an average rate of 400 Hz for offline event storage and certification \cite{Khachatryan_2017}. HLT runs 600 of these independent Trigger Paths.
+
+\end{enumerate}
