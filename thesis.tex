@@ -1,10 +1,16 @@
 \documentclass[a4, oneside, 10pt]{memoir}
 
-% Misc imports
+%% Misc imports
+% Clickable ref
+\usepackage{hyperref}
 \usepackage{setspace}
 \usepackage{wrapfig}
 \usepackage{graphicx}
 \usepackage{lipsum}
+
+% MICRO SIGN != MU
+\usepackage{siunitx}
+
 
 % Typeface
 \usepackage{fontspec}
@@ -44,9 +50,13 @@
 % Table of Contents
 \tableofcontents
 \thispagestyle{empty}
+\addtocounter{page}{-1}
 
 % Import parts
 \input{3_intro}
+
+\pagebreak
+\listoffigures
 
 % Bibliography
 \bibliographystyle{unsrt}

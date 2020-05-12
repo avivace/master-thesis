@@ -29,17 +29,21 @@ Statistical and random uncertainties follow known distributions (like a Poisson 
 
 
 \section{Common Probability Distributions in Physics}
-TODO
+
+Many problems in physics are described or can be approximated by a small group of probability distributions \cite{leo2012techniques}.
+
 \subsection{Binomial}
 TODO
 \subsection{Poisson}
 
 
 
+\begin{equation}
+	\label{eqn:poisson}
+	P\left( x \right) = \frac{{e^{ - \lambda } \lambda ^x }}{{x!}}
+\end{equation}
 
-$$P\left( x \right) = \frac{{e^{ - \lambda } \lambda ^x }}{{x!}}$$
-
-\cite{leo2012techniques} Consider the radioactive decay phenomena as an example: a radioactive source such as $^{137}$Cs has a half-life of 27 years. The probability for a single nucleus to decay is $8.2 \times 10^{-10}s^{-1}$.
+Consider the radioactive decay phenomena as an example: a radioactive source such as $^{137}$Cs has a half-life of 27 years. The probability for a single nucleus to decay is $8.2 \times 10^{-10}s^{-1}$. However, even a \SI{1}{\micro\gram} contains $10^{15}$ nuclei. Since each nucleus acts as a "trial", the mean number of decay events will be $\mu = N p$, satisfying the limiting conditions. The probability of observing an event is given by \ref{eqn:poisson}.
 
 \subsection{Gaussian}
 
