@@ -13,30 +13,34 @@
 %	\caption{CERN Accelerators complex \cite{Mobs:2684277}}
 %\end{figure}
 
-
-
-
-
-
-
-High Energy Physics experiments need to collect a large quantity of data to attack the statistical nature of particle physics and find interesting phenomena with enough accuracy.
-
-Many events searched by LHC require very rare and short-lived conditions:
-
-ADD FIGURE
-
-Statistical and random uncertainties follow known distributions (like a Poisson rate) or are empirically determined. Repeating measurements provides larger samples to estimate these uncertanties.
-
-
 \section{Common Probability Distributions in Physics}
+\label{distributions1}
 
-Many problems in physics are described or can be approximated by a small group of probability distributions \cite{leo2012techniques}. In this section, we will briefly describe them.
+Many problems in physics are described or can be approximated by a small group of probability distributions. In this section, we will briefly describe them \cite{leo2012techniques}.
 
 \subsection{Binomial}
+
+When a problem involve repeated, independent trials with two possible outcomes, the probability is given by the binomial distribution:
 
 \begin{equation}
 	P(r)= \frac{N! }{ r! \left( N-r \right)! } p^r (1-p)^{N-r}
 \end{equation}
+
+where $p$ is the probability of success in a single trial.
+
+Mean:
+
+\begin{equation}
+	\mu = \sum_{r}rP(r) = Np
+\end{equation}
+
+Variance:
+
+\begin{equation}
+	\sigma^2=\sum_r(r-\mu)^2P(r) = Np(1-p)
+\end{equation}
+
+For practical calculations, using a Gaussian is a good approximation of a Binomial when $N$ is greater than 30 and $p\geq0.05$. If $p$ is small such that the product $Np$ is finite, we can use a Poisson distribution.
 
 \subsection{Poisson}
 
@@ -45,14 +49,55 @@ When the probability is very small ($p \rightarrow 0$) and the numer of trials a
 
 \begin{equation}
 	\label{eqn:poisson}
-	P\left( x \right) = \frac{{e^{ - \lambda } \lambda ^x }}{{x!}}
+	P\left( r \right) = \frac{{\mu^{ r } e ^{-\mu} }}{{r!}}
 \end{equation}
 
-As an example, consider the \textit{radioactive decay} phenomena: a radioactive source such as $^{137}$Cs has a half-life of 27 years. The probability for a single nucleus to decay is $8.2 \times 10^{-10}s^{-1}$. However, even a \SI{1}{\micro\gram} contains $10^{15}$ nuclei. Since each nucleus acts as a \textit{trial}, the mean number of decay events will be $\mu = N p$, satisfying the limiting conditions. The probability of observing an event is given by \ref{eqn:poisson}.
+If the mean is expressed as the mean per unit dimension ($\mu = \lambda t$) we can rewrite \ref{eqn:poisson} as:
+
+\begin{equation}
+	P\left( x \right) = \frac{(\lambda t) ^r {e^{ - \lambda t}} }{{r!}}
+\end{equation}
+
+
+As an example, consider the \textit{radioactive decay} phenomena: a radioactive source such as $^{137}$Cs has a half-life of 27 years. The probability for a single nucleus to decay is $8.2 \times 10^{-10}s^{-1}$. However, even a \SI{1}{\micro\gram} contains $10^{15}$ nuclei. Since each nucleus acts as a \textit{trial}, the mean number of decay events will be $\mu = N p = 8.2 \times 10^5$, satisfying the limiting conditions. The probability of observing an event is given by \ref{eqn:poisson}.
+
+The Poisson distribution exhibits two interesting features:
+
+\begin{enumerate}
+	\item Only mean appears, so the knowledge of $N$ and $p$ is not always required. E.g. this happens in experiments involving particle reactions where the mean counting rate is known, rather than the number of particles in the beam.
+
+	\item This distribution only depends on one parameter: $\mu$. We can arbitrarily increase this value by repeating the experiment for higher values of N.
+\end{enumerate}
 
 \subsection{Gaussian}
 
+The \textit{Gaussian} (or \textit{Normal}) is a continuos, symmetric distribution. Density is defined as
+
+\begin{equation}
+	P(x) = \frac{1}{{\sigma \sqrt {2\pi } }}e^{{{ - \left( {x - \mu } \right)^2 } \mathord{\left/ {\vphantom {{ - \left( {x - \mu } \right)^2 } {2\sigma ^2 }}} \right. \kern-\nulldelimiterspace} {2\sigma ^2 }}}
+\end{equation}
+
+Where $\mu$ is the mean and $\sigma ^2$ corresponds to the variance. The case where $\mu = 0$ and $\sigma = 1$ is called the \textit{standard} normal distribution.
+
+\begin{equation}
+	y = \frac{e^{ - \frac{{x^2 }}{2}}}{{\sqrt {2\pi } }}
+\end{equation}
+
+Any Gaussian distribution can be transformed to this reduced form trivially:
+
+\begin{equation}
+	z = \frac{x-\mu}{\sigma}.
+\end{equation}
+
 \section{CERN and the LHC}
+
+High Energy Physics experiments need to collect a large quantity of data to attack the statistical nature of particle physics and find interesting phenomena with enough accuracy.
+
+Many events searched by LHC require very rare and short-lived conditions:
+
+ADD FIGURE
+
+While Systematic Errors are harder to handle, uncertainties caused by Random Errors follow known distributions (like a Poisson rate) or are empirically determined. As we've seen \ref{distributions1}, repeating measurements provides larger samples to estimate these uncertanties and get more accurate data.
 
 \textit{luminosity} value of $10^{34}$ $cm^{-2}$ $s^{-1}$. This value is a measurement of the number of collisions that can be produced in a detector per $cm^2$ and per second.
 
