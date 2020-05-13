@@ -19,7 +19,7 @@
 
 
 
-High Energy Phisics experiments need to collect a large quantity of data to attack the statistical nature of particle physics and find interesting phenomena with enough accuracy.
+High Energy Physics experiments need to collect a large quantity of data to attack the statistical nature of particle physics and find interesting phenomena with enough accuracy.
 
 Many events searched by LHC require very rare and short-lived conditions:
 
@@ -30,12 +30,17 @@ Statistical and random uncertainties follow known distributions (like a Poisson 
 
 \section{Common Probability Distributions in Physics}
 
-Many problems in physics are described or can be approximated by a small group of probability distributions \cite{leo2012techniques}.
+Many problems in physics are described or can be approximated by a small group of probability distributions \cite{leo2012techniques}. In this section, we will briefly describe them.
 
 \subsection{Binomial}
-TODO
+
+\begin{equation}
+	P(r)= \frac{N! }{ r! \left( N-r \right)! } p^r (1-p)^{N-r}
+\end{equation}
+
 \subsection{Poisson}
 
+When the probability is very small ($p \rightarrow 0$) and the numer of trials approaches infinite ($N \rightarrow \infty$) such that the mean $\mu = N p$ remains finite, the \textit{Poisson} distribution occurs:
 
 
 \begin{equation}
@@ -43,7 +48,7 @@ TODO
 	P\left( x \right) = \frac{{e^{ - \lambda } \lambda ^x }}{{x!}}
 \end{equation}
 
-Consider the radioactive decay phenomena as an example: a radioactive source such as $^{137}$Cs has a half-life of 27 years. The probability for a single nucleus to decay is $8.2 \times 10^{-10}s^{-1}$. However, even a \SI{1}{\micro\gram} contains $10^{15}$ nuclei. Since each nucleus acts as a "trial", the mean number of decay events will be $\mu = N p$, satisfying the limiting conditions. The probability of observing an event is given by \ref{eqn:poisson}.
+As an example, consider the \textit{radioactive decay} phenomena: a radioactive source such as $^{137}$Cs has a half-life of 27 years. The probability for a single nucleus to decay is $8.2 \times 10^{-10}s^{-1}$. However, even a \SI{1}{\micro\gram} contains $10^{15}$ nuclei. Since each nucleus acts as a \textit{trial}, the mean number of decay events will be $\mu = N p$, satisfying the limiting conditions. The probability of observing an event is given by \ref{eqn:poisson}.
 
 \subsection{Gaussian}
 
