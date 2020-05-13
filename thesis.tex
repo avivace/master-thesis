@@ -12,7 +12,7 @@
 \usepackage{siunitx}
 
 
-% Typeface
+% Typography
 \usepackage{fontspec}
 	% Numbers={OldStyle,Proportional},Ligatures=TeX
 	\setmainfont[]{Adobe Caslon Pro}
@@ -27,7 +27,11 @@
 \graphicspath{ {figures/} }
 %\definecolor{gray75}{gray}{0.75}
 
-% Abstract (and Acknowledgements)
+% Enumerate and show in TOC till the subsection depth
+\setsecnumdepth{subsection}
+\settocdepth{subsection}
+
+% Style Abstract (and Acknowledgements)
 \renewcommand{\abstractnamefont}{\normalfont\huge\bfseries}
 \renewcommand{\abstracttextfont}{\normalfont\normalsize}
 
@@ -42,16 +46,18 @@
 %\setulmarginsandblock{2.5cm}{*}{1}
 %\checkandfixthelayout 
 
+% Frontmatter part is numbered with Romans
 \frontmatter
 % Front, Abstract and Acknowledgements
 \input{0_front}
 \input{1_abstract}
 \input{2_ack}
 
-% Table of Contents
-\tableofcontents
+% Table of Contents (hidden from the table of contents)
+\tableofcontents*
 \thispagestyle{empty}
 
+% Mainmatter switches to Arabic numbering
 \mainmatter
 % Import parts
 \input{3_intro}
