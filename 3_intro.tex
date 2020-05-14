@@ -13,6 +13,22 @@
 	\caption{CERN Accelerators complex \cite{Mobs:2684277}}
 \end{figure}
 
+\section{Particle Physics}
+
+Particle physics researches the nature of the fundamental parts of matter and how they interact. According to the Standard Model \cite{Quang:1998yw}, the matter is made of \textit{fermions}, classified into leptons (electrons, muons, taus and neutrinos) and quarks (up, down, charm, strange, top, bottom). Each particle have an associated antiparticle of the same mass but opposite quantum numbers.
+
+They interact through forces:
+
+\begin{enumerate}
+	\item Strong interaction, mediated by gluons
+	\item Weak interaction, mediated by Z and W bosons
+	\item Electromagnetic interaction, mediated by photons
+\end{enumerate}
+
+Gravitational force is not taken into account. Quarks interact with all three forces, leptons are not sensitive to the strong force and neutrinos are subject only to the weak force.
+
+TODO
+
 \section{Statistics in Physics}
 
 Many problems in physics are described or can be approximated by a small group of probability distributions. We will briefly describe them \cite{leo2012techniques}, focusing on important features exploited by Physics and Particle Physics.
@@ -87,6 +103,7 @@ The Poisson distribution exhibits two interesting features:
 \end{enumerate}
 
 \subsection{Gaussian}
+\label{eqn:gaussian}
 
 The \textit{Gaussian} (or \textit{Normal}) is a continuos, symmetric distribution. Density is defined as
 
@@ -169,6 +186,24 @@ One inverse femtobarn is equal to approximately 100 trillion proton-proton colli
 		\includegraphics[width=0.5\paperwidth]{integrated_lumi_atlas}}
 	\caption{Integrated luminosity at ATLAS experiment \cite{Bruce:2016iew}}
 \end{figure}
+
+\subsection{Standard Deviation and Significance}
+
+Searches in Particle Physics are done looking for an excess above background: a discovery of a particle involves knowning the amount of background events to except and being confident that the excess is not the result of a statistical fluctuation of this background.
+
+The scientific process requires quantification of the probability that excesses is genuine: this is why the "number of $\theta$" is crucial in validating discoveries: it represents the width of the Gaussian distribution, as we explained in \ref{eqn:gaussian}. The greater number of $\theta$, the minor will be the probability that the observed excess can be explained by a background fluctuation.
+At $3\sigma$ we talk about an evidence, while at $5\sigma$ we are in front of a discovery.
+
+
+\begin{figure}
+	\centerline{
+		\includegraphics[width=0.5\paperwidth]{2012Higgsplot}}
+	\caption{The invariant mass from pairs of photons selected in the Higgs to $\gamma\gamma$ analysis, as shown at the seminar at CERN on 4 July 2012. The excess of events over the background prediction around 125 GeV is consistent with predictions for the Standard Model Higgs boson.\cite{Collaboration:2627611}}
+\end{figure}
+
+Usually, the background follows a pattern, for which it's possible to fit a function (in this case a fourth order polynomial).
+
+TODO
 
 
 \section{CMS}
