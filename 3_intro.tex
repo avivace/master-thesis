@@ -13,10 +13,21 @@
 	\caption{CERN Accelerators complex \cite{Mobs:2684277}}
 \end{figure}
 
-\section{Common Probability Distributions in Physics}
-\label{distributions1}
+\section{Statistics in Physics}
 
-Many problems in physics are described or can be approximated by a small group of probability distributions. In this section, we will briefly describe them \cite{leo2012techniques}.
+Many problems in physics are described or can be approximated by a small group of probability distributions. We will briefly describe them \cite{leo2012techniques}, focusing on important features exploited by Physics and Particle Physics.
+
+\subsection{Systematic and Random Errors}
+
+Any kind of measurement is subject to two main types of uncertainties:
+
+\begin{enumerate}
+	\item \textit{Systematic Errors} are consistent uncertainties in the bias of the data, usually associated with the measurement equipment.
+	\item \textit{Random Errors} may arise from instrumental imprecision and from the inherent statistical nature of the observed event. Many processes in Physics are governed by the probabilistic laws of quantum mechanics, so that the number of events in a given time period is a random variable. Errors caused by the measurement of random processed are called \textit{statistical errors}. Differing values caused by many small factors not controlled by the experimenter are called \textit{instrumental errors}.
+\end{enumerate}
+
+While Systematic Errors are generally harder to handle, uncertainties caused by Random Errors follow known distributions (like a Poisson rate) or are empirically determined. As we'll see in \ref{distributions1}, repeating measurements provides larger samples to estimate these uncertanties and get more accurate data.
+
 
 \subsection{Binomial}
 
