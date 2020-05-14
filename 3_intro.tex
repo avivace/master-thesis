@@ -54,6 +54,7 @@ Variance:
 For many practical calculations \cite{leo2012techniques}, using a Gaussian is a good approximation of a Binomial when $N$ is greater than 30 and $p\geq0.05$ (taking into consideration that we are replacing a discrete distribution by a continuos one). If $p$ is small such that the product $Np$ is finite, we can use a Poisson distribution.
 
 \subsection{Poisson}
+\label{distributions1}
 
 When the probability is very small ($p \rightarrow 0$) and the numer of trials approaches infinite ($N \rightarrow \infty$) such that the mean $\mu = N p$ remains finite, the \textit{Poisson} distribution occurs:
 
@@ -115,9 +116,13 @@ Any Gaussian distribution can be transformed to this reduced form trivially:
 
 High Energy Physics experiments need to collect a large quantity of data to attack the statistical nature of particle physics and find interesting and rare phenomena with enough accuracy.
 
-While Systematic Errors are harder to handle, uncertainties caused by Random Errors follow known distributions (like a Poisson rate) or are empirically determined. As we've seen \ref{distributions1}, repeating measurements provides larger samples to estimate these uncertanties and get more accurate data.
-
 \subsection{Cross Section}
+
+\begin{figure}
+	\centerline{
+		\includegraphics[width=0.5\paperwidth]{cross_sections}}
+	\caption{Standard  model  cross  sections  at  the  Tevatron  and  LHC  colliders\cite{Bechtel:2009zza}}
+\end{figure}
 
 Cross section ($\sigma$) is one of the most important quantity in particle physics: it measures the probability than a specific process occurs in a collision of two particles. It is expressed in terms of the transverse area that the particle must hit to for that process to occur and it's measured in \textit{Barn}: $1b = 10^{-24} cm^2$.
 
@@ -125,13 +130,46 @@ E.g. the \textit{Rutherford cross-section} represents the probability of an alph
 
 \subsection{Luminosity}
 
-This value is a measurement of the number of collisions that can be produced in a detector (point of collision) per $cm^2$ and per second. It can be calculated in this way:
+This value is a measurement of the number of collisions that can potentially be produced in a point of collision per $cm^2$ and per second. It can be calculated in this way:
 
 \begin{equation}
-L\sim \frac{N^2}{t S_{\text{eff}}}
+	L\sim \frac{N^2}{t S_{\text{eff}}}
 \end{equation}
 
-Where $t$ is time between bunches, $S_{\text{eff}} = 4 \pi \sigma^2$ is the section offective of collision. In LHC, $\sigma = 16\times 10^{-4} cm$.
+Where $N$ is the number of protons in each bunch, $t$ is time between bunches, $S_{\text{eff}} = 4 \pi \sigma_c^2$ is the section effective of collision.
+
+In the LHC, $\sigma _c= 16\times 10^{-4} cm$, $N = 1.15\times10^{11}$, $t = 25 \times 10^{-9} s$, leading to a design luminosity of $10^{34} cm^{-2}s^{-1}$.
+
+\subsection{Delivered Luminosity}
+
+The actual luminosity value reached in the points of collision and recorded by the detectors can differ from the design one for different reasons, such as "Luminosity leveling" to avoid pile-up limit.
+
+\begin{figure}
+	\centerline{
+		\includegraphics[width=0.5\paperwidth]{inst-lumi}}
+	\caption{Example for the luminosity evolution of the ATLAS, CMS and LHCb experiments in a typical fillof the 2018 run. The luminosity of LHCb is levelled by beam separation. The upward steps of the ATLAS and CMS luminosities in the second half of the fill are due to $\beta\text{*}$ levelling
+		\cite{Wenninger:2018cgs}}
+\end{figure}
+
+
+\subsection{Integrated Luminosity}
+
+The integral of the delivered luminosity over time is called integrated luminosity. It is a measurement of the collected data size, and it is an important value to characterize the performance of an accelerator.
+
+\begin{equation}
+	L = \int Ldt
+\end{equation}
+
+It's expressed in inverse of cross section, usually in $\text{femtobarns}^{-1}$ ("Femto" means a factor of $10^{-15}$ so $\text{1 femtobarn} = 1 \text{fb} = 10^{-15} \text{b} = 10^{-39} cm^2 $).
+
+One inverse femtobarn is equal to approximately 100 trillion proton-proton collisions.
+
+\begin{figure}
+	\centerline{
+		\includegraphics[width=0.5\paperwidth]{integrated_lumi_atlas}}
+	\caption{Integrated luminosity at ATLAS experiment \cite{Bruce:2016iew}}
+\end{figure}
+
 
 \section{CMS}
 
