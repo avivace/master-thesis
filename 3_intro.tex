@@ -1,17 +1,17 @@
 \chapter{Introduction}
 
-%\begin{figure}
-%\centerline{
-%	\includegraphics[width=0.75\paperwidth]{cms_160312_06b}}
-%	\caption{Cutaway diagram of the CMS detector \cite{Sakuma_2014}}
+\begin{figure}
+	\centerline{
+		\includegraphics[width=0.8\paperwidth]{cms}}
+	\caption{Cutaway diagram of the CMS detector \cite{Sakuma_2014}}
 
-%\end{figure}
+\end{figure}
 
-%\begin{figure}
-%\centerline{
-%	\includegraphics[width=0.75\paperwidth]{CCC-v2019-final-white}}
-%	\caption{CERN Accelerators complex \cite{Mobs:2684277}}
-%\end{figure}
+\begin{figure}
+	\centerline{
+		\includegraphics[width=0.75\paperwidth]{CCC-2019}}
+	\caption{CERN Accelerators complex \cite{Mobs:2684277}}
+\end{figure}
 
 \section{Common Probability Distributions in Physics}
 \label{distributions1}
@@ -40,7 +40,7 @@ Variance:
 	\sigma^2=\sum_r(r-\mu)^2P(r) = Np(1-p)
 \end{equation}
 
-For practical calculations, using a Gaussian is a good approximation of a Binomial when $N$ is greater than 30 and $p\geq0.05$. If $p$ is small such that the product $Np$ is finite, we can use a Poisson distribution.
+For many practical calculations \cite{leo2012techniques}, using a Gaussian is a good approximation of a Binomial when $N$ is greater than 30 and $p\geq0.05$ (taking into consideration that we are replacing a discrete distribution by a continuos one). If $p$ is small such that the product $Np$ is finite, we can use a Poisson distribution.
 
 \subsection{Poisson}
 
@@ -58,6 +58,11 @@ If the mean is expressed as the mean per unit dimension ($\mu = \lambda t$) we c
 	P\left( x \right) = \frac{(\lambda t) ^r {e^{ - \lambda t}} }{{r!}}
 \end{equation}
 
+\begin{figure}
+	\centerline{
+		\includegraphics[width=0.5\paperwidth]{poisson}}
+	\caption{Poisson distribution with various values of $\mu$ \cite{leo2012techniques}}
+\end{figure}
 
 As an example, consider the \textit{radioactive decay} phenomena: a radioactive source such as $^{137}$Cs has a half-life of 27 years. The probability for a single nucleus to decay is $8.2 \times 10^{-10}s^{-1}$. However, even a \SI{1}{\micro\gram} contains $10^{15}$ nuclei. Since each nucleus acts as a \textit{trial}, the mean number of decay events will be $\mu = N p = 8.2 \times 10^5$, satisfying the limiting conditions. The probability of observing an event is given by \ref{eqn:poisson}.
 
@@ -66,7 +71,7 @@ The Poisson distribution exhibits two interesting features:
 \begin{enumerate}
 	\item Only mean appears, so the knowledge of $N$ and $p$ is not always required. E.g. this happens in experiments involving particle reactions where the mean counting rate is known, rather than the number of particles in the beam.
 
-	\item This distribution only depends on one parameter: $\mu$. We can arbitrarily increase this value by repeating the experiment for higher values of N.
+	\item This distribution only depends on one parameter: $\mu$. We can arbitrarily increase this value by repeating the experiment for higher values of $N$.
 \end{enumerate}
 
 \subsection{Gaussian}
@@ -89,17 +94,33 @@ Any Gaussian distribution can be transformed to this reduced form trivially:
 	z = \frac{x-\mu}{\sigma}.
 \end{equation}
 
+\begin{figure}
+	\centerline{
+		\includegraphics[width=0.5\paperwidth]{gaussian}}
+	\caption{Gaussian distribution with various values of $\sigma$ \cite{leo2012techniques}}
+\end{figure}
+
 \section{CERN and the LHC}
 
-High Energy Physics experiments need to collect a large quantity of data to attack the statistical nature of particle physics and find interesting phenomena with enough accuracy.
-
-Many events searched by LHC require very rare and short-lived conditions:
-
-ADD FIGURE
+High Energy Physics experiments need to collect a large quantity of data to attack the statistical nature of particle physics and find interesting and rare phenomena with enough accuracy.
 
 While Systematic Errors are harder to handle, uncertainties caused by Random Errors follow known distributions (like a Poisson rate) or are empirically determined. As we've seen \ref{distributions1}, repeating measurements provides larger samples to estimate these uncertanties and get more accurate data.
 
-\textit{luminosity} value of $10^{34}$ $cm^{-2}$ $s^{-1}$. This value is a measurement of the number of collisions that can be produced in a detector per $cm^2$ and per second.
+\subsection{Cross Section}
+
+Cross section ($\sigma$) is one of the most important quantity in particle physics: it measures the probability than a specific process occurs in a collision of two particles. It is expressed in terms of the transverse area that the particle must hit to for that process to occur and it's measured in \textit{Barn}: $1b = 10^{-24} cm^2$.
+
+E.g. the \textit{Rutherford cross-section} represents the probability of an alpha-particle to be deflected by a given angle during a collision with an atomic nucleus.
+
+\subsection{Luminosity}
+
+This value is a measurement of the number of collisions that can be produced in a detector (point of collision) per $cm^2$ and per second. It can be calculated in this way:
+
+\begin{equation}
+L\sim \frac{N^2}{t S_{\text{eff}}}
+\end{equation}
+
+Where $t$ is time between bunches, $S_{\text{eff}} = 4 \pi \sigma^2$ is the section offective of collision. In LHC, $\sigma = 16\times 10^{-4} cm$.
 
 \section{CMS}
 
