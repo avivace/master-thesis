@@ -1,5 +1,31 @@
 \chapter{Introduction}
 
+\section{CERN}
+
+CERN, the European Organization for Nuclear Research is a European research organization that operates the world’s largest and most powerful particle accelerator, the Large Hadron Collider.
+
+At CERN, 2500 staff members design, construction and operates the research infrastructure, in addition to more than 17500 users and scientists of 110 nationalities, from institutes in more than 70 countries.
+
+Colliding the beams in the LHC is the responsibility of CERN. Exploiting these collisions
+is the responsibility of large international scientific collaborations: the \textit{experiments}. Each experiment has a detector, a large experimental apparatus placed at a collision point of the LHC.
+
+The main collision points (shown in \ref{fig:cern_complex}) equipped with experiments are:
+
+\begin{enumerate}
+	\item ATLAS
+	\item LHCb
+	\item ALICE
+	\item CMS (figure \ref{fig:cms})
+\end{enumerate}
+
+\begin{figure}
+	\centerline{
+		\includegraphics[width=0.75\paperwidth]{CCC-2019}}
+	\caption{CERN Accelerators complex \cite{Mobs:2684277}}
+	\label{fig:cern_complex}
+\end{figure}
+
+
 \section{Statistics in Physics}
 
 Many problems in physics are described or can be approximated by a small group of probability distributions. We will briefly describe them \cite{leo2012techniques}, focusing on important features exploited by Physics and Particle Physics.
@@ -126,17 +152,12 @@ Current High Energy Physics research includes:
 \section{CERN and the LHC}
 
 %%
-%\begin{figure}
-%	\centerline{
-%		\includegraphics[width=0.8\paperwidth]{cms}}
-%	\caption{Cutaway diagram of the CMS detector \cite{Sakuma_2014}}
-
-%\end{figure}
-
 \begin{figure}
+
 	\centerline{
-		\includegraphics[width=0.75\paperwidth]{CCC-2019}}
-	\caption{CERN Accelerators complex \cite{Mobs:2684277}}
+		\includegraphics[width=0.8\paperwidth]{cms}}
+	\caption{Cutaway diagram of the CMS detector \cite{Sakuma_2014}}
+	\label{fig:cms}
 \end{figure}
 
 High Energy Physics experiments need to collect a large quantity of data to attack the statistical nature of particle physics and find interesting and rare phenomena with enough accuracy.
@@ -162,7 +183,7 @@ Figure \ref{fig:cross_sections} shows $\sigma$ values for different particles. N
 This value is a measurement of the number of collisions that can potentially be produced in a point of collision per $cm^2$ and per second. It can be calculated in this way:
 
 \begin{equation}
-	L\sim \frac{N^2}{t S_{\text{eff}}}
+	L \simeq  \frac{N^2}{t S_{\text{eff}}}
 \end{equation}
 
 Where $N$ is the number of protons in each bunch, $t$ is time between bunches, $S_{\text{eff}} = 4 \pi \sigma_c^2$ is the section effective of collision.
