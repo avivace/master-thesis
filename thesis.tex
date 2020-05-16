@@ -48,10 +48,16 @@
 
 % Frontmatter part is numbered with Romans
 \frontmatter
+
 % Front, Abstract and Acknowledgements
 \input{0_front}
-\input{1_abstract}
-\input{2_ack}
+%\input{1_abstract}
+%\input{2_ack}
+
+% Import revision data
+\input{revision}
+% Print revision data
+Revision \texttt{\revision} (\texttt{\revisiondate})
 
 % Table of Contents (hidden from the table of contents)
 \tableofcontents*
