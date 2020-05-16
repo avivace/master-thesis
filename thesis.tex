@@ -42,6 +42,9 @@
 
 \begin{document}
 
+% Import revision data
+\input{revision}
+
 %\setlrmarginsandblock{2.5cm}{2.5cm}{*}
 %\setulmarginsandblock{2.5cm}{*}{1}
 %\checkandfixthelayout 
@@ -51,11 +54,9 @@
 
 % Front, Abstract and Acknowledgements
 \input{0_front}
-%\input{1_abstract}
-%\input{2_ack}
+\input{1_abstract}
+\input{2_ack}
 
-% Import revision data
-\input{revision}
 % Print revision data
 Revision \texttt{\revision} (\texttt{\revisiondate})
 
@@ -65,14 +66,16 @@ Revision \texttt{\revision} (\texttt{\revisiondate})
 
 % Mainmatter switches to Arabic numbering
 \mainmatter
+
 % Import parts
 \input{3_intro}
+\input{4_ad}
 
 \pagebreak
 \listoffigures
 
 % Bibliography
-\bibliographystyle{unsrt}
+\bibliographystyle{ieeetr}
 \bibliography{bibliography_better.bib}
 
 % License
