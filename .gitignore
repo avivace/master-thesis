@@ -1,6 +1,8 @@
 # Ignore the produced thesis build, but not any other PDF file (some scalable figures are imported as PDF)
 thesis.pdf
 
+# Sublime workspace
+msc-thesis.sublime-workspace
 
 # Used as cache by betterbib
 *.sqlite

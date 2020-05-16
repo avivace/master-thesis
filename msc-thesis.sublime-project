@@ -1,11 +1,24 @@
 {
-	"folders":
-	[
-		{
-			"path": "."
-		}
-	],
-	 "settings": {
-        "TEXroot": "thesis.tex"
-    }
+	"folders": [
+	{
+		"path": "."
+	}],
+	"settings":
+	{
+		"TEXroot": "thesis.tex"
+	},
+	"build_systems": [
+	{
+		"name": "Make pdf",
+		"shell_cmd": "make pdf"
+	},
+	{
+		"name": "Publish pdf",
+		"shell_cmd": "make publish"
+	},
+	{
+		"name": "Clean",
+		"shell_cmd": "make clean"
+	},
+]
 }
