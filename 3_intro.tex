@@ -1,18 +1,5 @@
 \chapter{Introduction}
 
-\begin{figure}
-	\centerline{
-		\includegraphics[width=0.8\paperwidth]{cms}}
-	\caption{Cutaway diagram of the CMS detector \cite{Sakuma_2014}}
-
-\end{figure}
-
-\begin{figure}
-	\centerline{
-		\includegraphics[width=0.75\paperwidth]{CCC-2019}}
-	\caption{CERN Accelerators complex \cite{Mobs:2684277}}
-\end{figure}
-
 \section{Statistics in Physics}
 
 Many problems in physics are described or can be approximated by a small group of probability distributions. We will briefly describe them \cite{leo2012techniques}, focusing on important features exploited by Physics and Particle Physics.
@@ -138,19 +125,37 @@ Current High Energy Physics research includes:
 
 \section{CERN and the LHC}
 
+%%
+%\begin{figure}
+%	\centerline{
+%		\includegraphics[width=0.8\paperwidth]{cms}}
+%	\caption{Cutaway diagram of the CMS detector \cite{Sakuma_2014}}
+
+%\end{figure}
+
+\begin{figure}
+	\centerline{
+		\includegraphics[width=0.75\paperwidth]{CCC-2019}}
+	\caption{CERN Accelerators complex \cite{Mobs:2684277}}
+\end{figure}
+
 High Energy Physics experiments need to collect a large quantity of data to attack the statistical nature of particle physics and find interesting and rare phenomena with enough accuracy.
 
 \subsection{Cross Section}
 
 \begin{figure}
+
 	\centerline{
 		\includegraphics[width=0.5\paperwidth]{cross_sections}}
 	\caption{Standard  model  cross  sections  at  the  Tevatron  and  LHC  colliders\cite{Bechtel:2009zza}}
+	\label{fig:cross_sections}
 \end{figure}
 
 Cross section ($\sigma$) is one of the most important quantity in particle physics: it measures the probability than a specific process occurs in a collision of two particles. It is expressed in terms of the transverse area that the particle must hit to for that process to occur and it's measured in \textit{Barn}: $1b = 10^{-24} cm^2$.
 
 E.g. the \textit{Rutherford cross-section} represents the probability of an alpha-particle to be deflected by a given angle during a collision with an atomic nucleus.
+
+Figure \ref{fig:cross_sections} shows $\sigma$ values for different particles. Notice how the value increments with the collision energy $\sqrt s$ (13 TeV during Run 2).
 
 \subsection{Luminosity}
 
@@ -162,17 +167,30 @@ This value is a measurement of the number of collisions that can potentially be 
 
 Where $N$ is the number of protons in each bunch, $t$ is time between bunches, $S_{\text{eff}} = 4 \pi \sigma_c^2$ is the section effective of collision.
 
-In the LHC, $\sigma _c= 16\times 10^{-4} cm$, $N = 1.15\times10^{11}$, $t = 25 \times 10^{-9} s$, leading to a design luminosity of $10^{34} cm^{-2}s^{-1}$.
+In the LHC, $\sigma _c= 16\times 10^{-4}\, cm$, $N = 1.15\times10^{11}$, $t = 25 \times 10^{-9}\, s$, leading to a design luminosity of $10^{34}\, cm^{-2}s^{-1}$.
 
 \subsection{Delivered Luminosity}
 
-The actual luminosity value reached in the points of collision and recorded by the detectors can differ from the design one for different reasons, such as "Luminosity leveling" to avoid pile-up limit.
+The actual luminosity value reached in the points of collision and recorded by the detectors is called Delivered Luminosity.
+
+A number of factors influence this value (TO CHECK):
+
+\begin{enumerate}
+	\item Adjustments of the LHC beam-optics (emittance scan);
+	\item Prescale settings;
+	\item lumi-levelling;
+	\item Physiological decrease, due to the fact that protons get consumed by collisions.
+\end{enumerate}
+
+Figure \ref{fig:lum_evolution} shows the evolution of the delivered luminosity to the ATLAS, CMS and LHCb experiments.
+
 
 \begin{figure}
 	\centerline{
 		\includegraphics[width=0.5\paperwidth]{inst-lumi}}
 	\caption{Example for the luminosity evolution of the ATLAS, CMS and LHCb experiments in a typical fillof the 2018 run. The luminosity of LHCb is levelled by beam separation. The upward steps of the ATLAS and CMS luminosities in the second half of the fill are due to $\beta\text{*}$ levelling
 		\cite{Wenninger:2018cgs}}
+	\label{fig:lum_evolution}
 \end{figure}
 
 
@@ -198,9 +216,8 @@ One inverse femtobarn is equal to approximately 100 trillion proton-proton colli
 
 Searches in Particle Physics are done looking for an excess above background: a discovery of a particle involves knowning the amount of background events to except and being confident that the excess is not the result of a statistical fluctuation of this background.
 
-The scientific process requires quantification of the probability that excesses is genuine: this is why the "number of $\theta$" is crucial in validating discoveries: it represents the width of the Gaussian distribution, as we explained in \ref{eqn:gaussian}. The greater number of $\theta$, the minor will be the probability that the observed excess can be explained by a background fluctuation.
+The scientific process requires quantification of the probability that excesses is genuine: this is why the "number of $\sigma$" is crucial in validating discoveries: it represents the width of the Gaussian distribution, as we explained in \ref{eqn:gaussian}. The greater number of $\sigma$, the minor will be the probability that the observed excess can be explained by a background fluctuation.
 At $3\sigma$ we talk about an evidence, while at $5\sigma$ we are in front of a discovery.
-
 
 \begin{figure}
 	\centerline{
