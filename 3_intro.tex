@@ -65,7 +65,7 @@ Variance:
 	\sigma^2=\sum_r(r-\mu)^2P(r) = Np(1-p)
 \end{equation}
 
-For many practical calculations \cite{leo2012techniques}, using a Gaussian is a good approximation of a Binomial when $N$ is greater than 30 and $p\geq0.05$ (taking into consideration that we are replacing a discrete distribution by a continuos one). If $p$ is small such that the product $Np$ is finite, we can use a Poisson distribution.
+For many practical calculations \cite{leo2012techniques}, using a Gaussian is a good approximation of a Binomial when $N$ is greater than 30 and $p\geq0.05$ (taking into consideration that we are replacing a discrete distribution by a continuous one). If $p$ is small such that the product $Np$ is finite, we can use a Poisson distribution.
 
 \subsection{Poisson}
 \label{distributions1}
@@ -141,13 +141,13 @@ They interact through forces:
 
 Gravitational force is not taken into account. Quarks interact with all three forces, leptons are not sensitive to the strong force and neutrinos are subject only to the weak force.
 
-Experiments are the tool to validate the current theories: the Standard Model anticipated the existence of previously undiscovered particles, such as the \textit{Higgs} Boson, observed at CERN LHC in 2012. This particle is responsible of giving mass to the otherwaise massless particles in the SM, conciliating the theory with other experimental findings (Brout-Englert-Higgs mechanism \cite{PhysRevLett.13.321} \cite{PhysRevLett.13.508}).
+Experiments are the tool to validate the current theories: the Standard Model anticipated the existence of previously undiscovered particles, such as the \textit{Higgs} Boson, observed at CERN LHC in 2012. This particle is responsible of giving mass to the otherwise massless particles in the SM, conciliating the theory with other experimental findings (Brout-Englert-Higgs mechanism \cite{PhysRevLett.13.321, PhysRevLett.13.508}).
 
 Current High Energy Physics research includes:
 \begin{enumerate}
 	\item Matter-antimatter asymmetry of the universe \cite{Bernreuther:2002uj};
 	\item The unobservable dark matter giving galaxies the extra gravity to stay intact; \cite{bertone2005particle};
-	\item Explaination of gravitational physics in terms of quantum mechanics (e.g. \cite{Rovelli:2011eq});
+	\item Explanation of gravitational physics in terms of quantum mechanics (e.g. \cite{Rovelli:2011eq});
 \end{enumerate}
 
 \section{LHC}
@@ -194,7 +194,7 @@ A number of factors influence this value (TO CHECK):
 \begin{enumerate}
 	\item Adjustments of the LHC beam-optics (emittance scan);
 	\item Prescale settings;
-	\item lumi-levelling;
+	\item Lumi-levelling;
 	\item Physiological decrease, due to the fact that protons get consumed by collisions.
 \end{enumerate}
 
@@ -204,7 +204,7 @@ Figure \ref{fig:lum_evolution} shows the evolution of the delivered luminosity t
 \begin{figure}
 	\centerline{
 		\includegraphics[width=0.5\paperwidth]{inst-lumi}}
-	\caption{Example for the luminosity evolution of the ATLAS, CMS and LHCb experiments in a typical fillof the 2018 run. The luminosity of LHCb is levelled by beam separation. The upward steps of the ATLAS and CMS luminosities in the second half of the fill are due to $\beta\text{*}$ levelling
+	\caption{Example for the luminosity evolution of the ATLAS, CMS and LHCb experiments in a typical fill of the 2018 run. The luminosity of LHCb is levelled by beam separation. The upward steps of the ATLAS and CMS luminosities in the second half of the fill are due to $\beta\text{*}$ levelling
 		\cite{Wenninger:2018cgs}}
 	\label{fig:lum_evolution}
 \end{figure}
@@ -230,7 +230,7 @@ One inverse femtobarn is equal to approximately 100 trillion proton-proton colli
 
 \subsection{Standard Deviation and Significance}
 
-Searches in Particle Physics are done looking for an excess above background: a discovery of a particle involves knowning the amount of background events to except and being confident that the excess is not the result of a statistical fluctuation of this background.
+Searches in Particle Physics are done looking for an excess above background: a discovery of a particle involves knowing the amount of background events to except and being confident that the excess is not the result of a statistical fluctuation of this background.
 
 The scientific process requires quantification of the probability that excesses is genuine: this is why the "number of $\sigma$" is crucial in validating discoveries: it represents the width of the Gaussian distribution, as we explained in \ref{eqn:gaussian}. The greater number of $\sigma$, the minor will be the probability that the observed excess can be explained by a background fluctuation.
 At $3\sigma$ we talk about an evidence, while at $5\sigma$ we are in front of a discovery.
@@ -261,12 +261,12 @@ TODO
 \section{CMS Trigger System}
 
 
-The LHC generates 40 milions events per second. Each CMS event, on average, carries a payload of 1 MB of unprocessed informations. It is technologically impossible to retain this amount of data, due to hardware, software, network and storage constraints.
+The LHC generates 40 millions events per second. Each CMS event, on average, carries a payload of 1 MB of unprocessed informations. It is technologically impossible to retain this amount of data, due to hardware, software, network and storage constraints.
 
 Furthermore, most events represent uninteresting information for the current state of physics knowledge.
 
 The \textit{CMS Trigger System} is designed to reduce the output stream to 1000 events per second, while preserving the physics reach of the experiment.
-It is composed by a hierchical set of rules, called Trigger Nodes (or Paths): each one probes a specific patterns (physics signature) in the event or looks for specific physics objects.
+It is composed by a hierarchical set of rules, called Trigger Nodes (or Paths): each one probes a specific patterns (physics signature) in the event or looks for specific physics objects.
 
 This happens in two steps:
 
