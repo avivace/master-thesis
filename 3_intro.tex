@@ -12,6 +12,8 @@ Colliding the beams in the LHC is the responsibility of CERN. Exploiting these c
 
 The main collision points, shown in figure \ref{fig:cern_complex}, equipped with detectors are:
 
+TODO
+
 \begin{enumerate}
 	\item ATLAS
 	\item LHCb
@@ -37,7 +39,7 @@ Any kind of measurement is subject to two main types of uncertainties:
 
 \begin{enumerate}
 	\item \textit{Systematic Errors} are consistent uncertainties in the bias of the data, usually associated with the measurement equipment.
-	\item \textit{Random Errors} may arise from instrumental imprecision and from the inherent statistical nature of the observed event. Many processes in Physics are governed by the probabilistic laws of quantum mechanics, so that the number of events in a given time period is a random variable. Errors caused by the measurement of random processed are called \textit{statistical errors}. Differing values caused by many small factors not controlled by the experimenter are called \textit{instrumental errors}.
+	\item \textit{Random Errors} may arise from instrumental imprecision and from the inherent statistical nature of the observed class of events. Many processes in Physics are governed by the probabilistic laws of quantum mechanics, so that the number of events in a given time period is a random variable. Errors caused by the measurement of random processed are called \textit{statistical errors}. Differing values caused by many small factors not controlled by the experimenter are called \textit{instrumental errors}.
 \end{enumerate}
 
 While Systematic Errors are generally harder to handle, uncertainties caused by Random Errors follow known distributions (like a Poisson rate) or are empirically determined. As we'll see in \ref{distributions1}, repeating measurements provides larger samples to estimate these uncertanties and get more accurate data.
@@ -53,6 +55,9 @@ When a problem involve repeated, independent trials with two possible outcomes, 
 
 where $p$ is the probability of success in a single trial.
 
+% TODO: Define r and N, too
+% Introduce the notions of Mean and Variance
+
 Mean:
 
 \begin{equation}
@@ -65,13 +70,14 @@ Variance:
 	\sigma^2=\sum_r(r-\mu)^2P(r) = Np(1-p)
 \end{equation}
 
-For many practical calculations \cite{leo2012techniques}, using a Gaussian is a good approximation of a Binomial when $N$ is greater than 30 and $p\geq0.05$ (taking into consideration that we are replacing a discrete distribution by a continuous one). If $p$ is small such that the product $Np$ is finite, we can use a Poisson distribution.
+For many practical calculations \cite{leo2012techniques}, using a Gaussian (\ref{eqn:gaussian}) is a good approximation of a Binomial when $N$ is greater than 30 and $p\geq0.05$ (taking into consideration that we are replacing a discrete distribution by a continuous one). When $p\leq0.05$ and the product $Np$ is finite, we can use a Poisson distribution.
 
 \subsection{Poisson}
 \label{distributions1}
 
 When the probability is very small ($p \rightarrow 0$) and the numer of trials approaches infinity ($N \rightarrow \infty$) such that the mean $\mu = N p$ remains finite, the \textit{Poisson} distribution occurs:
 
+% TODO: define r and P(r)
 
 \begin{equation}
 	\label{eqn:poisson}
@@ -90,6 +96,8 @@ If the mean is expressed as the mean per unit dimension ($\mu = \lambda t$) we c
 	\caption{Poisson distribution with various values of $\mu$ \cite{leo2012techniques}}
 \end{figure}
 
+% FIXME: The probability for a single nucleus to decay -> Probability per time unit
+
 As an example, consider the \textit{radioactive decay} phenomena: a radioactive source such as $^{137}$Cs has a half-life of 27 years. The probability for a single nucleus to decay is $8.2 \times 10^{-10}s^{-1}$. However, even a \SI{1}{\micro\gram} contains $10^{15}$ nuclei. Since each nucleus acts as a \textit{trial}, the mean number of decay events will be $\mu = N p = 8.2 \times 10^5$, satisfying the limiting conditions. The probability of observing an event is given by \ref{eqn:poisson}.
 
 The Poisson distribution exhibits two interesting features:
@@ -102,6 +110,8 @@ The Poisson distribution exhibits two interesting features:
 
 \subsection{Gaussian}
 \label{eqn:gaussian}
+
+%TODO: Define densiti
 
 The \textit{Gaussian} (or \textit{Normal}) is a continuos, symmetric distribution. Density is defined as
 
@@ -131,7 +141,7 @@ Any Gaussian distribution can be transformed to this reduced form trivially:
 
 Particle physics researches the nature of the fundamental parts of matter and how they interact. According to the Standard Model \cite{Quang:1998yw}, the matter is made of \textit{fermions}, classified into leptons (electrons, muons, taus and neutrinos) and quarks (up, down, charm, strange, top, bottom). Each particle have an associated antiparticle of the same mass but opposite quantum numbers.
 
-They interact through forces:
+Interactions between fermions are mediated by bosons:
 
 \begin{enumerate}
 	\item Strong interaction, mediated by gluons
@@ -141,19 +151,20 @@ They interact through forces:
 
 Gravitational force is not taken into account. Quarks interact with all three forces, leptons are not sensitive to the strong force and neutrinos are subject only to the weak force.
 
-Experiments are the tool to validate the current theories: the Standard Model anticipated the existence of previously undiscovered particles, such as the \textit{Higgs} Boson, observed at CERN LHC in 2012. This particle is responsible of giving mass to the otherwise massless particles in the SM, conciliating the theory with other experimental findings (Brout-Englert-Higgs mechanism \cite{PhysRevLett.13.321, PhysRevLett.13.508}).
+Experiments are the tool to validate the current theories: the Standard Model anticipated the existence of previously undiscovered particles, such as the \textit{Higgs} Boson, observed at CERN in 2012. This particle is responsible of giving mass to the otherwise massless particles in the SM, conciliating the theory with other experimental findings (Brout-Englert-Higgs mechanism \cite{PhysRevLett.13.321, PhysRevLett.13.508}).
 
 Current High Energy Physics research includes:
 \begin{enumerate}
 	\item Matter-antimatter asymmetry of the universe \cite{Bernreuther:2002uj};
-	\item The unobservable dark matter giving galaxies the extra gravity to stay intact; \cite{bertone2005particle};
+	\item The not-yet discovered dark matter, which is supposed to give galaxies the extra gravity needed to explain many observed features \cite{bertone2005particle};
 	\item Explanation of gravitational physics in terms of quantum mechanics (e.g. \cite{Rovelli:2011eq});
 \end{enumerate}
 
-\section{LHC}
+\section{Large Hadron Collider}
 
 %%
 
+TODO LHC
 
 High Energy Physics experiments need to collect a large quantity of data to attack the statistical nature of particle physics and find interesting and rare phenomena with enough accuracy.
 
@@ -171,7 +182,9 @@ Cross section ($\sigma$) is one of the most important quantity in particle physi
 
 E.g. the \textit{Rutherford cross-section} represents the probability of an alpha-particle to be deflected by a given angle during a collision with an atomic nucleus.
 
-Figure \ref{fig:cross_sections} shows $\sigma$ values for different particles. Notice how the value increments with the collision energy $\sqrt s$ (13 TeV during Run 2).
+%TODO: Add cross section value for this example
+
+Figure \ref{fig:cross_sections} shows $\sigma$ values for different processes. Notice how the value increments with the collision energy $\sqrt s$ (13 TeV during Run 2).
 
 \subsection{Luminosity}
 
@@ -232,7 +245,9 @@ One inverse femtobarn is equal to approximately 100 trillion proton-proton colli
 
 Searches in Particle Physics are done looking for an excess above background: a discovery of a particle involves knowing the amount of background events to except and being confident that the excess is not the result of a statistical fluctuation of this background.
 
-The scientific process requires quantification of the probability that excesses is genuine: this is why the "number of $\sigma$" is crucial in validating discoveries: it represents the width of the Gaussian distribution, as we explained in \ref{eqn:gaussian}. The greater number of $\sigma$, the minor will be the probability that the observed excess can be explained by a background fluctuation.
+% TODO: qui serve che tu richiami esplicitamente il fatto che stai trattando la produzione e la selezione di eventi con una gaussiana. Io non citerei il numero di sigma ma bensi’ la probabilita’ delle code: 68%, 95% etc. etc.  Alla fine poi puoi spiegare che corrispondono ad integrare la gaussiana in intervalli di 1, 2, 3 standard deviations
+
+The scientific process requires quantification of the probability that excesses are genuine: this is why the "number of $\sigma$" is crucial in validating discoveries: it represents the width of the Gaussian distribution, as we explained in \ref{eqn:gaussian}. The greater number of $\sigma$, the minor will be the probability that the observed excess can be explained by a background fluctuation.
 At $3\sigma$ we talk about an evidence, while at $5\sigma$ we are in front of a discovery.
 
 \begin{figure}
