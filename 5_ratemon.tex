@@ -8,11 +8,30 @@ What are ratemon scripts? How are they used? By whom?
 
 \section{Packaging, CI/CD}
 
-Docker, gitlab ci, cernbox
+To enable CI/CD, we copied the repository on the cern GitLab. The repository on github is being kept updated but the CI/CD is handled by GitLab.
+I've restructured the folder. The "misc" folder now contains the fits logs and the wbmRateReader. The ratemon folder is the only one actually being packaged. The "systemd" folder contains the service file allowing the \texttt{ShiftMonitorTool} to be installed and used as a systemd service.
+
+Docker, GitLab ci, cernbox
+
+Each commit triggers a build and a deployment of a RPM package. This CI/CD system is configured in these files:
+
+\begin{enumerate}
+	\item \texttt{.GitLab-ci.yml} - describes the GitLab CI. The first phase (\texttt{build\_rpm}) tells the builder (described by \texttt{builder.dockerfile} and exposed on the GitLab registry) to run \texttt{make rpm} (described in \texttt{Makefile}) and flags the RPM package files as artifacts; In the second phase (deploy), those artifacts are pushed on a EOS folder using the ci-web-deployer tool;
+	\item builder.dockerfile - prepares the docker container that will run the build, starting from the cern/cc7-base image. This is exposed using the GitLab registry feature as gitlab-registry.cern.ch/avivace/ratemon/builder;
+	\item Makefile - Uses the fpm tool to produce an RPM file with the given metadata and contents. Basically, the ratemon script folder is copied into /opt/ and the systemd service file goes into /usr/lib/systemd/system
+
+	\item The build produces an RPM package file. Those files are pushed during the "deploy" CI phase and finally published on a public CERNBox folder (EOS: /eos/users/a/avivace/ratemon\_builds). This is done using a service CERN account.
+\end{enumerate}
 
 \section{Configuration}
 
 YAML, schema, database errors?
+
+The ShiftMonitorTool and plotTriggerRates scripts now require an \texttt{--dbConfigFile} option, specifying the YAML configuration file containing the database connection parameters.
+
+I've updated the README and the twiki page to reflect the changes on the DB configuration. Scripts now need to be called in this way:
+
+\texttt{python plotTriggerRates.py --dbConfigFile=dbConfig.yaml --useFills --createFit --bestFit --triggerList=TriggerLists/monitorlist\_COLLISIONS.list 6303}
 
 \section{Exporting data}
 
@@ -29,3 +48,5 @@ VueJS, ROOT, Plotly
 \section{Integration with OMS}
 
 Highcharts, React, Panel
+
+
