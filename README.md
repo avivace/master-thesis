@@ -2,10 +2,10 @@
 
 *Experimental Anomaly Detection on CERN CMS Trigger Rates*, a master thesis typeset in LaTeX using the memoir class.
 
-Prerequisites: XeLaTeX, latexmk, betterbib, latexindent
+Prerequisites: XeLaTeX, latexmk, betterbib, latexindent, inkscape (SVG)
 
 ```bash
-apt install texlive-xelatex latexmk
+apt install texlive-xelatex latexmk inkscape
 pip install betterbib
 ```
 

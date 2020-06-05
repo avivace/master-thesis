@@ -1,5 +1,7 @@
 betterbib=bibliography_better.bib
 TEXFILES := $(shell find . -name '*.tex')
+SVGFILES := $(shell find . -name '*.svg')
+
 
 .PHONY : revision.tex
 revision.tex:
@@ -19,8 +21,15 @@ $(betterbib): bibliography.bib
 	latexindent -w -t -s bibliography.bib
 	betterbib bibliography.bib bibliography_better.bib
 
-pdf: $(betterbib) lint revision.tex
-	latexmk --xelatex thesis
+.PHONY: ${SVGFILES}
+${SVGFILES}: ; inkscape $@ --export-type=pdf
+
+.PHONY: svg
+svg: ${SVGFILES}
+	echo SVG converted
+
+pdf: $(betterbib) lint svg revision.tex
+	latexmk --xelatex -latexoption="-shell-escape" thesis
 
 publish: pdf
 	scp thesis.pdf vps:/var/www/html/thesis.pdf
