@@ -44,7 +44,7 @@
 \begin{document}
 
 % Import revision data
-\input{revision}
+%\input{revision}
 
 %\setlrmarginsandblock{2.5cm}{2.5cm}{*}
 %\setulmarginsandblock{2.5cm}{*}{1}
@@ -59,7 +59,7 @@
 \input{2_ack}
 
 % Print revision data
-Revision \texttt{\revision} (\texttt{\revisiondate})
+%Revision \texttt{\revision} (\texttt{\revisiondate})
 
 % Table of Contents (hidden from the table of contents)
 \tableofcontents*
@@ -69,10 +69,16 @@ Revision \texttt{\revision} (\texttt{\revisiondate})
 \mainmatter
 
 % Import parts
+\chapter{Introduction}
 \input{3_intro}
 \input{4_ad}
 
 \input{5_ratemon}
+
+\chapter{Problem Statement}
+\chapter{Data}
+\chapter{Anomaly Detection Pipeline}
+\chapter{Results}
 
 \pagebreak
 \listoffigures

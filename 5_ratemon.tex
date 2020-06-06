@@ -34,6 +34,8 @@ Each commit triggers a build and a deployment of a RPM package. This CI/CD syste
 	\item The build produces an RPM package file. Those files are pushed during the "deploy" CI phase and finally published on a public CERNBox folder (EOS: /eos/users/a/avivace/ratemon\_builds). This is done using a service CERN account.
 \end{enumerate}
 
+Previously, the RateMon tools had to be installed checking out the code from the git repository, running a preparatory script, configuring the database connection and then running the script. Now, the system package manager can install the packaged software.
+
 \section{Configuration}
 
 YAML, schema, database errors?
