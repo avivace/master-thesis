@@ -47,7 +47,7 @@
 \begin{document}
 
 % Import revision data
-%\input{revision}
+\input{revision}
 
 %\setlrmarginsandblock{2.5cm}{2.5cm}{*}
 %\setulmarginsandblock{2.5cm}{*}{1}
@@ -57,12 +57,9 @@
 \frontmatter
 
 % Front, Abstract and Acknowledgements
-\input{0_front}
-\input{1_abstract}
-\input{2_ack}
-
-% Print revision data
-%Revision \texttt{\revision} (\texttt{\revisiondate})
+\input{chapters/0_front}
+\input{chapters/1_abstract}
+\input{chapters/2_ack}
 
 % Table of Contents (hidden from the table of contents)
 \tableofcontents*
@@ -73,10 +70,10 @@
 
 % Import parts
 \chapter{Introduction}
-\input{3_intro}
-\input{4_ad}
+\input{chapters/3_intro}
+\input{chapters/4_ad}
 
-\input{5_ratemon}
+\input{chapters/5_ratemon}
 
 \chapter{Problem Statement}
 \chapter{Data}

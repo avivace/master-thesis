@@ -43,5 +43,13 @@ clean:
 	rm *.log
 	rm *.toc
 	rm *.xdv
+	rm *.acn
+	rm *.bbl
+	rm *.blg
+	rm *.ist
+	rm *.log
+	rm *.out
+	rm *.glo
+	rm *.lof
 	rm revision.tex
 	rm bibliography_better.bib

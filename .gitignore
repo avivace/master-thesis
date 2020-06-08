@@ -29,6 +29,7 @@ revision.tex
 *.cb
 *.cb2
 .*.lb
+*.bak*
 
 ## Intermediate documents:
 *.dvi
