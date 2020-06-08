@@ -14,7 +14,7 @@ ${TEXFILES}: ; latexindent -w -t -s $@
 
 .PHONY: lint
 lint: ${TEXFILES}
-	rm *.bak*
+	-rm chapters/*.bak*
 	echo Lint finished
 
 $(betterbib): bibliography.bib
@@ -28,28 +28,32 @@ ${SVGFILES}: ; inkscape $@ --export-type=pdf
 svg: ${SVGFILES}
 	echo SVG converted
 
-pdf: $(betterbib) lint svg revision.tex
+glossary:
+	makeglossaries thesis
+
+pdf: $(betterbib) revision.tex lint svg
 	latexmk --xelatex -latexoption="-shell-escape" thesis
 
 publish: pdf
 	scp thesis.pdf vps:/var/www/html/thesis.pdf
 
 clean:
-	rm *.aux
-	rm *.bbl
-	rm *.blg
-	rm *.fdb_latexmk
-	rm *.fls
-	rm *.log
-	rm *.toc
-	rm *.xdv
-	rm *.acn
-	rm *.bbl
-	rm *.blg
-	rm *.ist
-	rm *.log
-	rm *.out
-	rm *.glo
-	rm *.lof
-	rm revision.tex
-	rm bibliography_better.bib
+	-rm *.aux
+	-rm *.bbl
+	-rm *.blg
+	-rm *.fdb_latexmk
+	-rm *.fls
+	-rm *.log
+	-rm *.toc
+	-rm *.xdv
+	-rm *.acn
+	-rm *.bbl
+	-rm *.blg
+	-rm *.ist
+	-rm *.log
+	-rm *.out
+	-rm *.glo
+	-rm *.lof
+	-rm *.bak*
+	-rm revision.tex
+	-rm bibliography_better.bib
