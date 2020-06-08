@@ -8,6 +8,14 @@
 \usepackage{graphicx}
 \usepackage{lipsum}
 
+\usepackage[xindy, toc, acronyms, nomain]{glossaries}
+
+
+\newacronym{lvm}{LVM}{Logical Volume Manager}
+
+\makeglossaries
+
+
 % Tables
 \usepackage{multirow}
 
@@ -58,8 +66,11 @@
 
 % Front, Abstract and Acknowledgements
 \input{chapters/0_front}
+\input{chapters/0_dedication}
 \input{chapters/1_abstract}
 \input{chapters/2_ack}
+
+\pagebreak
 
 % Table of Contents (hidden from the table of contents)
 \tableofcontents*
@@ -72,7 +83,6 @@
 \chapter{Introduction}
 \input{chapters/3_intro}
 \input{chapters/4_ad}
-
 \input{chapters/5_ratemon}
 
 \chapter{Problem Statement}
