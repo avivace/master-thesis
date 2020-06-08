@@ -72,6 +72,35 @@ Table \ref{table:confusion_matrix} explains the following quantities:
 
 Receiver Operating Characteristics (ROC) diagrams show a classifier performance plotting the False Positive Rates (FPR) against the True Positive Rates (TPR) of the classifier for a different thresholds. The idea is maximise the area under the ROC curve.
 
+Intuitively, precision is the ability of the classifier not to label as positive a sample that is negative while recall is a measure of the ability of the classifier to find all the positive samples. \cite{scikit-learn}
+
+
+\begin{equation}
+	TPR = Recall = r = \frac{TP}{TP+FN}
+\end{equation}
+
+\begin{equation}
+	FPR = \frac{FP}{FP+TN}
+\end{equation}
+
+\begin{equation}
+	Precision = p = \frac{TP}{TP+FP}
+\end{equation}
+
+Another metric is the F-measure, defined as follows:
+
+\begin{equation}
+	F_\beta = (1 + \beta^2) \cdot \frac{\mathrm{p} \cdot \mathrm{r}}{(\beta^2 \cdot \mathrm{p}) + \mathrm{r}}
+\end{equation}
+
+Where $\beta$ is a positive real chosen such that recall is considered $\beta$ times as important as precision. In the case $\beta = 1$:
+
+\begin{equation}
+	F_1 = 2 \cdot \frac{\mathrm{p} \cdot \mathrm{r}}{\mathrm{p} + \mathrm{r}}
+\end{equation}
+
+
+
 \subsection{Output of Anomaly Detection}
 
 \subsection{Applications}
