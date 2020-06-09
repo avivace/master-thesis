@@ -55,5 +55,8 @@ clean:
 	-rm *.glo
 	-rm *.lof
 	-rm *.bak*
+	-rm *.sbl
+	-rm *.slg
+	-rm *.sym
 	-rm revision.tex
 	-rm bibliography_better.bib

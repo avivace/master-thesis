@@ -196,7 +196,7 @@ E.g. the \textit{Rutherford cross-section} represents the probability of an alph
 
 %TODO: Add cross section value for this example
 
-Figure \ref{fig:cross_sections} shows $\sigma$ values for different processes. Notice how the value increments with the collision energy $\sqrt s$ (13 TeV during Run 2).
+Figure \ref{fig:cross_sections} shows $\sigma$ values for different processes. Notice how the value increments with the collision energy $\sqrt s$ (13 TeV during LHC Run 2).
 
 \subsection{Luminosity}
 
@@ -280,12 +280,43 @@ Usually, the background follows a pattern, for which it's possible to fit a func
 TODO
 
 
-\section{CMS}
+\section{Compact Muon Solenoid}
 
-TODO
+The Compact Muon Solenoid (CMS) experiment is a general purpose particle detector, designed to observe all interactions in a collision. It's also a \textit{hermetic} detector: it blocks particles from escaping the detector undetected. Since the decay of particles can produce new particles not interacting with any part of the detector, this design allows the measurement of imbalance in momentum and energy, and these non-interacting phenomena can be inferred.
 
 \begin{figure}
+	\centerline{
+		\includegraphics[width=0.75\paperwidth]{slice_white_colour_french_291016}}
+	\caption{A transversal slice through the CMS detector, demonstrating the various sections of the detector
+		and their designed functions. \cite{Barney:2628641}}
+	\label{fig:cms2}
+\end{figure}
 
+\subsection{Silicon Tracker}
+
+This part, the closest to the center of collision, is able to measure location, magnetic field and momentum of the particles. It can detect the decay of very short-lived particles, such as beauty quarks.
+
+It needs to be as little as obstrusive as possibile, and it's built following the microstrip design: a large number of identical semiconductor strips laid out along one axis of a two-dimensional structure. The geometrical layout of the components allows to accurately reconstruct the track of an incoming particle of ionizing radiation.
+
+\subsection{Electromagnetic Calorimeter}
+
+The Electromagnetic Calorimeter (ECAL) is composed by a set of 75000 lead lungstate crystals, stopping the passing electrons and photons. When this happens, these crystals produce light as electromagnetic photon showers, measured by photodetectors.
+
+
+\subsection{Hadronic Calorimeter}
+
+The Hadronic Calorimeter (HCAL) detects hadrons and gluons with several layers of dense absoring materials and \textit{scintillators} where light pulses are produced when particles flows through.
+
+\subsection{Superconducting Solenoid}
+
+The Superconducting Solenoid is the largest superconducting magnet ever built. It's a huge magnet made of coils of wire that produce a uniform magnetic field when electricity flows through them. The CMS magnet is “superconducting”, allowing electricity to flow without resistance and generating a powerful magnetic field of 4 T, allowing precise momentum readings by analyzing the arcs of charged particles.
+
+\subsection{Muon Chambers}
+
+This section is composed of three components: Resistive Plate Chambers (RPC), Drift Tubes (DT), Cathode Strip Chambers (CSC). It relies on the strong magnetic field (\~{} 2 T, provided by the return flux outside the solenoid) to measure the curvature of the only particles that managed to reach this section: muons and neutrinos.
+
+
+\begin{figure}
 	\centerline{
 		\includegraphics[width=0.8\paperwidth]{cms}}
 	\caption{Cutaway diagram of the CMS detector \cite{Sakuma_2014}}
