@@ -2,6 +2,8 @@ betterbib=bibliography_better.bib
 TEXFILES := $(shell find . -name '*.tex')
 SVGFILES := $(shell find . -name '*.svg')
 
+pdf: $(betterbib) revision.tex lint svg
+	latexmk --xelatex -latexoption="-shell-escape" thesis
 
 .PHONY : revision.tex
 revision.tex:
@@ -30,9 +32,6 @@ svg: ${SVGFILES}
 
 glossary:
 	makeglossaries thesis
-
-pdf: $(betterbib) revision.tex lint svg
-	latexmk --xelatex -latexoption="-shell-escape" thesis
 
 publish: pdf
 	scp thesis.pdf vps:/var/www/html/thesis.pdf
