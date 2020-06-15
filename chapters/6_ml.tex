@@ -87,9 +87,12 @@ It can be modeled as follows:
 	\end{tikzpicture}
 \end{figure}
 
-\subsection{Activation Functions}
-\begin{description}[leftmargin=!,labelwidth=\widthof{\bfseries The longest label}]
-	\item[Logistic]
+\section{Activation Functions}
+
+The choice of activation functions in neural networks affects the training dynamics and the final performance. A lot of alternatives have been proposed and are in development, but none managed to reach the popularity of ReLU.
+
+\begin{description}[align=right,leftmargin=*,labelindent=5cm]
+	\item[Sigmoid (Logistic)]
 	      ${(1 + e^{-x})}^{-1}$
 	\item[Hyperbolic]
 	      $\tanh(x)$
@@ -107,11 +110,21 @@ It can be modeled as follows:
 			      \alpha(e^x - 1) & \text{if } x \geq 0 \\
 			      x               & \text{if } x < 0    \\
 		      \end{cases}$
+	\item[Swish]
+	      $x \cdot \text{sigmoid}(\beta x)$
 \end{description}
 
 \begin{figure}
 	\centerline{
-		\includegraphics[width=0.4\paperwidth]{activation_fun_comparison}}
+		\includegraphics[width=0.7\paperwidth]{activation_fun_comparison}}
 	\caption{Comparison of activation functions}
 	\label{fig:activation_functions}
 \end{figure}
+
+Some important trends have been discovered by "Searching for Activation Functions" \cite{DBLP:journals/corr/abs-1710-05941} a recent work using automated search and benchmarking techniques:
+
+\begin{enumerate}
+	\item Complicated activation functions consistently underperform simpler activation functions;
+	\item A common structure shared by the top activation functions is the use of the raw preactivation $x$ as input to the final binary function;
+	\item Functions that use division tend to perform poorly because the output explodes when the denominator approaches zero.
+\end{enumerate}
