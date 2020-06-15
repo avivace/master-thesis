@@ -86,3 +86,32 @@ It can be modeled as follows:
 		\node[below of=n,font=\scriptsize] {Weights};
 	\end{tikzpicture}
 \end{figure}
+
+\subsection{Activation Functions}
+\begin{description}[leftmargin=!,labelwidth=\widthof{\bfseries The longest label}]
+	\item[Logistic]
+	      ${(1 + e^{-x})}^{-1}$
+	\item[Hyperbolic]
+	      $\tanh(x)$
+	\item[Rectified Linear Unit (ReLU)]
+	      $\max(0,\, x)$
+	\item[Leaky ReLU]
+	      $\max(0.01x,\, x)$
+	\item[Parametric LReLU]
+	      $\begin{cases}
+			      \alpha x & \text{if } x \geq 0 \\
+			      x        & \text{if } x < 0    \\
+		      \end{cases}$
+	\item[Exponential Linear Unit (ELU)]
+	      $\begin{cases}
+			      \alpha(e^x - 1) & \text{if } x \geq 0 \\
+			      x               & \text{if } x < 0    \\
+		      \end{cases}$
+\end{description}
+
+\begin{figure}
+	\centerline{
+		\includegraphics[width=0.4\paperwidth]{activation_fun_comparison}}
+	\caption{Comparison of activation functions}
+	\label{fig:activation_functions}
+\end{figure}
