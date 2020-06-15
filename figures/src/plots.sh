@@ -1,0 +1,1 @@
+python plotTriggerRates.py --dbConfigFile=dbConfig.yaml --createFit --bestFit --triggerList=TriggerLists/monitorlist_COLLISIONS.list 305112
