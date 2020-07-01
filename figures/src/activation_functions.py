@@ -1,6 +1,10 @@
 import math
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
+
+# In case of "Font family not found" errors:
+# matplotlib.font_manager._rebuild()
 
 plt.rcParams["font.family"] = "serif"
 plt.rcParams["font.serif"] = "Adobe Caslon Pro"
@@ -47,12 +51,13 @@ leaky_relu = lr(x)
 swish = sig*x
 
 # Displaying the functions
+plt.axhline(y=0, color='k')
+plt.axvline(x=0, color='k')
 line_1, = plt.plot(x,sig, label='Sigmoid')
 line_2, = plt.plot(x,tanh, label='Tanh')
 line_3, = plt.plot(x,relu, label='ReLU')
-line_4, = plt.plot(x,leaky_relu, label='Leaky ReLU')
+line_4, = plt.plot(x,leaky_relu, label='Leaky ReLU',linestyle="--")
 line_5, = plt.plot(x,swish, label='Swish')
+
 plt.legend(handles=[line_1, line_2, line_3, line_4, line_5])
-plt.axhline(y=0, color='k')
-plt.axvline(x=0, color='k')
 plt.savefig(fname="../activation_fun_comparison.svg")
