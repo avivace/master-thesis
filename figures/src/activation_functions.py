@@ -61,3 +61,4 @@ line_5, = plt.plot(x,swish, label='Swish')
 
 plt.legend(handles=[line_1, line_2, line_3, line_4, line_5])
 plt.savefig(fname="../activation_fun_comparison.svg")
+print("Figure 'activation_fun_comparison.svg' exported")
