@@ -121,10 +121,62 @@ The choice of activation functions in neural networks affects the training dynam
 	\label{fig:activation_functions}
 \end{figure}
 
-Some important trends have been discovered by "Searching for Activation Functions" \cite{DBLP:journals/corr/abs-1710-05941} a recent work using automated search and benchmarking techniques:
+Some important trends have been discovered by \textit{Searching for Activation Functions} \cite{DBLP:journals/corr/abs-1710-05941}, a recent study using automated search and benchmarking techniques:
 
 \begin{enumerate}
 	\item Complicated activation functions consistently underperform simpler activation functions;
 	\item A common structure shared by the top activation functions is the use of the raw preactivation $x$ as input to the final binary function;
 	\item Functions that use division tend to perform poorly because the output explodes when the denominator approaches zero.
 \end{enumerate}
+
+\section{Loss Functions}
+
+\subsection{Regression loss}
+
+\begin{equation}
+	L_2(y, \hat{y}) = MSE = \sum\limits_{i=1}^n  {(y_i - \hat{y}_i)}^2
+\end{equation}
+
+\begin{equation}
+	L_1(y, \hat{y}) = MAE = \sum\limits_{i=1}^n  {|y_i - \hat{y}_i|}
+\end{equation}
+
+\begin{equation}
+	L_{cosh}(y, \hat{y}) = \sum\limits_{i=1}^n  {\log(\cosh(\hat{y}_i-y_i))}
+\end{equation}
+
+\begin{equation}
+	L_\gamma(y, \hat{y}) = \sum\limits_{i=y_i<\hat{y}_i}  ({\gamma-1}).|y_i - \hat{y}_i| + \sum\limits_{i=y_i\geq \hat{y}_i}  ({\gamma}).|y_i - \hat{y}_i|
+\end{equation}
+
+
+
+\begin{figure}
+	\centerline{
+		\includegraphics[width=0.6\paperwidth]{loss_Huber}}
+	\caption{Huber/Smooth MAE Loss Function using various $\delta$ values}
+	\label{fig:Loss Huber}
+\end{figure}
+
+\begin{figure}
+	\centerline{
+		\includegraphics[width=0.6\paperwidth]{loss_L1_L2}}
+	\caption{Mean Square Error (L2) vs Mean Absolute Error (L1) Loss Functions}
+	\label{fig:Loss L1 L2}
+\end{figure}
+
+\begin{figure}
+	\centerline{
+		\includegraphics[width=0.6\paperwidth]{loss_logcosh}}
+	\caption{Log-Cosh Loss Function}
+	\label{fig:Loss L1 L2}
+\end{figure}
+
+\begin{figure}
+	\centerline{
+		\includegraphics[width=0.6\paperwidth]{loss_quant}}
+	\caption{Quantile Loss Function, with different Quantiles ($\gamma$) values}
+	\label{fig:Loss L1 L2}
+\end{figure}
+
+\subsection{Classification loss}
