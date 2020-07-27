@@ -1,6 +1,6 @@
 \chapter{Modernising Rate Monitoring Tools}
 
-This chapter gives an overview of the software development work done to improve and add new features to the CMS Rate Monitoring software. Some other experimental components have ben developed to showcase possible upgrades, delivering quality of life enhancements and enabling shifters and physicists to navigate data in a faster and more comfortable way \cite{VivaceRTM1}
+This chapter gives an overview of the software development work done to improve and add new features to the CMS Rate Monitoring software. Some other experimental components have ben developed to showcase possible upgrades, delivering quality of life enhancements and enabling shifters and physicists to navigate data in a faster and more comfortable way. This work is also described in \cite{VivaceRTM1} \cite{VivaceRTM2} \cite{L1TriggerOMSDevelopments} \cite{MohrmanRTM} and the code is available in the mentioned git repositories.
 
 \begin{figure}
 	\centerline{
@@ -85,4 +85,54 @@ VueJS, ROOT, Plotly
 
 Highcharts, React, Panel
 
+\section{Run Registry}
 
+CMS Run Registry is a in-development tool giving access to a lot of DQM datasets. TODO: describe bug reports, HTTPS auth problems and various contributions done upstream to this tool.
+
+
+\section{Deployment}
+
+\subsection{Attaching a volume for caching}
+
+To offer more disk space to the caching mechanism, a new volume has been created through the CERN Openstack control panel. Once available, I attached it to the machine serving the RateMon API.
+
+On that machine, \texttt{fdisk -l} will give the new disk overview, listing the new volume. I noted the device ID (\texttt{/dev/vdb}) and then executed \texttt{fdisk /dev/vdb} to launch fdisk, the partition manager tool provided by the util-linux standard package.
+
+\begin{verbatim}
+[root@brandeis ~]# fdisk -l
+TODO
+\end{verbatim}
+
+In the fdisk shell, create a new partition (\texttt{n}), select is a primary (\texttt{p}) and denote it as the first (\texttt{1}). Select again the partition (\texttt{t}) and set the Linux partition type (\texttt{83}). (\texttt{p}) displays the partition setup we just defined. If that's okay, (\texttt{w}) commits the modifications and applies them.
+
+Back in the standard shell, use \texttt{mkfs.ext4 /dev/vdb} to format the partition using the EXT4 file system.
+
+Now, run \texttt{blkid} and note the UUID of our newly formatted volume:
+
+\begin{verbatim}
+[root@brandeis ~]# blkid
+/dev/vda2  UUID="10b2738c-96b6-4094-accc-14eaf22faaf1" TYPE="xfs" PARTUUID="9249901b-bf84-4296-869f-8aee6566e46c" 
+/dev/vdb   UUID="128c8df1-5700-45de-901a-9c461475d5dc" TYPE="ext4"
+\end{verbatim}
+
+Now that we know the UUID, we can mount it:
+
+\begin{verbatim}
+[root@brandeis ~]# mount /dev/disk/by-uuid/128c8df1-5700-45de-901a-9c461475d5dc /data
+\end{verbatim}
+
+To make the mounting persistent, we add this entry to the \texttt{/etc/fstab} file:
+
+\begin{verbatim}
+UUID=128c8df1-5700-45de-901a-9c461475d5dc	/data	auto defaults,nofail	0 3
+\end{verbatim}
+
+Here's the final situation, as described by \texttt{df -h}:
+
+\begin{verbatim}
+[root@brandeis ~]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+[...]
+/dev/vda2        40G   33G  7.6G  82% /
+/dev/vdb        246G   61M  234G   1% /data
+\end{verbatim}
