@@ -76,6 +76,17 @@ TODO
 \section{API}
 
 Connexion, OpenAPI 3 schema, Swagger UI
+\begin{verbatim}
+yum install libnsl
+
+export LD_LIBRARY_PATH=/usr/lib/oracle/19.6/client64/lib:LD_LIBRARY_PATH
+
+copy tnsnames.ora
+
+wget https://download.oracle.com/otn_software/linux/instantclient/19600/oracle-instantclient19.6-basic-19.6.0.0.0-1.x86_64.rpm
+
+yum install oracle-instantclient19.6-basic-19.6.0.0.0-1.x86_64.rpm
+\end{verbatim}
 
 \section{Web Application}
 
@@ -96,35 +107,46 @@ CMS Run Registry is a in-development tool giving access to a lot of DQM datasets
 
 To offer more disk space to the caching mechanism, a new volume has been created through the CERN Openstack control panel. Once available, I attached it to the machine serving the RateMon API.
 
-On that machine, \texttt{fdisk -l} will give the new disk overview, listing the new volume. I noted the device ID (\texttt{/dev/vdb}) and then executed \texttt{fdisk /dev/vdb} to launch fdisk, the partition manager tool provided by the util-linux standard package.
+On that machine, \texttt{fdisk -l} will give the disks overview, listing the new volume. I noted the device ID (\texttt{/dev/vdb}) and then executed \texttt{fdisk /dev/vdb} to launch fdisk, the partition manager tool provided by the util-linux standard package.
 
 \begin{verbatim}
-[root@brandeis ~]# fdisk -l
-TODO
+[root@ater ~]# fdisk -l
+...
+Disk /dev/vdb: 600 GiB, 644245094400 bytes, 1258291200 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
 \end{verbatim}
 
-In the fdisk shell, create a new partition (\texttt{n}), select is a primary (\texttt{p}) and denote it as the first (\texttt{1}). Select again the partition (\texttt{t}) and set the Linux partition type (\texttt{83}). (\texttt{p}) displays the partition setup we just defined. If that's okay, (\texttt{w}) commits the modifications and applies them.
+In the fdisk shell, create a new partition (\texttt{n}), select is a primary (\texttt{p}) and denote it as the first (\texttt{1}). Set it to occupy all the available space accepting defaults. Select again the partition (\texttt{t}) and set the Linux partition type (\texttt{83}). (\texttt{p}) displays the partition setup we just defined. If that's okay, (\texttt{w}) commits the modifications and applies them.
+
+\begin{verbatim}
+Device     Boot Start        End    Sectors  Size Id Type
+/dev/vdb1        2048 1258291199 1258289152  600G 83 Linux
+\end{verbatim}
 
 Back in the standard shell, use \texttt{mkfs.ext4 /dev/vdb} to format the partition using the EXT4 file system.
 
-Now, run \texttt{blkid} and note the UUID of our newly formatted volume:
+Note the UUID of our newly formatted partition:
 
 \begin{verbatim}
-[root@brandeis ~]# blkid
-/dev/vda2  UUID="10b2738c-96b6-4094-accc-14eaf22faaf1" TYPE="xfs" PARTUUID="9249901b-bf84-4296-869f-8aee6566e46c" 
-/dev/vdb   UUID="128c8df1-5700-45de-901a-9c461475d5dc" TYPE="ext4"
+[root@ater ~]# mkfs.ext4 /dev/vdb
+mke2fs 1.45.4 (23-Sep-2019)
+Creating filesystem with 157286400 4k blocks and 39321600 inodes
+Filesystem UUID: f74a87c8-7ced-4414-bc62-e09d07be7845
 \end{verbatim}
 
-Now that we know the UUID, we can mount it:
+Now that we know the UUID, we can mount the volume:
 
 \begin{verbatim}
-[root@brandeis ~]# mount /dev/disk/by-uuid/128c8df1-5700-45de-901a-9c461475d5dc /data
+[root@ater ~]# mkdir /cache
+[root@ater ~]# mount /dev/disk/by-uuid/f74a87c8-7ced-4414-bc62-e09d07be7845 /cache
 \end{verbatim}
 
 To make the mounting persistent, we add this entry to the \texttt{/etc/fstab} file:
 
 \begin{verbatim}
-UUID=128c8df1-5700-45de-901a-9c461475d5dc	/data	auto defaults,nofail	0 3
+UUID=f74a87c8-7ced-4414-bc62-e09d07be7845	/cache	auto defaults,nofail	0 3
 \end{verbatim}
 
 Here's the final situation, as described by \texttt{df -h}:
@@ -132,7 +154,52 @@ Here's the final situation, as described by \texttt{df -h}:
 \begin{verbatim}
 [root@brandeis ~]# df -h
 Filesystem      Size  Used Avail Use% Mounted on
-[...]
+...
 /dev/vda2        40G   33G  7.6G  82% /
-/dev/vdb        246G   61M  234G   1% /data
+/dev/vdb        590G   73M  560G   1% /cache
+\end{verbatim}
+
+\subsection{NGINX as reverse proxy and cache server}
+
+\begin{verbatim}
+sudo cat /var/log/audit/audit.log | grep nginx | grep denied
+\end{verbatim}
+
+\begin{verbatim}
+[root@ater ~]# setsebool -P httpd_can_network_connect 1
+\end{verbatim}
+
+chown nginx:nginx /cache/
+
+\begin{verbatim}
+# Set cache dir
+proxy_cache_path /cache levels=1:2 keys_zone=one:50m max_size=500g inactive=200d;
+
+# Set cache key to include identifying components
+proxy_cache_key $scheme$proxy_host$request_uri;
+
+# Add cache status to log
+log_format cache '$remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" cs=$upstream_cache_status';
+
+server {
+	server_name ater.cern.ch;
+	add_header X-Cache-Status $upstream_cache_status;
+	
+	## Access and error logs.
+		access_log /var/log/nginx/api-proxy.access.log cache;
+		error_log  /var/log/nginx/api-cache.error.log;	
+	
+	location / {
+		proxy_set_header Host $host;
+			proxy_set_header X-Real-IP $remote_addr;
+			
+		proxy_cache one;
+			proxy_ignore_headers X-Accel-Expires Expires Cache-Control;
+			proxy_cache_valid 200 302 200d;
+			proxy_cache_valid 404 15m;
+		proxy_pass http://localhost:8085;	
+	
+	}
+	listen 80;
+}
 \end{verbatim}
