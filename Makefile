@@ -3,7 +3,8 @@ TEXFILES := $(shell find . -name '*.tex')
 SVGFILES := $(shell find . -name '*.svg')
 
 pdf: $(betterbib) revision.tex lint svg
-	latexmk --xelatex -latexoption="-shell-escape" thesis
+	latexmk --xelatex -latexoption="-shell-escape -8bit" thesis
+	make clean
 
 .PHONY : revision.tex
 revision.tex:
@@ -11,8 +12,8 @@ revision.tex:
 	printf '\n\\newcommand{\\revisiondate}{%s}' "$(shell git show -s --format=%ci HEAD)" >> revision.tex
 	printf '\n\\newcommand{\\revision}{%s}' "$(shell git log -1 --format=%h)" >> revision.tex
 
-.PHONY: ${TEXFILES}
-${TEXFILES}: ; latexindent -w -t -s $@
+#.PHONY: ${TEXFILES}
+#${TEXFILES}: ; latexindent -w -t -s $@
 
 .PHONY: lint
 lint: ${TEXFILES}
@@ -37,6 +38,11 @@ publish: pdf
 	scp thesis.pdf vps:/var/www/html/thesis.pdf
 
 clean:
+	-rm *.acr
+	-rm *.alg
+	-rm *.glg
+	-rm *.gls
+	-rm *.xdy
 	-rm *.aux
 	-rm *.bbl
 	-rm *.blg

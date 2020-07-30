@@ -43,10 +43,10 @@ Each commit triggers a build and a deployment of a RPM package. This CI/CD syste
 
 \begin{enumerate}
 	\item \texttt{.GitLab-ci.yml} - describes the GitLab CI. The first phase (\texttt{build\_rpm}) tells the builder (described by \texttt{builder.dockerfile} and exposed on the GitLab registry) to run \texttt{make rpm} (described in \texttt{Makefile}) and flags the RPM package files as artifacts; In the second phase (deploy), those artifacts are pushed on a EOS folder using the ci-web-deployer tool;
-	\item builder.dockerfile - prepares the docker container that will run the build, starting from the cern/cc7-base image. This is exposed using the GitLab registry feature as gitlab-registry.cern.ch/avivace/ratemon/builder;
-	\item Makefile - Uses the fpm tool to produce an RPM file with the given metadata and contents. Basically, the ratemon script folder is copied into /opt/ and the systemd service file goes into /usr/lib/systemd/system
+	\item \texttt{builder.dockerfile} - prepares the docker container that will run the build, starting from the cern/cc7-base image. This is exposed using the GitLab registry feature as \texttt{gitlab-registry.cern.ch/avivace/ratemon/builder};
+	\item \texttt{Makefile} - Uses the fpm tool to produce an RPM file with the given metadata and contents. Basically, the ratemon script folder is copied into /opt/ and the systemd service file goes into /usr/lib/systemd/system
 
-	\item The build produces an RPM package file. Those files are pushed during the "deploy" CI phase and finally published on a public CERNBox folder (EOS: /eos/users/a/avivace/ratemon\_builds). This is done using a service CERN account.
+	\item The build produces an RPM package file. Those files are pushed during the "deploy" CI phase and finally published on a public CERNBox folder (EOS: \texttt{/eos/users/a/avivace/ratemon\_builds}). This is done using a service CERN account.
 \end{enumerate}
 
 Previously, the RateMon tools had to be installed checking out the code from the git repository, running a preparatory script, configuring the database connection and then running the script. Now, the system package manager can install the packaged software.
@@ -59,7 +59,9 @@ The ShiftMonitorTool and plotTriggerRates scripts now require an \texttt{--dbCon
 
 I've updated the README and the twiki page to reflect the changes on the DB configuration. Scripts now need to be called in this way:
 
-\texttt{python plotTriggerRates.py --dbConfigFile=dbConfig.yaml --useFills --createFit --bestFit --triggerList=TriggerLists/monitorlist\_COLLISIONS.list 6303}
+\begin{textcode}
+$ python plotTriggerRates.py --dbConfigFile=dbConfig.yaml --useFills --createFit --bestFit --triggerList=TriggerLists/monitorlistCOLLISIONS.list 6303
+\end{textcode}
 
 \section{Exporting data}
 
@@ -73,10 +75,46 @@ TODO
 
 TODO
 
+\begin{listing}[ht]
+\begin{pythoncode}
+# Exporting trigger rates using the plotTriggerRates 
+#  class as a library
+import plotTriggerRates as ptr
+import yaml
+
+# Read database configuration from file
+with open("dbConfig.yaml", 'r') as stream:
+    dbCfg = yaml.safe_load(stream)
+
+# Specify which triggers we want
+triggers = ["HLT_Ele40_WPTight_Gsf",
+            "HLT_DoubleEle33_CaloIdL_MW"]
+
+# Initialize the RateMon controller
+controller = ptr.MonitorController()
+
+# Get Trigger Rates from Fill 6303, creating fits
+triggerrates = controller.runStandalone(
+                         dbConfig=dbCfg,
+                         triggerList=triggers,
+                         useFills=True,
+                         vsLS=False,
+                         createFit=True,
+                         bestFit=True,
+                         data_lst=[6303])
+
+# Print result
+print(triggerrates)
+\end{pythoncode}
+\caption{Example usage of the RateMon module in a Python script}
+\end{listing}
+
 \section{API}
 
 Connexion, OpenAPI 3 schema, Swagger UI
-\begin{verbatim}
+
+
+\begin{textcode}
 yum install libnsl
 
 export LD_LIBRARY_PATH=/usr/lib/oracle/19.6/client64/lib:LD_LIBRARY_PATH
@@ -86,11 +124,7 @@ copy tnsnames.ora
 wget https://download.oracle.com/otn_software/linux/instantclient/19600/oracle-instantclient19.6-basic-19.6.0.0.0-1.x86_64.rpm
 
 yum install oracle-instantclient19.6-basic-19.6.0.0.0-1.x86_64.rpm
-\end{verbatim}
-
-\section{Web Application}
-
-VueJS, ROOT, Plotly
+\end{textcode}
 
 \section{Integration with OMS}
 
@@ -109,69 +143,72 @@ To offer more disk space to the caching mechanism, a new volume has been created
 
 On that machine, \texttt{fdisk -l} will give the disks overview, listing the new volume. I noted the device ID (\texttt{/dev/vdb}) and then executed \texttt{fdisk /dev/vdb} to launch fdisk, the partition manager tool provided by the util-linux standard package.
 
-\begin{verbatim}
-[root@ater ~]# fdisk -l
+\begin{textcode}
+$ fdisk -l
 ...
 Disk /dev/vdb: 600 GiB, 644245094400 bytes, 1258291200 sectors
 Units: sectors of 1 * 512 = 512 bytes
 Sector size (logical/physical): 512 bytes / 512 bytes
 I/O size (minimum/optimal): 512 bytes / 512 bytes
-\end{verbatim}
+\end{textcode}
 
 In the fdisk shell, create a new partition (\texttt{n}), select is a primary (\texttt{p}) and denote it as the first (\texttt{1}). Set it to occupy all the available space accepting defaults. Select again the partition (\texttt{t}) and set the Linux partition type (\texttt{83}). (\texttt{p}) displays the partition setup we just defined. If that's okay, (\texttt{w}) commits the modifications and applies them.
 
-\begin{verbatim}
+\begin{textcode}
 Device     Boot Start        End    Sectors  Size Id Type
 /dev/vdb1        2048 1258291199 1258289152  600G 83 Linux
-\end{verbatim}
+\end{textcode}
 
 Back in the standard shell, use \texttt{mkfs.ext4 /dev/vdb} to format the partition using the EXT4 file system.
 
 Note the UUID of our newly formatted partition:
 
-\begin{verbatim}
-[root@ater ~]# mkfs.ext4 /dev/vdb
+\begin{textcode}
+$ mkfs.ext4 /dev/vdb
 mke2fs 1.45.4 (23-Sep-2019)
 Creating filesystem with 157286400 4k blocks and 39321600 inodes
 Filesystem UUID: f74a87c8-7ced-4414-bc62-e09d07be7845
-\end{verbatim}
+\end{textcode}
 
 Now that we know the UUID, we can mount the volume:
 
-\begin{verbatim}
-[root@ater ~]# mkdir /cache
-[root@ater ~]# mount /dev/disk/by-uuid/f74a87c8-7ced-4414-bc62-e09d07be7845 /cache
-\end{verbatim}
+\begin{textcode}
+$ mkdir /cache
+$ mount /dev/disk/by-uuid/f74a87c8-7ced-4414-bc62-e09d07be7845 /cache
+\end{textcode}
 
 To make the mounting persistent, we add this entry to the \texttt{/etc/fstab} file:
 
-\begin{verbatim}
+\begin{textcode}
 UUID=f74a87c8-7ced-4414-bc62-e09d07be7845	/cache	auto defaults,nofail	0 3
-\end{verbatim}
+\end{textcode}
 
 Here's the final situation, as described by \texttt{df -h}:
 
-\begin{verbatim}
-[root@brandeis ~]# df -h
+\begin{textcode}
+$ df -h
 Filesystem      Size  Used Avail Use% Mounted on
 ...
 /dev/vda2        40G   33G  7.6G  82% /
 /dev/vdb        590G   73M  560G   1% /cache
-\end{verbatim}
+\end{textcode}
 
 \subsection{NGINX as reverse proxy and cache server}
 
-\begin{verbatim}
-sudo cat /var/log/audit/audit.log | grep nginx | grep denied
-\end{verbatim}
 
-\begin{verbatim}
-[root@ater ~]# setsebool -P httpd_can_network_connect 1
-\end{verbatim}
+\begin{textcode}
+sudo cat /var/log/audit/audit.log | grep nginx | grep denied
+\end{textcode}
+
+
+\begin{textcode}
+$ setsebool -P httpd_can_network_connect 1
+\end{textcode}
 
 chown nginx:nginx /cache/
 
-\begin{verbatim}
+\begin{listing}[ht]
+\begin{textcode}
 # Set cache dir
 proxy_cache_path /cache levels=1:2 keys_zone=one:50m max_size=500g inactive=200d;
 
@@ -186,20 +223,33 @@ server {
 	add_header X-Cache-Status $upstream_cache_status;
 	
 	## Access and error logs.
-		access_log /var/log/nginx/api-proxy.access.log cache;
-		error_log  /var/log/nginx/api-cache.error.log;	
+	access_log /var/log/nginx/api-proxy.access.log cache;
+	error_log  /var/log/nginx/api-cache.error.log;	
 	
 	location / {
 		proxy_set_header Host $host;
-			proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Real-IP $remote_addr;
 			
 		proxy_cache one;
-			proxy_ignore_headers X-Accel-Expires Expires Cache-Control;
-			proxy_cache_valid 200 302 200d;
-			proxy_cache_valid 404 15m;
+		proxy_ignore_headers X-Accel-Expires Expires Cache-Control;
+		proxy_cache_valid 200 302 200d;
+		proxy_cache_valid 404 15m;
 		proxy_pass http://localhost:8085;	
 	
 	}
 	listen 80;
 }
-\end{verbatim}
+\end{textcode}
+\caption{NGINX configuration for reverse proxying and caching}
+\end{listing}
+
+\section{A new User Interface}
+
+VueJS, ROOT, Plotly, Plotly -> JSROOT
+
+\begin{figure}
+	\centerline{
+		\includegraphics[width=0.9\paperwidth]{figures/ratemon-ui0.png}}
+	\caption{Main RateMon UI application view, showing interactive trigger rate plots and relative fit functions}
+	\label{fig:ratemon_ui0}
+\end{figure}
