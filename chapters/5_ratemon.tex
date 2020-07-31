@@ -3,17 +3,17 @@
 This chapter gives an overview of the software development work done to improve and add new features to the CMS Rate Monitoring software. Some other experimental components have ben developed to showcase possible upgrades, delivering quality of life enhancements and enabling shifters and physicists to navigate data in a faster and more comfortable way. This work is also described in \cite{VivaceRTM1} \cite{VivaceRTM2} \cite{L1TriggerOMSDevelopments} \cite{MohrmanRTM} and the code is available in the mentioned git repositories.
 
 \begin{figure}
-	\centerline{
-		\includegraphics[width=0.6\paperwidth]{figures/RMT_305112_L1_SingleTau120er2p1.pdf}}
-	\caption{L1 Trigger path plotted with a fitted function on run 305112}
-	\label{fig:ratemon_l1}
+    \centerline{
+        \includegraphics[width=0.6\paperwidth]{figures/RMT_305112_L1_SingleTau120er2p1.pdf}}
+    \caption{L1 Trigger path plotted with a fitted function on run 305112}
+    \label{fig:ratemon_l1}
 \end{figure}
 
 \begin{figure}
-	\centerline{
-		\includegraphics[width=0.6\paperwidth]{figures/RMT_305112_HLT_PFMET110_PFMHT110_IDTight.pdf}}
-	\caption{HLT Trigger path plotted with a fitted function on run 305112}
-	\label{fig:ratemon_hlt}
+    \centerline{
+        \includegraphics[width=0.6\paperwidth]{figures/RMT_305112_HLT_PFMET110_PFMHT110_IDTight.pdf}}
+    \caption{HLT Trigger path plotted with a fitted function on run 305112}
+    \label{fig:ratemon_hlt}
 \end{figure}
 
 
@@ -26,15 +26,15 @@ What are ratemon scripts? How are they used? By whom?
 The High Level Trigger (HLT) rate monitoring tool is a python script that reports the rates of a selected list of triggers, primary datasets, and streams. The script updates every minute and averages the rates recorded in the last 3 lumisections, and, if possible, compares them to the predicted rate. If a trigger path deviates by a specified amount from the prediction, or exceeds a fixed rate, the corresponding line is highlighted in a yellow colour. The scripts also displays other information that could be useful for the shifter, such as the run number and last lumisections, the LHC status, HLT key, deaditme, instantaneous luminosity and index of the prescale column in use.
 
 \begin{figure}
-	\centerline{
-		\includegraphics[width=0.8\paperwidth]{figures/ratemon_warnings}}
-	\caption{Example execution of the Rate Monitoring Tool showing warnings: two triggers have values consistently deviating from the predictions. \cite{ratemon-twiki}}
-	\label{fig:ratemon_warnings}
+    \centerline{
+        \includegraphics[width=0.8\paperwidth]{figures/ratemon_warnings}}
+    \caption{Example execution of the Rate Monitoring Tool showing warnings: two triggers have values consistently deviating from the predictions. \cite{ratemon-twiki}}
+    \label{fig:ratemon_warnings}
 \end{figure}
 
 \section{Packaging, CI/CD}
 
-To enable CI/CD, we copied the repository on the CERN GitLab. The repository on GitHub is being kept updated but the CI/CD is handled by GitLab.
+To enable CI/CD, we moved the repository on the CERN GitLab. The repository on GitHub is being kept updated but the CI/CD is handled by GitLab.
 I've restructured the folder. The "misc" folder now contains the fits logs and the wbmRateReader. The ratemon folder is the only one actually being packaged. The "systemd" folder contains the service file allowing the \texttt{ShiftMonitorTool} to be installed and used as a systemd service.
 
 Docker, GitLab ci, cernbox
@@ -42,11 +42,11 @@ Docker, GitLab ci, cernbox
 Each commit triggers a build and a deployment of a RPM package. This CI/CD system is configured in these files:
 
 \begin{enumerate}
-	\item \texttt{.GitLab-ci.yml} - describes the GitLab CI. The first phase (\texttt{build\_rpm}) tells the builder (described by \texttt{builder.dockerfile} and exposed on the GitLab registry) to run \texttt{make rpm} (described in \texttt{Makefile}) and flags the RPM package files as artifacts; In the second phase (deploy), those artifacts are pushed on a EOS folder using the ci-web-deployer tool;
-	\item \texttt{builder.dockerfile} - prepares the docker container that will run the build, starting from the cern/cc7-base image. This is exposed using the GitLab registry feature as \texttt{gitlab-registry.cern.ch/avivace/ratemon/builder};
-	\item \texttt{Makefile} - Uses the fpm tool to produce an RPM file with the given metadata and contents. Basically, the ratemon script folder is copied into /opt/ and the systemd service file goes into /usr/lib/systemd/system
+    \item \textbf{.GitLab-ci.yml} describes the GitLab CI. The first phase (\texttt{build\_rpm}) tells the builder (described by \texttt{builder.dockerfile} and exposed on the GitLab registry) to run \texttt{make rpm} (described in \texttt{Makefile}) and flags the RPM package files as artifacts; In the second phase (deploy), those artifacts are pushed on a EOS folder using the ci-web-deployer tool;
+    \item \textbf{builder.dockerfile} prepares the docker container that will run the build, starting from the cern/cc7-base image. This is exposed using the GitLab registry feature as \texttt{gitlab-registry.cern.ch/avivace/ratemon/builder};
+    \item \textbf{Makefile} Uses the fpm tool to produce an RPM file with the given metadata and contents. Basically, the ratemon script folder is copied into /opt/ and the systemd service file goes into /usr/lib/systemd/system
 
-	\item The build produces an RPM package file. Those files are pushed during the "deploy" CI phase and finally published on a public CERNBox folder (EOS: \texttt{/eos/users/a/avivace/ratemon\_builds}). This is done using a service CERN account.
+    \item The build produces an RPM package file. Those files are pushed during the "deploy" CI phase and finally published on a public CERNBox folder (EOS: \texttt{/eos/users/a/avivace/ratemon\_builds}). This is done using a service CERN account.
 \end{enumerate}
 
 Previously, the RateMon tools had to be installed checking out the code from the git repository, running a preparatory script, configuring the database connection and then running the script. Now, the system package manager can install the packaged software.
@@ -65,7 +65,15 @@ $ python plotTriggerRates.py --dbConfigFile=dbConfig.yaml --useFills --createFit
 
 \section{Exporting data}
 
-JSON, middle db layer?
+TODO
+
+\subsection{Raw JSON}
+
+TODO
+
+\subsection{ROOT files}
+
+TODO
 
 \section{Python3 upgrade}
 
@@ -73,12 +81,9 @@ TODO
 
 \section{From a CLI tool to a proper module}
 
-TODO
-
 \begin{listing}[ht]
 \begin{pythoncode}
-# Exporting trigger rates using the plotTriggerRates 
-#  class as a library
+# Exporting trigger rates importing the plotTriggerRates class
 import plotTriggerRates as ptr
 import yaml
 
@@ -111,9 +116,80 @@ print(triggerrates)
 
 \section{API}
 
+\begin{figure}
+    \centerline{
+        \includegraphics[width=0.8\paperwidth]{figures/swagger-ui}}
+    \caption{Swagger UI}
+    \label{fig:swagger-ui}
+\end{figure}
+
+\subsection{OpenAPI 3 Schema}
+
+\begin{listing}[ht]
+\begin{yamlcode}
+openapi: "3.0.0"
+info:
+  version: 0.0.2
+  title: RateMon API
+  description: API exposing CMS Trigger Rates exported by the RateMon tools
+servers:
+  - url: http://ater.cern.ch/api/v1
+paths:
+  /ratesROOT:
+    get:
+      tags: [Trigger Rates]
+      description: |
+        Get ROOT plot of the Rates of the specified Trigger Path and LHC Run Number
+      operationId: app.getRatesROOT
+      parameters:
+        - name: runNumber
+          in: query
+          description: "Run number"
+          example: 305112
+          required: true
+          style: form
+          schema:
+            type: integer
+        - name: triggerKey
+          in: query
+          description: "Trigger name key. Must be part of the [monitorlist_COLLISIONS](https://gitlab.cern.ch/cms-tsg-fog/ratemon/-/blob/api/ratemon/TriggerLists/monitorlist_COLLISIONS.list) list"
+          example: HLT_CaloJet500_NoJetID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ROOT binary file of the computed plot
+\end{yamlcode}
+\caption{OpenAPI schema definition of the \texttt{/ratesROOT} API endpoint}
+\end{listing}
+
 Connexion, OpenAPI 3 schema, Swagger UI
 
+\subsection{Implementation}
 
+\begin{listing}[ht]
+\begin{pythoncode}
+def getRatesROOT(runNumber: int, triggerKey: str):
+    saveDirectory = "/rtmdata/" + str(runNumber)
+    rates = controller.runStandalone(
+                         dbConfig=dbCfg,
+                         exportRoot=True,
+                         saveDirectory=saveDirectory,
+                         makeTitle=False,
+                         triggerList=[triggerKey],
+                         createFit=True,
+                         bestFit=True,
+                         data_lst=[runNumber])
+
+    return send_from_directory(saveDirectory,
+                               triggerKey + '.ROOT',
+                               as_attachment=True) # Keep the filename
+\end{pythoncode}
+\caption{Implementation of the \texttt{/ratesROOT} API endpoint}
+\end{listing}
+
+\subsection{Running}
 \begin{textcode}
 yum install libnsl
 
@@ -180,7 +256,7 @@ $ mount /dev/disk/by-uuid/f74a87c8-7ced-4414-bc62-e09d07be7845 /cache
 To make the mounting persistent, we add this entry to the \texttt{/etc/fstab} file:
 
 \begin{textcode}
-UUID=f74a87c8-7ced-4414-bc62-e09d07be7845	/cache	auto defaults,nofail	0 3
+UUID=f74a87c8-7ced-4414-bc62-e09d07be7845   /cache  auto defaults,nofail    0 3
 \end{textcode}
 
 Here's the final situation, as described by \texttt{df -h}:
@@ -208,7 +284,7 @@ $ setsebool -P httpd_can_network_connect 1
 chown nginx:nginx /cache/
 
 \begin{listing}[ht]
-\begin{textcode}
+\begin{nginxcode}
 # Set cache dir
 proxy_cache_path /cache levels=1:2 keys_zone=one:50m max_size=500g inactive=200d;
 
@@ -219,27 +295,27 @@ proxy_cache_key $scheme$proxy_host$request_uri;
 log_format cache '$remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" cs=$upstream_cache_status';
 
 server {
-	server_name ater.cern.ch;
-	add_header X-Cache-Status $upstream_cache_status;
-	
-	## Access and error logs.
-	access_log /var/log/nginx/api-proxy.access.log cache;
-	error_log  /var/log/nginx/api-cache.error.log;	
-	
-	location / {
-		proxy_set_header Host $host;
-		proxy_set_header X-Real-IP $remote_addr;
-			
-		proxy_cache one;
-		proxy_ignore_headers X-Accel-Expires Expires Cache-Control;
-		proxy_cache_valid 200 302 200d;
-		proxy_cache_valid 404 15m;
-		proxy_pass http://localhost:8085;	
-	
-	}
-	listen 80;
+    server_name ater.cern.ch;
+    add_header X-Cache-Status $upstream_cache_status;
+    
+    ## Access and error logs.
+    access_log /var/log/nginx/api-proxy.access.log cache;
+    error_log  /var/log/nginx/api-cache.error.log;  
+    
+    location / {
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+            
+        proxy_cache one;
+        proxy_ignore_headers X-Accel-Expires Expires Cache-Control;
+        proxy_cache_valid 200 302 200d;
+        proxy_cache_valid 404 15m;
+        proxy_pass http://localhost:8085;   
+    
+    }
+    listen 80;
 }
-\end{textcode}
+\end{nginxcode}
 \caption{NGINX configuration for reverse proxying and caching}
 \end{listing}
 
@@ -248,8 +324,8 @@ server {
 VueJS, ROOT, Plotly, Plotly -> JSROOT
 
 \begin{figure}
-	\centerline{
-		\includegraphics[width=0.9\paperwidth]{figures/ratemon-ui0.png}}
-	\caption{Main RateMon UI application view, showing interactive trigger rate plots and relative fit functions}
-	\label{fig:ratemon_ui0}
+    \centerline{
+        \includegraphics[width=0.9\paperwidth]{figures/ratemon-ui0.png}}
+    \caption{Main RateMon UI application view, showing interactive trigger rate plots and relative fit functions}
+    \label{fig:ratemon_ui0}
 \end{figure}

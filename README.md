@@ -10,23 +10,31 @@ Run `make` to produce a PDF build. `make publish` updates the build at [avivace.
 
 Prerequisites: 
 
+Typefaces:
+
+- Adobe Caslon Pro
+- Iosevka Etoile — Quasi-proportional, Slab-serif
+
+Software:
+
 - XeLaTeX
 - latexmk
 - betterbib
 - latexindent
 - inkscape (SVG -> PDF figures processing)
+- Minted, Pygments (Syntax hightlighting in codeblocks)
 - Python3.7, matplotlib and additional Python3 packages (figures generation, see `figures/src`)
 - RateMon (to generate CMS Trigger Rate plots, fit functions plotting, ..)
 
 ```bash
 # On Debian-based systems:
 apt install texlive-xelatex latexmk inkscape
-pip install betterbib
+pip install betterbib pygments
 ```
 
 ### Figures
 
-Some figures are generated with external tools or Python scripts. Use a virtual environment to set up the dependencies listed in `figures/src/requirements.txt`.
+Some figures are generated with Python scripts and external tools. Use a virtual environment to set up the dependencies listed in `figures/src/requirements.txt`.
 
 ### Software
 
@@ -36,3 +44,7 @@ The actual software related to work reported in the thesis is not included here.
 - [RateMon API]()
 - [RateMon UI]()
 - [Triggers Anomaly Detection]()
+
+### References
+
+- [Minted](https://blog.wizardsoftheweb.pro/syntax-highlighting-in-latex-with-minted/#code)
