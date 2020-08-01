@@ -1,6 +1,31 @@
 \chapter{Modernising Rate Monitoring Tools}
 
-This chapter gives an overview of the software development work done to improve and add new features to the CMS Rate Monitoring software. Some other experimental components have ben developed to showcase possible upgrades, delivering quality of life enhancements and enabling shifters and physicists to navigate data in a faster and more comfortable way. This work is also described in \cite{VivaceRTM1} \cite{VivaceRTM2} \cite{L1TriggerOMSDevelopments} \cite{MohrmanRTM} and the code is available in the mentioned git repositories.
+One of the major challenges for the Compact Muon Solenoid (CMS) experiment, is the task of reducing event rate from roughly 40 MHz down to a more manageable 1 kHz while keeping as many interesting physics events as possible. This is accomplished through the use of a Level-1 (L1) hardware based trigger as well as a software based High-Level Trigger (HLT). Monitoring and understanding the output rates of the L1 and HLT triggers is of key importance for determining the overall performance of the trigger system and is intimately tied to what type of data is being recorded for physics analyses.
+
+Here, we introduce the Trigger System in operation at the CMS experiment and proceed giving an overview of the software development work done to improve and add new features to the CMS Rate Monitoring software, a collection of tools used by CMS shifters to monitor the L1 and HLT trigger rates. Some other experimental components have ben developed to showcase possible upgrades, delivering quality of life enhancements and enabling shifters and physicists to navigate data in a faster and more comfortable way.
+
+Finally, proper export functionalities have been added to the tools, allowing to save and export Trigger Rates as JSON or ROOT binary files.
+
+This work is also described in \cite{VivaceRTM1} \cite{VivaceRTM2} \cite{L1TriggerOMSDevelopments} \cite{MohrmanRTM}, the source code is available in the RateMon git repository \cite{RateMonGit}.
+
+\section{CMS Trigger System}
+
+A Trigger is an  electronic system for spotting potentially interesting collisions in a particle detector and triggering the detector’s read-out system to record the data resulting from the collision.
+
+The LHC generates 40 millions events per second. Each CMS event, on average, carries a payload of 1 MB of unprocessed informations. It is technologically impossible to retain this amount of data, due to hardware, software, network and storage constraints. Furthermore, most events represent uninteresting information for the current state of physics knowledge.
+
+The \textit{CMS Trigger System} is designed to reduce the output stream to 1000 events per second, while preserving the physics reach of the experiment.
+It is composed by a hierarchical set of rules, called Trigger Nodes (or Paths): each one probes a specific patterns (physics signature) in the event or looks for specific physics objects.
+
+This happens in two steps:
+
+\begin{enumerate}
+
+    \item The first level (L1) \cite{Bayatyan:706847} brings the 40 MHz to a 100 kHz rate. Here, N Trigger Algorithms are implemented on custom electronics (FPGAs and ASICs) exploiting informations from sub-detector components.
+
+    \item A configurable set of L1 Trigger Nodes seeds Triggers in the second level (HLT), implemented in software. The event stream is further refined, selecting an average rate of 400 Hz for offline event storage and certification \cite{Khachatryan_2017}. HLT runs 600 of these independent Trigger Paths.
+
+\end{enumerate}
 
 \begin{figure}
     \centerline{
@@ -16,14 +41,11 @@ This chapter gives an overview of the software development work done to improve 
     \label{fig:ratemon_hlt}
 \end{figure}
 
+\section{Rate Monitoring software}
 
-\section{Context}
+\subsection{Shift Monitor tool}
 
-What are ratemon scripts? How are they used? By whom?
-
-\subsection{ShiftMonitorTool}
-
-The High Level Trigger (HLT) rate monitoring tool is a python script that reports the rates of a selected list of triggers, primary datasets, and streams. The script updates every minute and averages the rates recorded in the last 3 lumisections, and, if possible, compares them to the predicted rate. If a trigger path deviates by a specified amount from the prediction, or exceeds a fixed rate, the corresponding line is highlighted in a yellow colour. The scripts also displays other information that could be useful for the shifter, such as the run number and last lumisections, the LHC status, HLT key, deaditme, instantaneous luminosity and index of the prescale column in use.
+The High Level Trigger (HLT) rate monitoring tool is a python script that reports the rates of a selected list of triggers, primary datasets, and streams. It is run in the CMS control room and gives valuable real-time feedback of trigger rates to the shift crew: it updates every minute and averages the rates recorded in the last 3 lumisections, and, if possible, compares them to the predicted rate. If a trigger path deviates by a specified amount from the prediction, or exceeds a fixed rate, the corresponding line is highlighted in a yellow colour. The scripts also displays other information that could be useful for the shifter, such as the run number and last lumisections, the LHC status, HLT key, deadtime, instantaneous luminosity and index of the prescale column in use.
 
 \begin{figure}
     \centerline{
@@ -31,6 +53,16 @@ The High Level Trigger (HLT) rate monitoring tool is a python script that report
     \caption{Example execution of the Rate Monitoring Tool showing warnings: two triggers have values consistently deviating from the predictions. \cite{ratemon-twiki}}
     \label{fig:ratemon_warnings}
 \end{figure}
+
+\subsection{Trigger Rate plotting}
+
+Another part of the software is plotting library, exposed as a the \texttt{plotTriggerRates} command line tool: it is used for observing how trigger rates vary over a range of beam and detector conditions, in particular how the rates of individual triggers scale with event pile-up.
+
+Trigger Rates are usually represented in \textit{Rate vs. PileUp plots}, specifically "pre-deadtime unprescaled rate / num colliding bx [Hz]" over "PU" (Pile Up luminosity) units, generated by the RateMon tools.
+
+In general, \textit{deadtime} refers to a time period during normal data taking when collisions are occurring but CMS is not ready to record the the data. This can occur for various reasons that are described in section 6.2.1 of \cite{Khachatryan_2017}. "pre-deadtime" rates are used in plots to allow for consistent comparison between different runs/fills; different runs and fills could have had different deadtimes, so correcting the rates for deadtime before fitting will allow the rates from different runs to be compared in a consistent way.
+
+A \textit{prescale} is a way of scaling back the rate of L1 and HLT triggers. For example, if a certain trigger has a prescale of 5, then the data corresponding to the event the trigger fired on is only recorded once out of every five times that the trigger fired. So if the prescale is 1, the data will be recorded every time the trigger fires. A prescale of 0 actually means that no data will be recorded for the trigger in question; the trigger is essentially just turned off. Again, correcting for deadtime in Rate VS PU plots is to allow for consistent comparisons of rates for different runs/fills and across pre scale columns. 
 
 \section{Packaging, CI/CD}
 
@@ -42,14 +74,17 @@ Docker, GitLab ci, cernbox
 Each commit triggers a build and a deployment of a RPM package. This CI/CD system is configured in these files:
 
 \begin{enumerate}
-    \item \textbf{.GitLab-ci.yml} describes the GitLab CI. The first phase (\texttt{build\_rpm}) tells the builder (described by \texttt{builder.dockerfile} and exposed on the GitLab registry) to run \texttt{make rpm} (described in \texttt{Makefile}) and flags the RPM package files as artifacts; In the second phase (deploy), those artifacts are pushed on a EOS folder using the ci-web-deployer tool;
-    \item \textbf{builder.dockerfile} prepares the docker container that will run the build, starting from the cern/cc7-base image. This is exposed using the GitLab registry feature as \texttt{gitlab-registry.cern.ch/avivace/ratemon/builder};
-    \item \textbf{Makefile} Uses the fpm tool to produce an RPM file with the given metadata and contents. Basically, the ratemon script folder is copied into /opt/ and the systemd service file goes into /usr/lib/systemd/system
-
+    \item \texttt{.GitLab-ci.yml} describes the GitLab CI. The first phase (\texttt{build\_rpm}) tells the builder (described by \texttt{builder.dockerfile} and exposed on the GitLab registry) to run \texttt{make rpm} (described in \texttt{Makefile}) and flags the RPM package files as artifacts; In the second phase (deploy), those artifacts are pushed on a EOS folder using the ci-web-deployer tool;
+    \item \texttt{builder.dockerfile} prepares the docker container that will run the build, starting from the cern/cc7-base image. This is exposed using the GitLab registry feature as \texttt{gitlab-registry.cern.ch/avivace/ratemon/builder};
+    \item \texttt{Makefile} Uses the fpm tool to produce an RPM file with the given metadata and contents. Basically, the ratemon script folder is copied into /opt/ and the systemd service file goes into /usr/lib/systemd/system
     \item The build produces an RPM package file. Those files are pushed during the "deploy" CI phase and finally published on a public CERNBox folder (EOS: \texttt{/eos/users/a/avivace/ratemon\_builds}). This is done using a service CERN account.
 \end{enumerate}
 
 Previously, the RateMon tools had to be installed checking out the code from the git repository, running a preparatory script, configuring the database connection and then running the script. Now, the system package manager can install the packaged software.
+
+\subsection{CMS Cactus}
+
+TODO \cite{DirkxCactus}
 
 \section{Configuration}
 
@@ -93,7 +128,7 @@ with open("dbConfig.yaml", 'r') as stream:
 
 # Specify which triggers we want
 triggers = ["HLT_Ele40_WPTight_Gsf",
-            "HLT_DoubleEle33_CaloIdL_MW"]
+              "HLT_DoubleEle33_CaloIdL_MW"]
 
 # Initialize the RateMon controller
 controller = ptr.MonitorController()
