@@ -196,7 +196,23 @@ Current High Energy Physics research includes:
 
 TODO LHC
 
-High Energy Physics experiments need to collect a large quantity of data to attack the statistical nature of particle physics and find interesting and rare phenomena with enough accuracy.
+A machine in which beams of charged particles are accelerated to high energies. Electric fields are used to accelerate the particles while magnets steer and focus them. Beams can be made to collide with a static target or with each other \cite{CERNGlossary}.
+
+\begin{itemize}
+
+\item A collider is a special type of circular accelerator where beams travelling in opposite directions are accelerated and made to interact at designated collision points.
+
+\item A linear accelerator (or linac) is often used asthe first stage in an accelerator chain.
+
+\item A synchrotron is an accelerator in which the magnetic field bending the orbits of the particles increases with the energy of the particles. This makes the particles move in a circular path.
+
+\end{itemize}
+
+\subsection{Run, Fill}
+
+For the LHC, a "run" is a period between "long shutdowns". Run 1 was 2010 to early 2013, Run 2 is 2015 to 2018, etc. There are thousands of LHC fills in a LHC run.
+
+For the experiments, a "run" is a discrete interval of data-taking. Usually run changes occur when something about the detector itself changes, such as trigger configuration or a subdetector is enabled/disabled. There may even be a timer that changes run after a prescribed period (certainly this is the case at LHCb). There can be many runs per fill, or runs can occur independently of fills, particularly if there's no beam or the LHC is in "machine development".
 
 \subsection{Cross Section}
 
@@ -218,7 +234,9 @@ Figure \ref{fig:cross_sections} shows $\sigma$ values for different processes. N
 
 \subsection{Luminosity}
 
-This value is a measurement of the number of collisions that can potentially be produced in a point of collision per $cm^2$ and per second. It can be calculated in this way:
+Luminosity is a measure of how many particles pass through a given area in a certain amount of time. The higher the luminosity delivered by the LHC, the larger the number of collision events happening at each experiment. Hence, more luminosity means more precise results and an increased possibility to observe rare processes \cite{CERNGlossary}.
+
+More specifically it is a measurement of the number of collisions that can potentially be produced in a point of collision per $cm^2$ and per second. It can be calculated in this way:
 
 \begin{equation}
 	L \simeq  \frac{N^2}{t S_{\text{eff}}}
@@ -253,6 +271,7 @@ Figure \ref{fig:lum_evolution} shows the evolution of the delivered luminosity t
 \end{figure}
 
 
+\label{int_lum_def}
 \subsection{Integrated Luminosity}
 
 The integral of the delivered luminosity over time is called integrated luminosity. It is a measurement of the collected data size, and it is an important value to characterize the performance of an accelerator.
@@ -270,6 +289,8 @@ One inverse femtobarn is equal to approximately 100 trillion proton-proton colli
 		\includegraphics[width=0.5\paperwidth]{integrated_lumi_atlas}}
 	\caption{Integrated luminosity at ATLAS experiment \cite{Bruce:2016iew}}
 \end{figure}
+
+\textit{Lumi Section} (LS) \label{ls_def} is a unit accounting for Integrated Luminosity. It's defined as a the sub-section of a run during which time the instantaneous Luminosity is unchanging (\~{}23 seconds).
 
 \subsection{Standard Deviation and Significance}
 
@@ -340,23 +361,3 @@ This section is composed of three components: Resistive Plate Chambers (RPC), Dr
 	\caption{Cutaway diagram of the CMS detector \cite{Sakuma_2014}}
 	\label{fig:cms}
 \end{figure}
-
-\section{CMS Trigger System}
-
-
-The LHC generates 40 millions events per second. Each CMS event, on average, carries a payload of 1 MB of unprocessed informations. It is technologically impossible to retain this amount of data, due to hardware, software, network and storage constraints.
-
-Furthermore, most events represent uninteresting information for the current state of physics knowledge.
-
-The \textit{CMS Trigger System} is designed to reduce the output stream to 1000 events per second, while preserving the physics reach of the experiment.
-It is composed by a hierarchical set of rules, called Trigger Nodes (or Paths): each one probes a specific patterns (physics signature) in the event or looks for specific physics objects.
-
-This happens in two steps:
-
-\begin{enumerate}
-
-	\item The first level (L1) \cite{Bayatyan:706847} brings the 40 MHz to a 100 kHz rate. Here, N Trigger Algorithms are implemented on custom electronics (FPGAs and ASICs) exploiting informations from sub-detector components.
-
-	\item A configurable set of L1 Trigger Nodes seeds Triggers in the second level (HLT), implemented in software. The event stream is further refined, selecting an average rate of 400 Hz for offline event storage and certification \cite{Khachatryan_2017}. HLT runs 600 of these independent Trigger Paths.
-
-\end{enumerate}
