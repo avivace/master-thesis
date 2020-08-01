@@ -1,0 +1,116 @@
+\chapter{Anomaly Detection on Trigger Rates}
+
+\section{Problem Statement}
+
+\section{Data}
+
+\subsection{Dataset A: Detector state over time}
+
+This dataset describes the status of the CMS detector and its sub-systems over the progress of the Run, for every Run since the experiment is active.
+
+The time progress of the Run is expressed in LS (Lumi Sections) units (\ref{ls_def}).
+
+More than 25 thousands Run are available, starting from the 2009 collisions to the 2018 cosmics.
+
+It's been generated using the CMS Run Registry API, with the DQM Offline Datasets as source.
+
+\begin{listing}[H]
+\begin{jsoncode}
+  {
+    "class": "Collisions18",
+    "dataset_attributes": {},
+    "datasets_in_gui": [],
+    "deleted": false,
+    "lumisections": {
+      "btag-btag": {
+        "EMPTY": 0,
+        "GOOD": 228,
+        "causes": [
+          "UNDEF"
+        ],
+        "comments": []
+      },
+      "csc-csc": {
+        "EMPTY": 0,
+        "GOOD": 228,
+        "causes": [
+          "UNDEF"
+        ],
+        "comments": []
+      },
+      "dt-dt": {
+        "EMPTY": 0,
+        "GOOD": 228,
+        "causes": [
+          "UNDEF"
+        ],
+        "comments": []
+      },
+      "tracker-tracking": {
+        "EMPTY": 0,
+        "GOOD": 228,
+        "causes": [
+          "UNDEF"
+        ],
+        "comments": []
+      },
+      /* ... */
+    },
+    "name": "online",
+    "run_number": 316361,
+    "short_run": 1,
+    "significant": true,
+    "state": "SIGNOFF",
+    "stop_reason": "ECAL preshower red recycle",
+    "version": 4260755
+  }
+\end{jsoncode}
+\caption{JSON export of the Run Registry data for Run 316361}
+\end{listing}
+
+\subsection{Dataset B: Trigger Rates}
+
+For each Run we then exported the Trigger Rates in the form of "pre-deadtime unprescaled rate / num colliding bx" (Hz) values over LS time series.
+
+There are hundreds of Triggers available, we selected the ones normally considered by shifters during Collision runs, which includes 17 HLT and 12 L1 Trigger Paths.
+
+This data is generated querying data from the CMS OMDS database by the Rate Monitoring tools, which operates a series of normalisations to make the plots comparable across runs and configurations. A fitted function is also computed and included in the object describing the rates.
+
+\begin{listing}[H]
+\begin{jsoncode}
+{
+    "runnumber": 316361,
+    "x_axis": "ls",
+    "y_axis": "pre-dt-unprescaled-rate",
+    "plots": {
+        "HLT_DoubleEle33_CaloIdL_MW": {
+            "plotname": "HLT_DoubleEle33_CaloIdL_MW_lumisection_vs_pre-deadtime unprescaled rate",
+            "xvar": "lumisection",
+            "yvar": "pre-deadtime unprescaled rate",
+            "xVals": [
+                23.0,
+                24.0,
+                25.0,
+                // ...
+            ],
+            "yVals": [
+                0.0038020953070372343,
+                0.00429236376658082,
+                0.005365777760744095,
+                // ...
+            ],
+            "fit": {
+                "linear": "0.00448 + x*-0.00000"
+            }
+        }
+        // ...
+    }
+}
+
+\end{jsoncode}
+\caption{JSON export of Trigger Rates vs LS time series for Run 316361}
+\end{listing}
+
+\section{Anomaly Detection Pipeline}
+
+\section{Results}
