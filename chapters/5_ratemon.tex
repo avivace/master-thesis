@@ -12,7 +12,7 @@ This work is also described in \cite{VivaceRTM1} \cite{VivaceRTM2} \cite{L1Trigg
 
 A Trigger is an  electronic system for spotting potentially interesting collisions in a particle detector and triggering the detector’s read-out system to record the data resulting from the collision.
 
-The LHC generates 40 millions events per second. Each CMS event, on average, carries a payload of 1 MB of unprocessed informations. It is technologically impossible to retain this amount of data, due to hardware, software, network and storage constraints. Furthermore, most events represent uninteresting information for the current state of physics knowledge.
+The LHC generates 40 millions events per second. Each event recorded by the CMS detector, carries on average a payload of 1 MB of unprocessed informations. It is technologically impossible to retain this amount of data, due to hardware, software, network and storage constraints. Furthermore, most events represent uninteresting information for the current state of physics knowledge.
 
 The \textit{CMS Trigger System} is designed to reduce the output stream to 1000 events per second, while preserving the physics reach of the experiment.
 It is composed by a hierarchical set of rules, called Trigger Nodes (or Paths): each one probes a specific patterns (physics signature) in the event or looks for specific physics objects.
@@ -84,7 +84,65 @@ Previously, the RateMon tools had to be installed checking out the code from the
 
 \subsection{CMS Cactus}
 
-TODO \cite{DirkxCactus}
+CMS Cactus auto devops \cite{DirkxCactus} is a collection of GitLab CI templates and images designed to ease development and maintenance of CI workflows for Cactus projects. It is built on the same foundations as GitLab AutoDevOps, but tailored for CERN and CMS infrastructure.
+
+We moved the CI/CD and packaging pipeline from vanilla’s GitLab tools to CMS Cactus, now using (and customising) a template provided by this tool.
+
+TODO improvements, examples
+
+\begin{listing}[ht]
+\begin{yamlcode}
+
+# include all templates in https://gitlab.cern.ch/cms-cactus/ops/auto-devops/-/tree/0.0.3
+include:
+  - project: cms-cactus/ops/auto-devops
+    ref: 0.0.4
+    file: templates/all.yml
+
+# Only run when a branch or git tag is defined
+# this avoids accidents like
+# - detached pipelines causing undefined behavior
+# - triggering for merge requests, where the CI pretends your code is already on the master branch, 
+#   and thus you unintentionally push your RPMs to your production yum repo prematurely
+workflow:
+  rules:
+  - if: $CI_COMMIT_TAG     
+  - if: $CI_COMMIT_BRANCH
+
+stages:
+- setup
+- build
+- publish
+- deploy
+
+builder image:
+  extends: .auto_devops_docker_builder_autotag_onchange
+  stage: setup
+  variables:
+    DOCKERFILE: builder.Dockerfile
+    CONTEXT_FOLDER: .gitlab/ci
+    NAME: builder
+
+make:
+  image: $CI_REGISTRY_IMAGE/builder:$CI_COMMIT_REF_NAME-latest
+  stage: build
+  script:
+  - make
+  artifacts:
+    paths:
+    - "/rpms"
+
+docker:
+  extends: .auto_devops_docker_builder_autotag
+  stage: publish
+  variables:
+    BUILD_ARG_CI_COMMIT_REF_NAME: $CI_COMMIT_REF_NAME
+
+\end{yamlcode}
+
+\caption{Setting up CI/CD by extending CMS Cactus templates}
+\end{listing}
+
 
 \section{Configuration}
 
