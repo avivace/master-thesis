@@ -1,6 +1,6 @@
 # Experimental Anomaly Detection on CERN CMS Trigger Rates
 
-Source of my a master thesis, typeset in LaTeX using the memoir class, for my MSc in Computer Science at Università degli studi di Milano Bicocca (2019/2020) describing the development and the data science/ML work done at CERN.
+Source of my a master thesis, typeset in LaTeX using the memoir class, for my [MSc in Computer Science](https://github.com/avivace/compsci) at Università degli studi di Milano Bicocca (2019/2020) describing the development and the data science/ML work done at CERN.
 
 Supervisors: Fabio Antonio Stella (**unimib**), Simone Gennai (**INFN**), Glenn Dirkx (**CERN**).
 
