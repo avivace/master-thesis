@@ -72,9 +72,9 @@ We quickly introduce some tools and services we will be mentioning later, outlin
 
 GitLab is a DevOps lyfecycle tool, providing Git hosting, a wiki, issue-tracking, contrinuos integration and deployment features. There's a public instance running at GitLab.com, but the software is licensed with an "open-core" business model, so everyone can self-host the entire stack, provided they have the infrastructure.
 
-In 2017, CERN chose GitLab as their code hosting solution and moved to a self-hosted GitLab instance. From now on, with "GitLab" we will refer to the CERN GitLab instance.
+GitLab business model is defined as "open core" (and not "open source"). They offer the core functionalities as free and open source software, while additional commercial features are offered in the paid plans, developed in a closed-source modality.
 
-TODO: open source VS open core
+In 2017, CERN chose GitLab as their code hosting solution and moved to a self-hosted GitLab instance. From now on, with "GitLab" we will refer to the CERN GitLab instance.
 
 \paragraph{Docker}
 
@@ -86,15 +86,80 @@ Docker containers are defined by a single file, called Dockerfile.
 
 TODO: container registry?
 
+\paragraph{EOS}
+
+EOS \cite{Peters_2015} is an open source distributed low-latency disk storage system in production since 2011 at CERN. Having a highly-scalable hierarchical namespace, and with data access possible by the XROOT protocol, it was initially used for physics data storage. Today, EOS provides storage for both physics and user use cases.
+
 \paragraph{CERNBox}
 
-CERNBox \cite{Mascetti_2015} is the cloud data storage service available to all CERN users. It provides a synchronisation and sharing service for end users on all major platforms. It is powered by the CERN EOS infrastructure.
+CERNBox \cite{Mascetti_2015} is the cloud data storage service available to all CERN users. It provides a synchronisation and sharing clients for end users on all major platforms, including a web servioe. Core of the implementation is the XRootD framework providing a feature-rich remote access protocol.  It is powered by the CERN EOS infrastructure as its storage backend.
+
+\paragraph{WBM} The CMS Web Based Monitoring \cite{badgett2014web}
+
+\paragraph{OMS} The CMS Online Monitoring System \cite{Andre2649402} 
 
 \section{Packaging, CI/CD}
 
-To enable Continues Integration and Continuos Deployment features, we moved the repository on the CERN GitLab. The repository on GitHub is being kept as a mirror but the CI/CD pipeline is handled by GitLab.
+The CMS Rate Monitoring git repository was hosted on GitHub. To enable Continues Integration and Continuos Deployment features, we migrated the repository to the CERN GitLab. The repository on GitHub is being kept as a mirror (as an additional git remote target) but the pipelines will be handled by GitLab.
 
-The folder has been restructured: the "misc" sub folder now contains the fits logs and the wbmRateReader scripts. The ratemon folder is the only one actually being packaged. The "systemd" folder contains the service file allowing the \texttt{ShiftMonitorTool} to be installed and used as a systemd service.
+
+\begin{listing}[ht]
+\begin{yamlcode}
+
+# EOS_PATH can be defined here or, if it needs to be hidden, 
+# as a secure variable of the project (Settings -> CI/CD -> Variables)
+# Note that the deploy-eos script needs the EOS_ACCOUNT_USERNAME and 
+# EOS_ACCOUNT_PASSWORD of a secondary CERN account having write access on the
+# specified EOS folder. Those are set as project variables.
+
+variables:
+  EOS_PATH: "/eos/user/a/avwebd2/ratemon_builds"
+
+stages:
+  - rpm
+  - deploy
+
+build_rpm:
+  stage: rpm
+  image: gitlab-registry.cern.ch/avivace/ratemon/builder
+  script:
+    # deploy-eos copies the content of the 'public' folder inside the specified
+    # eos share
+    - mkdir public
+    - make rpm
+    - mv *.rpm public/
+  artifacts:
+    paths:
+      - public
+    # Make it vanish in 1 hour
+    expire_in: 1 hour
+
+# https://gitlab.cern.ch/ci-tools/ci-web-deployer
+deploy-eos:
+  stage: deploy
+  image: gitlab-registry.cern.ch/ci-tools/ci-web-deployer:latest
+  script:
+    - deploy-eos
+
+\end{yamlcode}
+\caption{First iteration of the CI/CD setup}
+\end{listing}
+
+\begin{listing}[ht]
+\begin{yamlcode}
+FROM cern/cc7-base
+
+RUN yum install -y ruby-devel gcc make rpm-build rubygems
+RUN gem install --no-ri --no-rdoc fpm
+
+CMD fpm
+\end{yamlcode}
+\caption{Builder.dockerfile}
+\end{listing}
+
+The folder has been restructured: the "misc" sub folder now contains the fits logs and the wbmRateReader scripts. Everything else went to a "ratemon" sub folder, which will be the only one being packaged.
+
+We prepared and included a systemd service file, allowing the \texttt{ShiftMonitorTool} to be installed and used as a systemd service.
 
 Each commit triggers a build and a deployment of a RPM package. This CI/CD system is configured in these files:
 
@@ -105,7 +170,11 @@ Each commit triggers a build and a deployment of a RPM package. This CI/CD syste
     \item The build produces an RPM package file. Those files are pushed during the "deploy" CI phase and finally published on a public CERNBox folder (EOS: \texttt{/eos/users/a/avivace/ratemon\_builds}). This is done using a service CERN account.
 \end{enumerate}
 
-Previously, the RateMon tools had to be installed checking out the code from the git repository, running a preparatory script, configuring the database connection and then running the script. Now, the system package manager can install the packaged software.
+Previously, the RateMon tools had to be installed checking out the code from the git repository, running a preparatory script, configuring the database connection and then running the script. Now, the system package manager can install the packaged software:
+
+\begin{textcode}
+P5 $ rpm -i ratemon_0.1.rpm
+\end{textcode}
 
 \subsection{CMS Cactus}
 
@@ -333,12 +402,24 @@ CMS Run Registry is a in-development tool giving access to a lot of DQM datasets
 
 \subsection{Attaching a volume for caching}
 
-To offer more disk space to the caching mechanism, a new volume has been created through the CERN Openstack control panel. Once available, I attached it to the machine serving the RateMon API.
-
-On that machine, \texttt{fdisk -l} will give the disks overview, listing the new volume. I noted the device ID (\texttt{/dev/vdb}) and then executed \texttt{fdisk /dev/vdb} to launch fdisk, the partition manager tool provided by the util-linux standard package.
+To offer more disk space to the caching mechanism, a new volume has been created through the CERN Openstack infrastructure.
 
 \begin{textcode}
-$ fdisk -l
+lxplus $ openstack volume create --description "Volume for RateMon API caching" --type standard --size 600 rtmcachevol
+\end{textcode}
+
+Size is measured in GB. The volume type "standard" is the default one, providing a reliable store which is tolerant to at least one disk failure without user impact or data loss. Maximum performance is 80 MB/s and 100 IO operations (both, read and write).
+
+The command \texttt{openstack volume show} should now list the volume as available. We can attach it to the VM serving the API (\texttt{ater})
+
+\begin{textcode}
+lxplus $ openstack server add volume ater rtmcachevol
+\end{textcode}
+
+On the \texttt{ater} machine, \texttt{fdisk -l} will give the disks overview, listing the new volume. I noted the device ID (\texttt{/dev/vdb}) and then executed \texttt{fdisk /dev/vdb} to launch fdisk, the partition manager tool provided by the util-linux standard package.
+
+\begin{textcode}
+ater $ fdisk -l
 ...
 Disk /dev/vdb: 600 GiB, 644245094400 bytes, 1258291200 sectors
 Units: sectors of 1 * 512 = 512 bytes
@@ -358,7 +439,7 @@ Back in the standard shell, use \texttt{mkfs.ext4 /dev/vdb} to format the partit
 Note the UUID of our newly formatted partition:
 
 \begin{textcode}
-$ mkfs.ext4 /dev/vdb
+ater $ mkfs.ext4 /dev/vdb
 mke2fs 1.45.4 (23-Sep-2019)
 Creating filesystem with 157286400 4k blocks and 39321600 inodes
 Filesystem UUID: f74a87c8-7ced-4414-bc62-e09d07be7845
@@ -367,8 +448,8 @@ Filesystem UUID: f74a87c8-7ced-4414-bc62-e09d07be7845
 Now that we know the UUID, we can mount the volume:
 
 \begin{textcode}
-$ mkdir /cache
-$ mount /dev/disk/by-uuid/f74a87c8-7ced-4414-bc62-e09d07be7845 /cache
+ater $ mkdir /cache
+ater $ mount /dev/disk/by-uuid/f74a87c8-7ced-4414-bc62-e09d07be7845 /cache
 \end{textcode}
 
 To make the mounting persistent, we add this entry to the \texttt{/etc/fstab} file:
@@ -380,7 +461,7 @@ UUID=f74a87c8-7ced-4414-bc62-e09d07be7845   /cache  auto defaults,nofail    0 3
 Here's the final situation, as described by \texttt{df -h}:
 
 \begin{textcode}
-$ df -h
+ater $ df -h
 Filesystem      Size  Used Avail Use% Mounted on
 ...
 /dev/vda2        40G   33G  7.6G  82% /
