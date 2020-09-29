@@ -64,12 +64,37 @@ In general, \textit{deadtime} refers to a time period during normal data taking 
 
 A \textit{prescale} is a way of scaling back the rate of L1 and HLT triggers. For example, if a certain trigger has a prescale of 5, then the data corresponding to the event the trigger fired on is only recorded once out of every five times that the trigger fired. So if the prescale is 1, the data will be recorded every time the trigger fires. A prescale of 0 actually means that no data will be recorded for the trigger in question; the trigger is essentially just turned off. Again, correcting for deadtime in Rate VS PU plots is to allow for consistent comparisons of rates for different runs/fills and across pre scale columns. 
 
+\section{Infrastructure and tools}
+
+We quickly introduce some tools and services we will be mentioning later, outlining their scopes in these operations:
+
+\paragraph{GitLab}
+
+GitLab is a DevOps lyfecycle tool, providing Git hosting, a wiki, issue-tracking, contrinuos integration and deployment features. There's a public instance running at GitLab.com, but the software is licensed with an "open-core" business model, so everyone can self-host the entire stack, provided they have the infrastructure.
+
+In 2017, CERN chose GitLab as their code hosting solution and moved to a self-hosted GitLab instance. From now on, with "GitLab" we will refer to the CERN GitLab instance.
+
+TODO: open source VS open core
+
+\paragraph{Docker}
+
+Docker can package an application and its dependencies in a virtual container that can run on any Linux server. This enables the application to run in a variety of locations, mostly isolated from the host machine.
+
+We use Docker to prepare isolated and reproducible environments in which we can run the building, packaging and deployment phases of the DevOps pipeline.
+
+Docker containers are defined by a single file, called Dockerfile.
+
+TODO: container registry?
+
+\paragraph{CERNBox}
+
+CERNBox \cite{Mascetti_2015} is the cloud data storage service available to all CERN users. It provides a synchronisation and sharing service for end users on all major platforms. It is powered by the CERN EOS infrastructure.
+
 \section{Packaging, CI/CD}
 
-To enable CI/CD, we moved the repository on the CERN GitLab. The repository on GitHub is being kept updated but the CI/CD is handled by GitLab.
-I've restructured the folder. The "misc" folder now contains the fits logs and the wbmRateReader. The ratemon folder is the only one actually being packaged. The "systemd" folder contains the service file allowing the \texttt{ShiftMonitorTool} to be installed and used as a systemd service.
+To enable Continues Integration and Continuos Deployment features, we moved the repository on the CERN GitLab. The repository on GitHub is being kept as a mirror but the CI/CD pipeline is handled by GitLab.
 
-Docker, GitLab ci, cernbox
+The folder has been restructured: the "misc" sub folder now contains the fits logs and the wbmRateReader scripts. The ratemon folder is the only one actually being packaged. The "systemd" folder contains the service file allowing the \texttt{ShiftMonitorTool} to be installed and used as a systemd service.
 
 Each commit triggers a build and a deployment of a RPM package. This CI/CD system is configured in these files:
 
