@@ -405,6 +405,8 @@ CMS Run Registry is a in-development tool giving access to a lot of DQM datasets
 To offer more disk space to the caching mechanism, a new volume has been created through the CERN Openstack infrastructure.
 
 \begin{textcode}
+lxplus $ # activate the correct OpenStack project
+lxplus $ eval $(ai-rc 'Ratemon')
 lxplus $ openstack volume create --description "Volume for RateMon API caching" --type standard --size 600 rtmcachevol
 \end{textcode}
 
