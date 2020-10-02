@@ -4,9 +4,9 @@ This work ...
 
 \section{Conventions}
 
-Code snippets (called "listings", from now on) demonstrating the execution of commands in a shell are noted with the \texttt{\$} character. Preceding the \texttt{\$} character you sometimes notice a string specifying the hostname of the machine (as specified in CERN OpenStack) or the general infrastructure/service in which that commands must run to success (and make sense). E.g. \texttt{lxplus \$ command} shows the command execution on one of the machine from LXPLUS \cite{LXPLUSServiceITDepartment-2020-10-01}, the CERN service offering access to machines running Linux CERN CentOS 7. If there's no specification before \texttt{\$}, the environment is not relevant. With \texttt{P5} we refer to the machines installed in Point 5 of the LHC, in Cessy, home to the CMS detector.
+Code snippets (called "listings", from now on) demonstrating the execution of commands in a shell are noted with the \texttt{\$} character. Preceding the \texttt{\$} character you sometimes notice a string specifying the hostname of the machine (as specified in CERN OpenStack) or the general infrastructure/service in which that commands must run to have effect. E.g. \texttt{lxplus \$ command} shows the command execution on one of the machine from LXPLUS \cite{LXPLUSServiceITDepartment-2020-10-01}, the CERN service offering access to machines running Linux CERN CentOS 7. If there's no specification before \texttt{\$}, the environment is not relevant. With \texttt{P5} we refer to the machines installed in Point 5 of the LHC, in Cessy, home to the CMS detector.
 
-The source code has been only partially reported here, focusing only on the relevant and meaningful parts. Look for reference to the git repositories for the complete copies. Some listings also have truncated outputs for the same reasons.
+The produced source code has been reported here only partially, focusing only on the relevant and meaningful parts. Refer to the git repositories for the complete copies. Some listings also have truncated outputs for the same reasons.
 
 \chapter{Background}
 
@@ -58,6 +58,7 @@ Initiatives:
 	\item open access (with the Sponsoring Consortium for Open Access Publishing in Particle Physics)
 	\item open data (with the Open Data Portal for the LHC experiments).
 	\item MAlt
+	\item Digital Memory, OAIS
 \end{itemize}
 
 Tools and technologies:
@@ -340,26 +341,20 @@ The Compact Muon Solenoid (CMS) experiment is a general purpose particle detecto
 	\label{fig:cms2}
 \end{figure}
 
-\subsection{Silicon Tracker}
+\paragraph{Silicon Tracker}
 
 This part, the closest to the center of collision, is able to measure location, magnetic field and momentum of the particles. It can detect the decay of very short-lived particles, such as beauty quarks.
 
 It needs to be as little as obstrusive as possibile, and it's built following the microstrip design: a large number of identical semiconductor strips laid out along one axis of a two-dimensional structure. The geometrical layout of the components allows to accurately reconstruct the track of an incoming particle of ionizing radiation.
 
-\subsection{Electromagnetic Calorimeter}
-
-The Electromagnetic Calorimeter (ECAL) is composed by a set of 75000 lead lungstate crystals, stopping the passing electrons and photons. When this happens, these crystals produce light as electromagnetic photon showers, measured by photodetectors.
+\paragraph{Electromagnetic Calorimeter} (ECAL) is composed by a set of 75000 lead lungstate crystals, stopping the passing electrons and photons. When this happens, these crystals produce light as electromagnetic photon showers, measured by photodetectors.
 
 
-\subsection{Hadronic Calorimeter}
+\paragraph{Hadronic Calorimeter} (HCAL) detects hadrons and gluons with several layers of dense absoring materials and \textit{scintillators} where light pulses are produced when particles flows through.
 
-The Hadronic Calorimeter (HCAL) detects hadrons and gluons with several layers of dense absoring materials and \textit{scintillators} where light pulses are produced when particles flows through.
+\paragraph{Superconducting Solenoid} The largest superconducting magnet ever built. It's a huge magnet made of coils of wire that produce a uniform magnetic field when electricity flows through them. The CMS magnet is “superconducting”, allowing electricity to flow without resistance and generating a powerful magnetic field of 4 T, allowing precise momentum readings by analyzing the arcs of charged particles.
 
-\subsection{Superconducting Solenoid}
-
-The Superconducting Solenoid is the largest superconducting magnet ever built. It's a huge magnet made of coils of wire that produce a uniform magnetic field when electricity flows through them. The CMS magnet is “superconducting”, allowing electricity to flow without resistance and generating a powerful magnetic field of 4 T, allowing precise momentum readings by analyzing the arcs of charged particles.
-
-\subsection{Muon Chambers}
+\paragraph{Muon Chambers}
 
 This section is composed of three components: Resistive Plate Chambers (RPC), Drift Tubes (DT), Cathode Strip Chambers (CSC). It relies on the strong magnetic field (\~{} 2 T, provided by the return flux outside the solenoid) to measure the curvature of the only particles that managed to reach this section: muons and neutrinos.
 
