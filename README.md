@@ -48,3 +48,4 @@ The actual software related to work reported in the thesis is not included here.
 ### References
 
 - [Minted](https://blog.wizardsoftheweb.pro/syntax-highlighting-in-latex-with-minted/#code)
+- [bibtex vs biber and biblatex vs natbib](https://tex.stackexchange.com/questions/25701/bibtex-vs-biber-and-biblatex-vs-natbib)
