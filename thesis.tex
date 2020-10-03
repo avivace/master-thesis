@@ -1,6 +1,6 @@
-\documentclass[a4, oneside, 10pt]{memoir}
+\documentclass[a4, oneside, 10pt, nobib]{memoir}
 
-%% Misc imports
+%% IMPORTS
 % Clickable ref
 \usepackage{hyperref}
 \usepackage{setspace}
@@ -17,6 +17,12 @@
 
 \usepackage{xcolor}
 \usepackage{minted}
+\usepackage[backend=biber, style=numeric, defernumbers]{biblatex}
+
+%% SET THINGS UP
+% Add bibliography database
+\addbibresource{bibliography_better.bib}
+
 \definecolor{friendlybg}{HTML}{F8F8F8}
 
 % Minted macros
@@ -48,9 +54,8 @@
 % Tables
 \usepackage{multirow}
 
-% MICRO SIGN != MU
+% micro sign != MU
 \usepackage{siunitx}
-
 
 % Typography
 \usepackage{fontspec}
@@ -68,7 +73,7 @@
 \graphicspath{ {figures/} }
 %\definecolor{gray75}{gray}{0.75}
 
-% Enumerate and show in TOC till the subsection depth
+% Set Table of Contents depth
 \setsecnumdepth{subsection}
 \settocdepth{subsection}
 
@@ -81,9 +86,10 @@
 
 %\settypeblocksize{20cm}{16.5cm}{*}%
 
+%% DOCUMENT
 \begin{document}
 
-% Import revision data
+% Add revision data
 \input{revision}
 
 %\setlrmarginsandblock{2.5cm}{2.5cm}{*}
@@ -93,7 +99,8 @@
 % Frontmatter part is numbered with Romans
 \frontmatter
 
-% Front, Abstract and Acknowledgements
+% Preamble:
+%  Front, Dedication, Abstract and Acknowledgements
 \input{chapters/0_front}
 \input{chapters/0_dedication}
 \input{chapters/1_abstract}
@@ -105,26 +112,29 @@
 \tableofcontents*
 \thispagestyle{empty}
 
-% Mainmatter switches to Arabic numbering
+% Switch to Arabic numbering with mainmatter
 \mainmatter
 
-% Import parts
+% Include chapters
 \input{chapters/3_intro}
 \input{chapters/4_ad}
 \input{chapters/6_ml}
 \input{chapters/5_ratemon}
 \input{chapters/7_adtr}
 
+% List of Figures
 \pagebreak
 \listoffigures
 
+% List of Listings
 \pagebreak
 \listoflistings
 \addcontentsline{toc}{chapter}{List of Listings}
 
-% Bibliography
-\bibliographystyle{ieeetr}
-\bibliography{bibliography_better.bib}
+% References
+\printbibheading[title={References}]
+\printbibliography[nottype=online, heading=subbibliography, title=Bibliography]
+\printbibliography[type=online, heading=subbibliography, title=Sitography]
 
 % License
 \pagebreak
