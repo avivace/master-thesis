@@ -92,7 +92,7 @@ A series of improvements and new features have been implemented on the Rate Moni
 
 \end{enumerate}
 
-A part from aiding the direct users of this tools, being able to consistently export rates from any trigger, run, fill, in any of the offered type of time series (Rate vs PU, Rate vs LS, ..) was also considered a prerequisite to do any kind of further data analysis study on this data.
+A part from aiding the direct users of this tools, being able to consistently export rates from any trigger, run, fill, in any of the offered type of time series (Rate vs Pile Up, Rate vs Lumisection, ..) was also considered a prerequisite to do any kind of further data analysis study on this data.
 
 \section{Infrastructure and tools}
 
@@ -102,19 +102,15 @@ We quickly introduce some tools and services we will be mentioning later, outlin
 
 GitLab is a DevOps lyfecycle tool, providing Git hosting, a wiki, issue-tracking, contrinuos integration and deployment features. There's a public instance running at GitLab.com, but the software is licensed with an "open-core" business model, so everyone can self-host the entire stack, provided they have the infrastructure.
 
-GitLab business model is defined as "open core" (and not "open source"). They offer the core functionalities as free and open source software, while additional commercial features are offered in the paid plans, developed in a closed-source modality.
+GitLab business model is defined as "open core" (and not "open source"): core functionalities are offered as free and open source software, while additional commercial features are offered in the paid plans, developed in a closed-source modality.
 
 In 2017, CERN chose GitLab as their code hosting solution and moved to a self-hosted GitLab instance. From now on, with "GitLab" we will refer to the CERN GitLab instance.
 
-\paragraph{Docker}
+\paragraph{Docker and container registries}
 
 Docker can package an application and its dependencies in a virtual container that can run on any Linux server. This enables the application to run in a variety of locations, mostly isolated from the host machine.
 
-We use Docker to prepare isolated and reproducible environments in which we can run the building, packaging and deployment phases of the DevOps pipeline.
-
-Docker containers are defined by a single file, called Dockerfile.
-
-TODO: container registry?
+Docker containers are defined by a single file, called Dockerfile. 
 
 \paragraph{EOS}
 
@@ -131,9 +127,85 @@ CERNBox \cite{Mascetti_2015} is the cloud data storage service available to all 
 \paragraph{ROOT} ROOT \cite{Brun:1997pa} 
 
 
-\section{Packaging, CI/CD}
+\section{DevOps}
+
+\subsection{Migration from GitHub}
 
 The CMS Rate Monitoring git repository was hosted on GitHub. To enable Continues Integration and Continuos Deployment features, we migrated the repository to the CERN GitLab. The repository on GitHub is being kept as a mirror (as an additional git remote target) but the pipelines will be handled by GitLab.
+
+\begin{listing}[ht]
+\begin{yamlcode}
+FROM cern/cc7-base
+
+RUN yum install -y ruby-devel gcc make rpm-build rubygems
+RUN gem install --no-ri --no-rdoc fpm
+
+CMD fpm
+\end{yamlcode}
+\caption{Builder.dockerfile}
+\end{listing}
+
+\subsection{Folder Restructuring}
+
+The folder has been restructured: the "misc" sub folder now contains the fits logs and the wbmRateReader scripts. Everything else went to a "ratemon" sub folder, which will be the only one being packaged.
+
+\subsection{Systemd service}
+
+We prepared and included a systemd service file (\texttt{systemd/ratemon.service}), allowing the \texttt{ShiftMonitorTool} to be installed and used as a systemd service.
+
+\subsection{Packaging}
+
+The packaging phase is defined in the Makefile. We use the \texttt{fpm} to package the software in a RPM file with the given metadata and contents. Basically, the ratemon script folder is copied into \texttt{/opt/} \cite{FilesystemHierarchyStandard-2015-05-20} and the systemd service file goes into \texttt{/usr/lib/systemd/system}.
+
+\begin{listing}[ht]
+\begin{yamlcode}
+
+RPM_NAME = ratemon-${VERSION}.${ARCH}.${BRANCH}.${HASH}.rpm
+
+.PHONY: rpm
+rpm: build ${RPM_NAME}
+${RPM_NAME}:
+  # Clean up the rpmroot directory
+  rm -rf rpmroot
+  # Create /opt
+  mkdir -p rpmroot/opt
+  # Systemd unit folder
+  mkdir -p rpmroot/usr/lib/systemd/system
+  # Copy the systemd unit file
+  cp systemd/* rpmroot/usr/lib/systemd/system
+  # Copy the ratemon folder
+  cp -r ratemon rpmroot/opt
+
+  # Launch fpm to package the prepared folder 
+  fpm \
+  -p ${RPM_NAME} \
+  -n ratemon \
+  -s dir \
+  -t rpm \
+  -v ${VERSION} \
+  -a ${ARCH} \
+  -d python3 -d root -d python36-root \
+  --iteration ${RELEASE} \
+  --description "Rate monitoring tools for HLT and L1" \
+  --url "https://gitlab.cern.ch/cms-tsg-fog/ratemon" \
+  --vendor "CERN" \
+  rpmroot/=/
+  mkdir -p rpms
+  mv *.rpm rpms
+\end{yamlcode}
+\caption{Makefile "rpm" target launching the fpm tool to handle the packaging}
+\end{listing}
+
+\subsection{}
+
+\subsection{Builder Docker image}
+
+Starting from the \texttt{cern/cc7-base} base Docker image we prepared a "Builder" container, defined in \texttt{builder.Dockerfile}. It provides an isolated and reproducible environment in which we can run the building, packaging and deployment phases of the DevOps pipeline.
+After pushing to the Container Registry, it's exposed as \texttt{gitlab-registry.cern.ch/CMS-TSG-FOG/ratemon/builder}.
+
+\subsection{CI/CD Pipeline}
+
+\texttt{.GitLab-ci.yml} describes the GitLab CI. The first phase (\texttt{build\_rpm}) tells the builder (described by \texttt{builder.dockerfile} and exposed on the GitLab registry) to run \texttt{make rpm} (described in \texttt{Makefile}) and flags the produced RPM package files as artifacts; In the second phase (deploy), those artifacts are pushed on a EOS folder (\texttt{\/eos\/user\/a\/avwebd2\/ratemon\_builds}) using the ci-web-deployer tool with the credentials of a CERN Service Account.
 
 
 \begin{listing}[ht]
@@ -178,30 +250,7 @@ deploy-eos:
 \caption{First iteration of the CI/CD setup}
 \end{listing}
 
-\begin{listing}[ht]
-\begin{yamlcode}
-FROM cern/cc7-base
-
-RUN yum install -y ruby-devel gcc make rpm-build rubygems
-RUN gem install --no-ri --no-rdoc fpm
-
-CMD fpm
-\end{yamlcode}
-\caption{Builder.dockerfile}
-\end{listing}
-
-The folder has been restructured: the "misc" sub folder now contains the fits logs and the wbmRateReader scripts. Everything else went to a "ratemon" sub folder, which will be the only one being packaged.
-
-We prepared and included a systemd service file, allowing the \texttt{ShiftMonitorTool} to be installed and used as a systemd service.
-
-Each commit triggers a build and a deployment of a RPM package. This CI/CD system is configured in these files:
-
-\begin{enumerate}
-    \item \texttt{.GitLab-ci.yml} describes the GitLab CI. The first phase (\texttt{build\_rpm}) tells the builder (described by \texttt{builder.dockerfile} and exposed on the GitLab registry) to run \texttt{make rpm} (described in \texttt{Makefile}) and flags the RPM package files as artifacts; In the second phase (deploy), those artifacts are pushed on a EOS folder using the ci-web-deployer tool;
-    \item \texttt{builder.dockerfile} prepares the docker container that will run the build, starting from the cern/cc7-base image. This is exposed using the GitLab registry feature as \texttt{gitlab-registry.cern.ch/avivace/ratemon/builder};
-    \item \texttt{Makefile} Uses the fpm tool to produce an RPM file with the given metadata and contents. Basically, the ratemon script folder is copied into /opt/ and the systemd service file goes into /usr/lib/systemd/system
-    \item The build produces an RPM package file. Those files are pushed during the "deploy" CI phase and finally published on a public CERNBox folder (EOS: \texttt{/eos/users/a/avivace/ratemon\_builds}). This is done using a service CERN account.
-\end{enumerate}
+\subsection{Results}
 
 Previously, the RateMon tools had to be installed checking out the code from the git repository, running a preparatory script, configuring the database connection and then running the script. Now, the system package manager can just install the packaged software:
 
@@ -213,9 +262,8 @@ P5 $ rpm -i ratemon_0.1.rpm
 
 CMS Cactus auto devops \cite{DirkxCactus} is a collection of GitLab CI templates and images designed to ease development and maintenance of CI workflows for Cactus projects. It is built on the same foundations as GitLab AutoDevOps, but tailored for CERN and CMS infrastructure.
 
-We moved the CI/CD and packaging pipeline from vanilla’s GitLab tools to CMS Cactus, now using (and customising) a template provided by this tool.
+As an additional improvement, we moved the CI/CD and packaging pipeline from vanilla’s GitLab tools to CMS Cactus, now using (and customising) a template provided by this tool.
 
-TODO improvements, examples
 
 \begin{listing}[ht]
 \begin{yamlcode}
@@ -272,7 +320,7 @@ docker:
 
 \section{Configuration}
 
-YAML, schema, database errors?
+The software requires a connection to the CMS OMDS 
 
 The ShiftMonitorTool and plotTriggerRates scripts now require an \texttt{--dbConfigFile} option, specifying the YAML configuration file containing the database connection parameters.
 
@@ -430,7 +478,7 @@ Highcharts, React, Panel
 
 CMS Run Registry is a in-development tool giving access to a lot of DQM datasets. TODO: describe bug reports, HTTPS auth problems and various contributions done upstream to this tool.
 
-\cite{FixingtheBreakagefromtheAddTrustExternalCARootExpiration-2020-10-03}
+\cite{FixingtheBreakagefromtheAddTrustExternalCARootExpiration-2020-10-03} \cite{ErrorSSLCERTIFICATEVERIFYFAILEDIssue1CMSTrackerDPGcernrequests-2020-10-03} \cite{SSLerrorraisedbytheclientIssue1fabioespinosarunregistryapiclient-2020-10-03} \cite{WorkaroundskipSSLverificationbyavivacePullRequest2fabioespinosarunregistryapiclient-2020-10-03}
 
 \section{Deployment}
 
@@ -556,7 +604,7 @@ server {
 
 \section{A new User Interface}
 
-VueJS, ROOT, Plotly, Plotly -> JSROOT
+VueJS \cite{Vuejs-2020-10-04}, Vuetify \cite{VuetifyAMaterialDesignFrameworkforVuejs-2020-10-04} ROOT, Plotly, Plotly -> JSROOT \cite{JavaScriptROOT-2020-05-07}
 
 \begin{figure}
     \centerline{
