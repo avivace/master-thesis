@@ -64,7 +64,8 @@ Trigger Rates are usually represented in \textit{Rate vs. PileUp} plots, specifi
 
 In general, \textit{deadtime} refers to a time period during normal data taking when collisions are occurring but CMS is not ready to record the the data. This can occur for various reasons that are described in section 6.2.1 of \cite{Khachatryan_2017}. "pre-deadtime" rates are used in plots to allow for consistent comparison between different runs/fills; different runs and fills could have had different deadtimes, so correcting the rates for deadtime before fitting will allow the rates from different runs to be compared in a consistent way.
 
-A \textit{prescale} is a way of scaling back the rate of L1 and HLT triggers. For example, if a certain trigger has a prescale of 5, then the data corresponding to the event the trigger fired on is only recorded once out of every five times that the trigger fired. So if the prescale is 1, the data will be recorded every time the trigger fires. A prescale of 0 actually means that no data will be recorded for the trigger in question; the trigger is essentially just turned off. Again, correcting for deadtime in Rate VS PU plots is to allow for consistent comparisons of rates for different runs/fills and across pre scale columns. 
+A \textit{prescale} is a way of scaling back the rate of L1 and HLT triggers. For example, if a certain trigger has a prescale of 5, then the data corresponding to the event the trigger fired on is only recorded once out of every five times that the trigger fired. So if the prescale is 1, the data will be recorded every time the trigger fires. A prescale of 0 means that no data will be recorded for the trigger in question: the trigger is essentially just turned off. 
+Correcting for deadtime in Rate VS PU plots enables consistent comparisons of rates for different runs/fills and across (different) pre scale columns. 
 
 \subsection{Overview}
 
@@ -188,10 +189,18 @@ ${RPM_NAME}:
 \caption{Makefile "rpm" target launching the fpm tool to handle the packaging}
 \end{listing}
 
+Previously, the RateMon tools had to be installed checking out the code from the git repository, running a preparatory script, configuring the database connection and then running the script. Now, the system package manager can just install the packaged software:
+
+\begin{textcode}
+P5 $ dnf -i ratemon_0.1.rpm
+\end{textcode}
+
+RPM packages can be obtained on public CERNBox or Dropbox folders or automatically installed in Puppet-managed machines, depending on the environemnt and system administration policy.
+
 \subsection{Builder Docker image}
 
 Starting from the \texttt{cern/cc7-base} base Docker image we prepared a "Builder" container, defined in \texttt{builder.Dockerfile}. It provides an isolated and reproducible environment in which we can run the building, packaging and deployment steps of the DevOps pipeline.
-After pushing to the Container Registry, it's exposed as \texttt{gitlab-registry.cern.ch/CMS-TSG-FOG/ratemon/builder}.
+After pushing it to the Container Registry, it's exposed as \texttt{gitlab-registry.cern.ch/CMS-TSG-FOG/ratemon/builder}.
 
 \begin{listing}[ht]
 \begin{yamlcode}
@@ -252,14 +261,6 @@ deploy-eos:
 \end{yamlcode}
 \caption{First iteration of the CI/CD setup}
 \end{listing}
-
-\subsection{Results}
-
-Previously, the RateMon tools had to be installed checking out the code from the git repository, running a preparatory script, configuring the database connection and then running the script. Now, the system package manager can just install the packaged software:
-
-\begin{textcode}
-P5 $ dnf -i ratemon_0.1.rpm
-\end{textcode}
 
 \subsection{CMS Cactus}
 
@@ -329,7 +330,7 @@ The configuration file was moved to a YAML file, loaded using the \texttt{safe\_
 
 \texttt{safe\_load(stream)} parses the given stream and returns a Python object constructed from for the first document in the stream. If there are no documents in the stream, it returns \texttt{None}. \texttt{safe\_load} recognizes only standard YAML tags and cannot construct an arbitrary Python object.
 
-Since we require just a couple of variables, this fits perfectly our use case, providing also a preliminary validation on the integrity of the file. The emitted configuration Python object is then passed to the database connection class.
+Since we require just a couple of variables, this fits perfectly our use case, providing also a preliminary validation on the integrity of the file. The emitted Python object describing the configuration is then passed to the database connection class.
 
 The \texttt{ShiftMonitorTool} and \texttt{plotTriggerRates} scripts now require an \texttt{--dbConfigFile} option, specifying the YAML configuration file containing the database connection parameters.
 
