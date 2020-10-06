@@ -343,21 +343,30 @@ $ python plotTriggerRates.py --dbConfigFile=dbConfig.yaml --useFills --createFit
 
 \section{Exporting data}
 
-TODO
+The plots used to be rendered in small PNG images, with the resolution of 900$\times$600 pixels in a 8 bit color space. These images were then stored and served in the old Rate Monitoring page on WBM. No interactivity, navigation or filtering was possible, the only plots available were the Rate vs PU ones and the information about the fitted functions was not directly exposed.
 
 \paragraph{Raw JSON}
 
-TODO
+The \texttt{plotTriggerRates} class was modified \cite{RootexporttoggleJSONexportfunction6MergeRequestsCMSTSGFOGratemonGitLab-2020-10-07} to be able to dump any Trigger Rate plot as a raw time series of plain numeric values in JSON files conform with a known schema. Additional meta data are included in the exported file too, such as the run number, the trigger key, the plotted variables and their units (e.g. Lumisection or PU as X, prescaled or unprescaled rate in Hz as Y), the coefficients and the form (e.g. linear or quadratic) of the fitted function.
+
+This feature enables any plotting library to reconstruct the original plots and possibily draw the fit functions on the top of the time series.
+
+The export can be toggled by passing the \texttt{--exportJSON} command line option.
 
 \paragraph{ROOT files}
 
-TODO
+The possibility to export the plot canvas as a ROOT file has been added. This allows any ROOT instance to render the full plot natively.
+
+This export functionality can be toggled by passing the \texttt{--exportRoot} command line option.
 
 \section{Python3 upgrade}
 
-The tool 
+Python 2.7 reached the end of life on the 1st January 2020. We made sure \cite{Python3migration4MergeRequestsCMSTSGFOGratemonGitLab-2020-10-07} that the tools could run under a recent and supported version of Python 3.
 
 \section{From a CLI tool to a proper module}
+
+The runstandalone method \cite{RestructuretheplotTriggerRatescripttobeusedasamodule7MergeRequestsCMSTSGFOGratemonGitLab-2020-10-07}
+
 
 \begin{listing}[ht]
 \begin{pythoncode}
@@ -393,6 +402,8 @@ print(triggerrates)
 \end{listing}
 
 \section{API}
+
+\cite{ExposefunctionalitieswithaRestfulAPI8MergeRequestsCMSTSGFOGratemonGitLab-2020-10-07}
 
 \begin{figure}
     \centerline{
