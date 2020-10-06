@@ -341,6 +341,23 @@ The documentation and the twiki page have been updated to reflect these changes.
 $ python plotTriggerRates.py --dbConfigFile=dbConfig.yaml --useFills --createFit --bestFit --triggerList=TriggerLists/monitorlistCOLLISIONS.list 6303
 \end{textcode}
 
+\begin{listing}[ht]
+\begin{yamlcode}
+dsn_info:
+    'online': ''
+    'offline': ''
+
+hlt_connect:
+    'user': ''
+    'passwd': ''
+
+trg_connect:
+    'user': ''
+    'passwd': ''
+\end{yamlcode}
+\caption{dbConfig.yaml, the new required configuration file to run RateMon}
+\end{listing}
+
 \section{Exporting data}
 
 The plots used to be rendered in small PNG images, with the resolution of 900$\times$600 pixels in a 8 bit color space. These images were then stored and served in the old Rate Monitoring page on WBM. No interactivity, navigation or filtering was possible, the only plots available were the Rate vs PU ones and the information about the fitted functions was not directly exposed.
