@@ -140,15 +140,16 @@ The CMS Rate Monitoring git repository was hosted on GitHub. To enable Continues
 
 \subsection{Folder Restructuring}
 
-The folder has been restructured: the "misc" sub folder now contains the fits logs and the wbmRateReader scripts. Everything else went to a "ratemon" sub folder, which will be the only one being packaged.
+The folder has been restructured: the "misc" sub folder now contains the fits logs and the old scripts used with WBM (wbmRateReader). Everything was moved in "ratemon" sub folder, which will be the only one being packaged.
 
 \subsection{Systemd service}
 
-We prepared and included a systemd service file (\texttt{systemd/ratemon.service}), allowing the \texttt{ShiftMonitorTool} to be installed and used as a systemd service.
+We prepared and included a systemd service file (\texttt{systemd/ratemon.service}), allowing the \texttt{ShiftMonitorTool} to be installed and used as a systemd service: running the \texttt{systemctl enable --now ratemon} command starts RateMon "headlessly" and sets it to run at boot. Logs (previously only on the shell running the script) can be viewed with \texttt{journalctl -fu ratemon}.
+
 
 \subsection{Packaging}
 
-The packaging phase is defined in the Makefile. We use the \texttt{fpm} \cite{fpm-packager} to package the software in a RPM file with the given metadata and contents. Basically, the ratemon script folder is copied into \texttt{/opt/} \cite{FilesystemHierarchyStandard-2015-05-20} and the systemd service file goes into \texttt{/usr/lib/systemd/system}.
+The packaging phase is defined in the Makefile. We use \texttt{fpm} \cite{fpm-packager} to package the software in a RPM file with the given metadata and contents \cite{Packaging1MergeRequestsCMSTSGFOGratemonGitLab-2020-10-07}. Basically, the ratemon script folder is copied into \texttt{/opt/} \cite{FilesystemHierarchyStandard-2015-05-20} and the systemd service file goes into \texttt{/usr/lib/systemd/system}.
 
 \begin{listing}[ht]
 \begin{yamlcode}
