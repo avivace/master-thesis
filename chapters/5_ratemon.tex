@@ -325,7 +325,7 @@ docker:
 
 \section{Configuration}
 
-The software requires a connection to the CMS OMDS database. Previously, these credentials had to be filled directly inside a python file imported by the application entry point.
+A connection to the CMS OMDS database is required to run the software. Previously, the credentials needed to establish such connections had to be filled directly inside a python file imported by the application entry point.
 
 The configuration file was moved to a YAML file, loaded using the \texttt{safe\_load} method offered by the PyYAML package \cite{pyyaml-2020-06-18}:
 
