@@ -2,7 +2,7 @@ betterbib=bibliography_better.bib
 TEXFILES := $(shell find . -name '*.tex')
 SVGFILES := $(shell find . -name '*.svg')
 
-pdf: $(betterbib) revision.tex lint svg
+pdf: revision.tex lint svg
 	latexmk --xelatex -latexoption="-shell-escape -8bit" thesis
 	make clean
 
