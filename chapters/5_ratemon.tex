@@ -99,11 +99,40 @@ A part from aiding the direct users of this tools, being able to consistently ex
 
 \section{Infrastructure and tools}
 
-We quickly introduce some tools and services we will be mentioning later, outlining their scopes in these operations:
+We quickly introduce some tools and services we will be mentioning later, outlining their scopes in these operations.
+
+\paragraph{SSH tunneling}
+
+Some parts of the CERN infrastructure are accessible only when connected to the CERN Network. When this was not possible an SSH tunnel through LXPLUS was used to proxy the connection:
+
+\begin{textcode}
+$ ssh -D 1337 -q -N -f -C lxplus.cern.ch
+\end{textcode}
+
+A local SOCKS5 proxy is then available on the local machine. Any browser can be configured to use it, setting \texttt{localhost:1337} as proxy address. Tools like \texttt{tsocks} \cite{tsocksTransparentSOCKSProxyingLibrary-2020-10-07} or the more recently updated \texttt{proxychains-ng} \cite{proxychains-ng} can be used to run any command in the shell or launch any program transparently proxying the network connections trough the tunnel. E.g. to run Oracle SQL Developer and connect to the CMS OMDS database from outside CERN, \texttt{proxychains} must be first configured:
+
+\begin{listing}[ht]
+\begin{textcode}
+# Strict - Each connection will be done via chained proxies
+strict_chain
+# Resolve DNS trough the proxy
+proxy_dns
+[ProxyList]
+# localhost SSH tunnel
+socks5  127.0.0.1 1337
+\end{textcode}
+\caption{/etc/proxychains.conf, proxychains configuration file}
+\end{listing}
+
+And then you can run
+
+\begin{textcode}
+$ proxychains ./sqldeveloper.sh
+\end{textcode}
 
 \paragraph{GitLab}
 
-GitLab is a DevOps lyfecycle tool, providing Git hosting, a wiki, issue-tracking, continuos integration and deployment features. There's a public instance running at GitLab.com, but the software is licensed with an "open-core" business model, so everyone can self-host the entire stack, provided they have the infrastructure.
+GitLab is a DevOps lifecycle tool, providing Git hosting, a wiki, issue-tracking, continuos integration and deployment features. There's a public instance running at GitLab.com, but the software is licensed with an "open-core" business model, so everyone can self-host the entire stack, provided they have the infrastructure.
 
 GitLab business model is defined as "open core" (and not "open source"): core functionalities are offered as free and open source software, while additional commercial features are offered in the paid plans, developed in a closed-source modality.
 
@@ -144,7 +173,7 @@ The folder has been restructured: the "misc" sub folder now contains the fits lo
 
 \subsection{Systemd service}
 
-We prepared and included a systemd service file (\texttt{systemd/ratemon.service}), allowing the \texttt{ShiftMonitorTool} to be installed and used as a systemd service: running the \texttt{systemctl enable --now ratemon} command starts RateMon "headlessly" and sets it to run at boot. Logs (previously only on the shell running the script) can be viewed with \texttt{journalctl -fu ratemon}.
+We prepared and included a systemd service file (\texttt{systemd/ratemon.service}), allowing the \texttt{ShiftMonitorTool} to be installed and used as a systemd service: running the \texttt{systemctl enable --now ratemon} command starts RateMon "headlessly" and sets it to run at boot. Logs (previously shown on the shell running the script) can be viewed with \texttt{journalctl -fu ratemon}.
 
 
 \subsection{Packaging}
@@ -344,16 +373,16 @@ $ python plotTriggerRates.py --dbConfigFile=dbConfig.yaml --useFills --createFit
 \begin{listing}[ht]
 \begin{yamlcode}
 dsn_info:
-    'online': ''
-    'offline': ''
+    online: <value>
+    offline: <value>
 
 hlt_connect:
-    'user': ''
-    'passwd': ''
+    user: <user>
+    passwd: <passwd>
 
 trg_connect:
-    'user': ''
-    'passwd': ''
+    user: <user>
+    passwd: <passwd>
 \end{yamlcode}
 \caption{dbConfig.yaml, the new required configuration file to run RateMon}
 \end{listing}
