@@ -113,7 +113,7 @@ Some parts of the CERN infrastructure are accessible only when connected to the 
 $ ssh -D 1337 -q -N -f -C lxplus.cern.ch
 \end{textcode}
 
-A local SOCKS5 proxy is then available on the local machine. Any browser can be configured to use it, setting \texttt{localhost:1337} as proxy address. Tools like \texttt{tsocks} \cite{tsocksTransparentSOCKSProxyingLibrary-2020-10-07} or the more recently updated \texttt{proxychains-ng} \cite{proxychains-ng} can be used to run any command in the shell or launch any program transparently proxying the network connections trough the tunnel. E.g. to run Oracle SQL Developer and connect to the CMS OMDS database from outside CERN, \texttt{proxychains} can be configured in this way:
+A local SOCKS5 proxy is then available on the local machine. Any browser can be configured to use it, setting \mcode{localhost:1337} as proxy address. Tools like \mcode{tsocks} \cite{tsocksTransparentSOCKSProxyingLibrary-2020-10-07} or the more recently updated \mcode{proxychains-ng} \cite{proxychains-ng} can be used to run any command in the shell or launch any program transparently proxying the network connections trough the tunnel. E.g. to run Oracle SQL Developer and connect to the CMS OMDS database from outside CERN, \mcode{proxychains} can be configured in this way:
 
 \begin{listing}[ht]
 \begin{textcode}
@@ -177,12 +177,12 @@ The folder has been restructured: the "misc" sub folder now contains the fits lo
 
 \subsection{Systemd service}
 
-We prepared and included a systemd service file (\texttt{systemd/ratemon.service}), allowing the \texttt{ShiftMonitorTool} to be installed and used as a systemd service: running the \texttt{systemctl enable --now ratemon} command starts RateMon's ShiftMonitorTool "headlessly" and sets it to run at boot. Logs (previously shown on the shell running the script) can be viewed with \texttt{sudo journalctl -fu ratemon}. Trigger shifters are in the "systemd-journal" group and get access to this command without needing sudo or root permissions.
+We prepared and included a systemd service file (\mcode{systemd/ratemon.service}), allowing the \mcode{ShiftMonitorTool} to be installed and used as a systemd service: running the \mcode{systemctl enable --now ratemon} command starts RateMon's ShiftMonitorTool "headlessly" and sets it to run at boot. Logs (previously shown on the shell running the script) can be viewed with \mcode{sudo journalctl -fu ratemon}. Trigger shifters are in the "systemd-journal" group and get access to this command without needing sudo or root permissions.
 
 
 \subsection{Packaging}
 
-The packaging phase is defined in the Makefile. We use \texttt{fpm} \cite{fpm-packager} to package the software in a RPM file with the given metadata and contents \cite{Packaging1MergeRequestsCMSTSGFOGratemonGitLab-2020-10-07}. Basically, the ratemon script folder is copied into \texttt{/opt/} \cite{FilesystemHierarchyStandard-2015-05-20} and the systemd service file goes into \texttt{/usr/lib/systemd/system}.
+The packaging phase is defined in the Makefile. We use \mcode{fpm} \cite{fpm-packager} to package the software in a RPM file with the given metadata and contents \cite{Packaging1MergeRequestsCMSTSGFOGratemonGitLab-2020-10-07}. Basically, the ratemon script folder is copied into \mcode{/opt/} \cite{FilesystemHierarchyStandard-2015-05-20} and the systemd service file goes into \mcode{/usr/lib/systemd/system}.
 
 \begin{listing}[ht]
 \begin{yamlcode}
@@ -233,8 +233,8 @@ RPM packages can be obtained on public CERNBox or Dropbox folders or automatical
 
 \subsection{Builder Docker image}
 
-Starting from the \texttt{cern/cc7-base} base Docker image we prepared a "Builder" container, defined in \texttt{builder.Dockerfile}. It provides an isolated and reproducible environment in which we can run the building, packaging and deployment steps of the DevOps pipeline.
-After pushing it to the Container Registry, it's exposed as \texttt{gitlab-registry.cern.ch/CMS-TSG-FOG/ratemon/builder}.
+Starting from the \mcode{cern/cc7-base} base Docker image we prepared a "Builder" container, defined in \mcode{builder.Dockerfile}. It provides an isolated and reproducible environment in which we can run the building, packaging and deployment steps of the DevOps pipeline.
+After pushing it to the Container Registry, it's exposed as \mcode{gitlab-registry.cern.ch/CMS-TSG-FOG/ratemon/builder}.
 
 \begin{listing}[ht]
 \begin{yamlcode}
@@ -251,7 +251,7 @@ CMD fpm
 
 \subsection{CI/CD Pipeline}
 
-\texttt{.GitLab-ci.yml} describes the GitLab CI. The first phase (\texttt{build\_rpm}) tells the builder (described by \texttt{builder.dockerfile} and exposed on the GitLab registry) to run \texttt{make rpm} (described in \texttt{Makefile}) and flags the produced RPM package files as artifacts; In the second phase (deploy), those artifacts are pushed on a EOS folder (\texttt{\/eos/user/a/avwebd2/ratemon\_builds}) using the ci-web-deployer tool with the credentials of a CERN Service Account (\texttt{avwebd2}).
+\mcode{.GitLab-ci.yml} describes the GitLab CI. The first phase (\mcode{build\_rpm}) tells the builder (described by \mcode{builder.dockerfile} and exposed on the GitLab registry) to run \mcode{make rpm} (described in \mcode{Makefile}) and flags the produced RPM package files as artifacts; In the second phase (deploy), those artifacts are pushed on a EOS folder (\mcode{\/eos/user/a/avwebd2/ratemon\_builds}) using the ci-web-deployer tool with the credentials of a CERN Service Account (\mcode{avwebd2}).
 
 
 \begin{listing}[ht]
@@ -360,13 +360,13 @@ docker:
 
 A connection to the CMS OMDS database is required to run the software. Previously, the credentials needed to establish such connections had to be filled directly inside a python file imported by the application entry point.
 
-The configuration file was moved to a YAML file, loaded using the \texttt{safe\_load} method offered by the PyYAML package \cite{pyyaml-2020-06-18}:
+The configuration file was moved to a YAML file, loaded using the \mcode{safe\_load} method offered by the PyYAML package \cite{pyyaml-2020-06-18}:
 
-\texttt{safe\_load(stream)} parses the given stream and returns a Python object constructed from for the first document in the stream. If there are no documents in the stream, it returns \texttt{None}. \texttt{safe\_load} recognizes only standard YAML tags and cannot construct an arbitrary Python object.
+\mcode{safe\_load(stream)} parses the given stream and returns a Python object constructed from for the first document in the stream. If there are no documents in the stream, it returns \mcode{None}. \mcode{safe\_load} recognizes only standard YAML tags and cannot construct an arbitrary Python object.
 
 Since we require just a couple of variables, this fits perfectly our use case, providing also a preliminary validation on the integrity of the file. The emitted Python object describing the configuration is then passed to the database connection class.
 
-The \texttt{ShiftMonitorTool} and \texttt{plotTriggerRates} scripts now require an \texttt{--dbConfigFile} option, specifying the YAML configuration file containing the database connection parameters.
+The \mcode{ShiftMonitorTool} and \mcode{plotTriggerRates} scripts now require an \mcode{--dbConfigFile} option, specifying the YAML configuration file containing the database connection parameters.
 
 The documentation and the twiki page have been updated to reflect these changes. Scripts now need to be called in this way:
 
@@ -397,17 +397,17 @@ The plots used to be rendered in small PNG images, with the resolution of 900$\t
 
 \paragraph{Raw JSON}
 
-The \texttt{plotTriggerRates} class was modified \cite{RootexporttoggleJSONexportfunction6MergeRequestsCMSTSGFOGratemonGitLab-2020-10-07} to be able to dump any Trigger Rate plot as a raw time series of plain numeric values in JSON files conform with a known schema. Additional meta data are included in the exported file too, such as the run number, the trigger key, the plotted variables and their units (e.g. Lumisection or PU as X, prescaled or unprescaled rate in Hz as Y), the coefficients and the form (e.g. linear or quadratic) of the fitted function.
+The \mcode{plotTriggerRates} class was modified \cite{RootexporttoggleJSONexportfunction6MergeRequestsCMSTSGFOGratemonGitLab-2020-10-07} to be able to dump any Trigger Rate plot as a raw time series of plain numeric values in JSON files conform with a known schema. Additional meta data are included in the exported file too, such as the run number, the trigger key, the plotted variables and their units (e.g. Lumisection or PU as X, prescaled or unprescaled rate in Hz as Y), the coefficients and the form (e.g. linear or quadratic) of the fitted function.
 
 This feature enables any plotting library to reconstruct the original plots and possibily draw the fit functions on the top of the time series.
 
-The export can be toggled by passing the \texttt{--exportJSON} command line option.
+The export can be toggled by passing the \mcode{--exportJSON} command line option.
 
 \paragraph{ROOT files}
 
 The possibility to export the plot canvas as a ROOT file has been added. This allows any ROOT instance to render the full plot natively.
 
-This export functionality can be toggled by passing the \texttt{--exportRoot} command line option.
+This export functionality can be toggled by passing the \mcode{--exportRoot} command line option.
 
 \section{Python3 upgrade}
 
@@ -565,13 +565,13 @@ lxplus $ openstack volume create --description "Volume for RateMon API caching" 
 
 Size is measured in GB. The volume type "standard" is the default one, providing a reliable store which is tolerant to at least one disk failure without user impact or data loss. Maximum performance is 80 MB/s and 100 IO operations (both, read and write).
 
-The command \texttt{openstack volume show} should now list the volume as available. We can attach it to the VM serving the API (\texttt{ater})
+The command \mcode{openstack volume show} should now list the volume as available. We can attach it to the VM serving the API (\mcode{ater})
 
 \begin{textcode}
 lxplus $ openstack server add volume ater rtmcachevol
 \end{textcode}
 
-On the \texttt{ater} machine, \texttt{fdisk -l} will give the disks overview, listing the new volume. I noted the device ID (\texttt{/dev/vdb}) and then executed \texttt{fdisk /dev/vdb} to launch fdisk, the partition manager tool provided by the util-linux standard package.
+On the \mcode{ater} machine, \mcode{fdisk -l} will give the disks overview, listing the new volume. I noted the device ID (\mcode{/dev/vdb}) and then executed \mcode{fdisk /dev/vdb} to launch fdisk, the partition manager tool provided by the util-linux standard package.
 
 \begin{textcode}
 ater $ fdisk -l
@@ -582,14 +582,14 @@ Sector size (logical/physical): 512 bytes / 512 bytes
 I/O size (minimum/optimal): 512 bytes / 512 bytes
 \end{textcode}
 
-In the fdisk shell, create a new partition (\texttt{n}), select is a primary (\texttt{p}) and denote it as the first (\texttt{1}). Set it to occupy all the available space accepting defaults. Select again the partition (\texttt{t}) and set the Linux partition type (\texttt{83}). (\texttt{p}) displays the partition setup we just defined. If that's okay, (\texttt{w}) commits the modifications and applies them.
+In the fdisk shell, create a new partition (\mcode{n}), select is a primary (\mcode{p}) and denote it as the first (\mcode{1}). Set it to occupy all the available space accepting defaults. Select again the partition (\mcode{t}) and set the Linux partition type (\mcode{83}). (\mcode{p}) displays the partition setup we just defined. If that's okay, (\mcode{w}) commits the modifications and applies them.
 
 \begin{textcode}
 Device     Boot Start        End    Sectors  Size Id Type
 /dev/vdb1        2048 1258291199 1258289152  600G 83 Linux
 \end{textcode}
 
-Back in the standard shell, use \texttt{mkfs.ext4 /dev/vdb} to format the partition using the EXT4 file system.
+Back in the standard shell, use \mcode{mkfs.ext4 /dev/vdb} to format the partition using the EXT4 file system.
 
 Note the UUID of our newly formatted partition:
 
@@ -607,13 +607,13 @@ ater $ mkdir /cache
 ater $ mount /dev/disk/by-uuid/f74a87c8-7ced-4414-bc62-e09d07be7845 /cache
 \end{textcode}
 
-To make the mounting persistent, we add this entry to the \texttt{/etc/fstab} file:
+To make the mounting persistent, we add this entry to the \mcode{/etc/fstab} file:
 
 \begin{textcode}
 UUID=f74a87c8-7ced-4414-bc62-e09d07be7845   /cache  auto defaults,nofail    0 3
 \end{textcode}
 
-Here's the final situation, as described by \texttt{df -h}:
+Here's the final situation, as described by \mcode{df -h}:
 
 \begin{textcode}
 ater $ df -h

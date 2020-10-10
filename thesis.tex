@@ -7,6 +7,7 @@
 \usepackage{wrapfig}
 \usepackage{graphicx}
 \usepackage{lipsum}
+ \usepackage{soul}
 
 \usepackage{subcaption}
 
@@ -35,9 +36,6 @@
 \newminted{json}{style=friendly, bgcolor=friendlybg, breaklines, tabsize=2, breakanywhere}
 
 
-
-%\usepackage[xindy, toc, acronyms, nomain]{glossaries}
-
 \usepackage{tikz}
 \usetikzlibrary{positioning}
 
@@ -57,8 +55,13 @@
 \usepackage{fontspec}
 	% Numbers={OldStyle,Proportional},Ligatures=TeX
 	\setmainfont[]{Minion Pro}
-	\setmonofont[Scale=0.8]{Iosevka Etoile}
+	\setmonofont[Scale=0.85]{Iosevka}
 	%\newfontfamily\bold{Tiempos Headline Medium}
+
+ \newcommand{\mcode}[1]{%
+  \sethlcolor{friendlybg}{%
+  \texttt{\hl{\mbox{#1}}}}%
+}
 
 % Captions
 \usepackage[font=normalsize, labelfont=bf]{caption}
@@ -82,7 +85,8 @@
 
 %\settypeblocksize{20cm}{16.5cm}{*}%
 
-\usepackage{glossaries}
+\usepackage[nopostdot,style=alttree,nonumberlist,toc]{glossaries}
+\glssetwidest{L1 Triggerrr}
 \makeglossaries
 
 \input{chapters/0_glossary}
@@ -105,10 +109,6 @@
 \input{chapters/0_dedication}
 \input{chapters/1_abstract}
 \input{chapters/2_ack}
-\glsaddall
-\phantomsection
-\addcontentsline{toc}{chapter}{Glossary}
-\printglossaries
 
 \pagebreak
 
@@ -125,6 +125,10 @@
 \input{chapters/6_ml}
 \input{chapters/5_ratemon}
 \input{chapters/7_adtr}
+
+% Glossary
+\glsaddall
+\printglossaries
 
 % List of Figures
 \pagebreak
