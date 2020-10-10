@@ -63,5 +63,9 @@ clean:
 	-rm *.sbl
 	-rm *.slg
 	-rm *.sym
+	-rm *.bcf
+	-rm *.lol
+	-rm *.pyg
+	-rm *.run.xml
 	-rm revision.tex
 	-rm bibliography_better.bib
