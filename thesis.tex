@@ -36,7 +36,7 @@
 
 
 
-\usepackage[xindy, toc, acronyms, nomain]{glossaries}
+%\usepackage[xindy, toc, acronyms, nomain]{glossaries}
 
 \usepackage{tikz}
 \usetikzlibrary{positioning}
@@ -45,10 +45,6 @@
 \tikzset{input/.style={basic,circle}}
 \tikzset{weights/.style={basic,rectangle}}
 \tikzset{functions/.style={basic,circle,fill=blue!10}}
-
-\newacronym{lvm}{LVM}{Logical Volume Manager}
-
-\makeglossaries
 
 
 % Tables
@@ -86,6 +82,10 @@
 
 %\settypeblocksize{20cm}{16.5cm}{*}%
 
+\usepackage{glossaries}
+\makeglossaries
+
+\input{chapters/0_glossary}
 %% DOCUMENT
 \begin{document}
 
@@ -105,6 +105,10 @@
 \input{chapters/0_dedication}
 \input{chapters/1_abstract}
 \input{chapters/2_ack}
+\glsaddall
+\phantomsection
+\addcontentsline{toc}{chapter}{Glossary}
+\printglossaries
 
 \pagebreak
 

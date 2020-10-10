@@ -4,7 +4,6 @@ SVGFILES := $(shell find . -name '*.svg')
 
 pdf: revision.tex lint svg
 	latexmk --xelatex -latexoption="-shell-escape -8bit" thesis
-	make clean
 
 .PHONY : revision.tex
 revision.tex:
