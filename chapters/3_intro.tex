@@ -2,13 +2,13 @@
 
 \section{Motivations}
 
-\paragraph{WBM to OMS} The CMS detector at the LHC is a complex system which needs fast and reliable monitoring. Quick feedback on each of the subsystems is needed to spot and solve problems or the data taken might not be useful for physics analysis \cite{chep2016wbm}. Experts from different systems need to correlate information to investigate underlying problems.
+\paragraph{Monitoring a a particle detector} The CMS detector at the LHC particle accelerator is a complex system which needs fast and reliable monitoring. Quick feedback on each of the subsystems is needed to spot and solve problems or the data taken might not be useful for physics analysis \cite{chep2016wbm}. Experts from different systems need to correlate information to investigate underlying problems.
 
-A centralized service exposes real time data, historical information, summaries and reports from a series of different sources:
+A centralized monitoring solution exposes real time data, historical information, summaries and reports from a series of different sources:
 
 \begin{itemize}
 	\item Luminosity, Collision Rates.
-	\item Global Trigger, Trigger Rates.
+	\item Global Trigger, \textbf{Trigger Rates}.
 	\item LHC (Beam currents, losses, status, collimators, real time clock, event signal).
 	\item Magnet.
 	\item Sub-system specific information stored in relational databases.
@@ -21,14 +21,20 @@ A centralized service exposes real time data, historical information, summaries 
 
 Such system is different from the Data Quality Monitoring services, which look at actual \textit{event} data.
 
-The WBM software covered this role since the commissioning of the CMS experiment, evolving and integrating new services into a growing framework during LHC Run 1 (2010-2013) and Run 2 (2015-2018).
+The WBM software covered this role since the commissioning of the CMS experiment (2008), evolving and integrating new services into a growing framework during LHC Run 1 (2010-2013) and Run 2 (2015-2018).
+
+\paragraph{Upgrading the monitoring framework} 
 
 During the second Long Shutdown of the LHC (2018-2021) the CMS detector will be upgraded and many CMS sub-systems will drastically change. WBM started to show its age and problems: it unexpectedly and heavily grew with new features, arriving at a point where services were using vastly different technologies and it became harder and harder to mantain and expand \cite{CMSWBMreview}. It is decided to deprecate \cite{upgradewbmoms} WBM in favor of a new framework, called OMS, decoupling the UI from the Aggregation (Data) Layer.
 
-In this work, we will focus on the underlying software providing Trigger Rates to the Trigger Shifters (CMS operators monitoring the detector status from the Triggers behaviour) and (new) monitoring framework.
+
+\section{Scope of this work}
+
+This work encompasses research, maintenance and development on one of the sources of monitored data: the underlying software providing Trigger Rates data to Trigger Shifters (CMS operators monitoring the detector status) and to the new monitoring framework.
 
 We will start by introducing CERN, the research institute operating the LHC, outlining why such an experiment is needed and how it enables particle physics research.
 
+Since this etc etc EXPERIMENTAL PART
 
 \section{Conventions}
 
