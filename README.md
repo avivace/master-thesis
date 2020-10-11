@@ -1,4 +1,4 @@
-# Experimental Anomaly Detection on CERN CMS Trigger Rates
+# Modernising the CERN CMS Trigger Rates Monitoring software
 
 Source of my master thesis, typeset in LaTeX using the memoir class, for my [MSc in Computer Science](https://github.com/avivace/compsci) at Università degli studi di Milano Bicocca (2019/2020) describing the done at CERN on the CMS Trigger Rate Monitoring tools.
 
