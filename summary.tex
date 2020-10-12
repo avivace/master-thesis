@@ -5,6 +5,10 @@
 	\setmainfont[]{Minion Pro}
 	\setmonofont[Scale=0.85]{Iosevka}
 
+\usepackage[backend=biber, style=numeric, defernumbers]{biblatex}
+\addbibresource{bibliography.bib}
+
+
 \begin{document}
 \thispagestyle{empty}
 
@@ -36,16 +40,17 @@
 
 		A Trigger system is responsible of filtering the large majority of events, spotting the potentially interesting ones, triggering the detector's read-out system to actually record data from the selected collissions.
 
-		One of the major challenges for the Compact Muon Solenoid (CMS) experiment, is the task of reducing event rate from roughly 40 MHz down to a more manageable 1 kHz while keeping as many interesting physics events as possible. This is accomplished through the use of a Level-1 (L1) hardware based trigger as well as a software based High-Level Trigger (HLT). Monitoring and understanding the output rates of the L1 and HLT triggers is of key importance for determining the overall performance of the trigger system and is intimately tied to what type of data is being recorded for physics analyses.
+		One of the major challenges for the Compact Muon Solenoid (CMS) experiment, is the task of reducing event rate from roughly 40 MHz down to a more manageable 1 kHz while keeping as many interesting physics events as possible. This is accomplished through the use of a Level-1 (L1) hardware based trigger as well as a software based High-Level Trigger (HLT). 
 
 		This crucial phase is also sensible to malfunctions of many of the underlying parts, from sub detectors to the trigger algorithms configurations: monitoring the rates of such filters is essential to spot any anomalous behaviour in the underlying (sub)systems, software and/or hardware configurations, network and detector malfunctions.
 
+		Monitoring and understanding the output rates of the L1 and HLT triggers is of key importance for determining the overall performance of the trigger system and is intimately tied to what type of data is being recorded for physics analyses.
+
 		This work concerns RateMon, the software framework providing the monitoring data on this Trigger system: it exposes Trigger Rates data, querying the OMDS database and carrying out \textbf{normalisations} and \textbf{corrections} for a number of different configurations and conditions, allowing consistent comparisons.
 
-		Trigger Rates are presented in the form of \textit{Rates VS PU} \textbf{plots}. It also responsible of \textbf{alerting} the Trigger Shifters staff when recorded rates deviate too much from the \textbf{predicted} values. Those predictions are based on analytical models fitted on data collected in previous runs.
+		Trigger Rates are presented in the form of \textit{Rates VS PU} \textbf{plots}. It is also responsible of \textbf{alerting} the Trigger Shifters staff when rates deviate too much from the \textbf{predicted} values. Those predictions are based on analytical models fitted on data collected in previous runs.
 
-		This software is also used by shifters in the CMS Control Room to monitor Trigger Rates and spot 
-		potential problems during the LHC runs.
+		This software is also used by shifters in the CMS Control Room to monitor Trigger Rates and spot potential problems during the LHC runs.
 		
 		\paragraph{Upgrading the monitoring framework} 
 
@@ -66,12 +71,13 @@
 		\item Prepared a Continuos Integration and Deployment pipeline running on the CERN infrastructure.
 		\item Upgraded the CI/CD pipeline to use the CMS Cactus auto DevOps tools.
 		\item Upgraded the exporting feature of the tools, previously limited to shell output and small PNG image renders.
-		\item Enabled the tools to export trigger rates data in a agnostic format, not tied to ROOT.
-		\item Enabled the tools to export trigger rates data in ROOT files, allowing ROOT clients to read them.
-		\item Updated the documentation adding a a way to consistently prepare P5, LXPLUS and personal machines to run RateMon tools, without being tied to a particular machine cluster at CERN.
+		\item Enabled the tools to export trigger rates data in ROOT binary files, allowing ROOT clients to read them.
+		\item Enabled the tools to export trigger rates data also in a agnostic format, not tied to ROOT.
+		\item Updated the documentation adding a a way to consistently prepare any machine to run RateMon tools, without being tied to a particular machine cluster at CERN.
 		\item Enabled any user to import the RateMon software as a Python module, adding some external-facing and transparent methods to get Trigger Rates as raw data or plots.
 		\item Investigated a solution to integrate RateMon into the new CMS Online Monitoring System, replacing the old Web Based Monitoring, now in deprecation.
-		\item Since a proper integration was not possible, implemented an API exposing the exporting, processing and plotting functionalities of the RateMon software. This API is formally defined with an OpenAPI 3 Schema and an auto generated Swagger interface is available as documentation to users.
+		\item Implemented an API exposing the exporting, processing and plotting functionalities of the RateMon software. This API is formally defined with an OpenAPI 3 Schema and an auto generated Swagger interface is available as documentation to users.
+		\item 
 		\item Implemented a reactive web application in VueJS to demonstrate and showcase the API capabilities, plotting Trigger Rates (and their predicted values, based on the fits) in the browser with interactive and scalable plots (powered by JSROOT) instead of static image exports, consuming the new API.
 		\item Implemented a Trigger Selection interface on the UI, a feature requested by Trigger shifters and coordinators.
 		\item Reported a series of bugs happening in the data processing phase of the scripts, detailing scenarios triggering them, to allow future work on them.
@@ -82,7 +88,7 @@
 
 		\paragraph{Building a new dataset to aid automated Anomaly Detection approaches}
 
-		Trying to fit traditional and (untradional) Machine Learning pipelines and techniques in this task is not a noval idea: an elaborated research study has been conducted on Anomaly Detection and Machine Learning approaches to similar problems at CERN, from Variational Auto Encoders solutions (PhD thesis, \cite{}) to improve the analytical models to fit and predict trigger rates to isolation forest and gaussian mixture models to detect anomalies in the LHC injection magnets.
+		Trying to fit traditional Machine Learning pipelines and techniques in this task is not a novel idea: an elaborated research study has been conducted on Anomaly Detection and Machine Learning approaches to similar problems at CERN, from Variational Auto Encoders solutions (PhD thesis, \cite{adpol-cvae}) aiming to improve the analytical models to fit and predict trigger rates to isolation forest and gaussian mixture models to detect anomalies in the LHC injection magnets.
 
 		Similar papers and state of the art studies have been surveyed to frame and formally define our problem.
 
@@ -90,9 +96,9 @@
 
 		Therefore, we exploited the acquired knowledge on the software sources to produce a new integrated and labelled dataset.
 
-		Additional work has been done to properly export data from another another important source at CMS, the Run Registry. It exposes the status over time of every part of the detector, including the ones for which the failures are identifiable from the monitoring of the trigger rates, the process currently done by humans by looking at trigger plots and fits.
+		Additional work has been done to properly export data from another important source at CMS, the Run Registry. It exposes the status over time of every part of the detector, including the ones for which the failures are identifiable from the monitoring of the trigger rates, the process currently carried out by humans by looking at trigger plots and fits.
 
 		These improvements enabled trigger rates time series and detector data to be properly exported and integrated in a new, rich dataset of genuine and labeled anomalous runs, possibily providing a new starting point for novel approaches to automatising this task.
 
-
+\printbibliography
 \end{document}
