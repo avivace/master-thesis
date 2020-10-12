@@ -35,7 +35,7 @@
 
 		2500 staff members design, construct and operate the research infrastructure, in addition to more than 17500 users and scientists of 110 nationalities, from institutes in more than 70 countries.
 
-		The Compact Moun Solenoid (CMS) detector in the LHC is a complex system which needs fast and reliable monitoring. Quick feedback on each of the subsystems is essential to spot and solve problems or the data taken might be unusable or not interesting for physics analysis. Experts from different systems need to correlate information to investigate underlying problems.
+		The Compact Muon Solenoid (CMS) detector in the LHC is a complex system which needs fast and reliable monitoring. Quick feedback on each of the subsystems is essential to spot and solve problems or the data taken might be unusable or not interesting for physics analysis. Experts from different systems need to correlate information to investigate underlying problems.
 
 \begin{figure}[H]
     \centerline{
@@ -50,7 +50,7 @@
 
 		A \textit{Trigger system} is responsible of filtering the large majority of events, spotting the potentially interesting ones, triggering the detector's read-out system to retain data from the selected collisions.
 
-		The CMS experiment generates milions of events per second, each one carrying payloads averaging \~{}1.5 MB \cite{smdaqatlhc2016v3pdf-2020-10-12}. One of the major challenges is the task of reducing event rate from roughly 40 MHz down to a more manageable 1 kHz while keeping as many interesting physics events as possible. This is accomplished through the use of a Level-1 (L1) \cite{Bayatyan:706847} hardware based trigger as well as a software based High-Level Trigger (HLT) \cite{Khachatryan_2017}. 
+		The CMS experiment generates millions of events per second, each one carrying payloads averaging \~{}1.5 MB \cite{smdaqatlhc2016v3pdf-2020-10-12}. One of the major challenges is the task of reducing event rate from roughly 40 MHz down to a more manageable 1 kHz while keeping as many interesting physics events as possible. This is accomplished through the use of a Level-1 (L1) \cite{Bayatyan:706847} hardware based trigger as well as a software based High-Level Trigger (HLT) \cite{Khachatryan_2017}. 
 
 		This crucial phase is also sensible to malfunctions of many of the underlying parts, from sub detectors to the trigger algorithms configurations: monitoring the rates of such filters is essential to spot any anomalous behaviour in the underlying (sub)systems, software and/or hardware configurations, network and detector malfunctions.
 		
@@ -77,7 +77,7 @@
 
 		\paragraph{Upgrading the monitoring framework} 
 
-		During the second Long Shutdown of the LHC (2018-2021) the CMS detector will be upgraded and many CMS sub-systems will drastically change. WBM started to show its age and problems: it unexpectedly and heavily grew with new features, arriving at a point where services were using vastly different technologies and it became harder and harder to mantain and expand. It has been decided to deprecate WBM in favor of a new software framework, called Online Monitoring System (OMS), decoupling the User Interface (UI) from the Aggregation (Data) Layer.
+		During the second Long Shutdown of the LHC (2018-2021) the CMS detector will be upgraded and many CMS sub-systems will drastically change. WBM started to show its age and problems: it unexpectedly and heavily grew with new features, arriving at a point where services were using vastly different technologies and it became harder and harder to maintain and expand. It has been decided to deprecate WBM in favour of a new software framework, called Online Monitoring System (OMS), decoupling the User Interface (UI) from the Aggregation (Data) Layer.
 
 \begin{figure}[H]
     \centerline{
@@ -118,17 +118,17 @@
 
 		\paragraph{Building a new dataset to aid automated Anomaly Detection approaches}
 
-		Trying to fit traditional Machine Learning (ML) pipelines and models in this type of scenario is not a novel idea: an elaborated research study has been conducted on Anomaly Detection and Machine Learning approaches to similar problems at CERN: from Variational Auto Encoders solutions \cite{adpol-cvae} aiming to improve the analytical models to fit and predict trigger rates to isolation forest and gaussian mixture models \cite{Halilovic:2665985} to detect anomalies in the LHC injection magnets.
+		Trying to fit traditional Machine Learning (ML) pipelines and models in this type of scenario is not a novel idea: an elaborated research study has been conducted on Anomaly Detection and Machine Learning approaches to similar problems at CERN: from Variational Auto Encoders solutions \cite{adpol-cvae} aiming to improve the analytical models to fit and predict trigger rates to isolation forest and Gaussian mixture models \cite{Halilovic:2665985} to detect anomalies in the LHC injection magnets.
 
 		Similar papers and state of the art studies have been surveyed to frame and formally define our problem.
 
-		Obtaining large, proportionally labeled datasets and the intrinsic difficulty to encode and formalise the human expertise in a "consumable" form for traditional ML pipelines appeared as the most critical points of these attemps.
+		Obtaining large, proportionally labelled datasets and the intrinsic difficulty to encode and formalise the human expertise in a "consumable" form for traditional ML pipelines appeared as the most critical points of these attempts.
 
 		Therefore, we exploited the acquired knowledge to produce a new integrated and labelled dataset.
 
 		Additional work has been done to properly export data from another important source at CMS, the new Run Registry \cite{cms_collaboration_2019_3599323}. It describes the status over time of every part of the detector, including the ones for which the failures are identifiable from the monitoring of the trigger rates, the process currently carried out by humans by looking at trigger plots, reference fits and other detector diagnostic data.
 
-		These improvements enabled trigger rates time series and detector data to be properly exported and integrated in a new, rich dataset of genuine and labeled anomalous runs, possibily providing a new starting point for new approaches to tackle this challenge.
+		These improvements enabled trigger rates time series and detector data to be properly exported and integrated in a new, rich dataset of genuine and labelled anomalous runs, possibly providing a new starting point for new approaches to tackle this challenge.
 
 \begin{figure}[H]
     \centerline{
