@@ -48,13 +48,13 @@
 \pagebreak
 		\paragraph{Monitoring the Trigger System}
 
-		A Trigger system is responsible of filtering the large majority of events, spotting the potentially interesting ones, triggering the detector's read-out system to actually record data from the selected collisions.
+		A Trigger system is responsible of filtering the large majority of events, spotting the potentially interesting ones, triggering the detector's read-out system to retain data from the selected collisions.
 
 		The CMS experiment generates milions of events per second, each one carrying payloads averaging \~{}1.5 MB \cite{smdaqatlhc2016v3pdf-2020-10-12}. One of the major challenges is the task of reducing event rate from roughly 40 MHz down to a more manageable 1 kHz while keeping as many interesting physics events as possible. This is accomplished through the use of a Level-1 (L1) \cite{Bayatyan:706847} hardware based trigger as well as a software based High-Level Trigger (HLT) \cite{Khachatryan_2017}. 
 
 
 
-		This crucial phase is also sensible to malfunctions of many of the underlying parts, from sub detectors to the trigger algorithms configurations: monitoring the rates of such filters is essential to spot any anomalous behaviour in the underlying (sub)systems, software and/or hardware configurations, network and detector malfunctions.
+		This crucial phase is also sensible to malfunctions of many of the underlying parts, from sub detectors to the trigger algorithms configurations: monitoring the rates of such filters is essential to spot any anomalous behaviour in the underlying (sub)systems, software and/or hardware configurations, network and detector malfunctions. A trigger consists in a series of conditions and physics tests, effectively looking for specific signatures, e.g. matching tracks to hits in the muon chambers, or spotting photons through their high energy but lack of charge \cite{TriggeringandDataAcquisitionCMSExperiment-2020-10-12}.
 
 
 
@@ -94,7 +94,7 @@
 
 		We proceed to improve and renovate the set of tools included in RateMon, getting them ready to be migrated to the new OMS infrastructure: the tool can be now run and deployed in a reproducible and isolated way. A new CI/CD pipeline is implemented to streamline the development process and deliver software updated directly to the Control Room machines. A new API surface exposes the software analysis, model fitting and plotting capabilities.
 
-		The following goals have been achieved and delivered in production:
+		The following goals have been achieved and delivered in production \cite{VivaceRTM1} \cite{VivaceRTM2} \cite{L1TriggerOMSDevelopments} \cite{MohrmanRTM}:
 
 		\begin{itemize}
 
@@ -103,7 +103,7 @@
 		\item Formally defined the environment and the dependencies needed to run the software.
 		\item To be compliant (and integrate) with control room deployment procedures, prepared scripts to package the software with the RPM package format. Prepared a basic systemd service to include in the package, to allow running the software as a system service.
 		\item Prepared a Continuos Integration and Deployment pipeline running on the CERN infrastructure.
-		\item Upgraded the CI/CD pipeline to use the CMS Cactus auto DevOps tools.
+		\item Upgraded the CI/CD pipeline to use the CMS Cactus \cite{DirkxCactus} auto DevOps tools.
 		\item Upgraded the exporting feature of the tools, previously limited to shell output and small PNG image renders.
 		\item Enabled the tools to export trigger rates data in ROOT binary files, allowing ROOT clients to read them.
 		\item Enabled the tools to export trigger rates data also in a agnostic format, not tied to ROOT.
