@@ -1,4 +1,4 @@
-\documentclass[a4, oneside, 10pt, nobib]{memoir}
+\documentclass[a4, oneside, 11pt, nobib]{memoir}
 \usepackage{graphicx}
 \usepackage{fontspec}
 \usepackage{float}
@@ -48,16 +48,13 @@
 \pagebreak
 		\paragraph{Monitoring the Trigger System}
 
-		A Trigger system is responsible of filtering the large majority of events, spotting the potentially interesting ones, triggering the detector's read-out system to retain data from the selected collisions.
+		A \textit{Trigger system} is responsible of filtering the large majority of events, spotting the potentially interesting ones, triggering the detector's read-out system to retain data from the selected collisions.
 
 		The CMS experiment generates milions of events per second, each one carrying payloads averaging \~{}1.5 MB \cite{smdaqatlhc2016v3pdf-2020-10-12}. One of the major challenges is the task of reducing event rate from roughly 40 MHz down to a more manageable 1 kHz while keeping as many interesting physics events as possible. This is accomplished through the use of a Level-1 (L1) \cite{Bayatyan:706847} hardware based trigger as well as a software based High-Level Trigger (HLT) \cite{Khachatryan_2017}. 
 
-
-
 		This crucial phase is also sensible to malfunctions of many of the underlying parts, from sub detectors to the trigger algorithms configurations: monitoring the rates of such filters is essential to spot any anomalous behaviour in the underlying (sub)systems, software and/or hardware configurations, network and detector malfunctions.
-		A trigger is a series or reconstruction steps and filters trying to select specific physics signatures like high momentum leptons or large energy deposits in the calorimeters \cite{TriggeringandDataAcquisitionCMSExperiment-2020-10-12}.
-
-
+		
+		A \textit{Trigger} is a series or reconstruction steps and filters trying to select specific physics signatures like high momentum leptons or large energy deposits in the calorimeters \cite{TriggeringandDataAcquisitionCMSExperiment-2020-10-12}.
 
 		Monitoring and understanding the output rates of the L1 and HLT triggers is of key importance for determining the overall performance of the trigger system and is intimately tied to what type of data is being recorded for physics analyses.
 
@@ -71,10 +68,9 @@
 
 
 
-		This work concerns RateMon, the software framework providing the monitoring data on this Trigger system: it exposes Trigger Rates data, querying the OMDS database and carrying out \textbf{normalisations} and \textbf{corrections} for a number of different configurations and conditions, allowing consistent comparisons. It is powered by ROOT \cite{Brun:1997pa}, an open-source data analysis framework developed by CERN, and its Python interface, PyROOT.
+		This work concerns RateMon, the software framework providing the monitoring data on this Trigger system: it exposes Trigger Rates data, querying the CMS Online Master Database System (OMDS) and carrying out \textbf{normalisations} and \textbf{corrections} for a number of different configurations and conditions, allowing consistent comparisons. It is powered by ROOT \cite{Brun:1997pa}, an open-source data analysis framework developed by CERN, and its Python interface, PyROOT.
 
-
-		Trigger Rates are presented in the form of \textit{Rates VS PU} \textbf{plots}. It is also responsible of \textbf{alerting} the Trigger Shifters staff when rates deviate too much from the \textbf{predicted} values. Those predictions are based on analytical models fitted on data collected in previous runs.
+		Trigger Rates are presented in the form of \textit{Rates (Hz) VS Pile Up luminosity (PU \cite{Herr:941318})} \textbf{plots}.  It is also responsible of \textbf{alerting} the Trigger Shifters staff when rates deviate too much from the \textbf{predicted} values. Those predictions are based on analytical models fitted on data collected in previous runs.
 
 		This software is also used by shifters in the CMS Control Room to monitor Trigger Rates and spot potential problems during the LHC runs.
 
@@ -86,7 +82,7 @@
 \begin{figure}[H]
     \centerline{
         \includegraphics[width=0.6\paperwidth]{figures/RMT_305112_HLT_PFMET110_PFMHT110_IDTight.pdf}}
-    \caption{An HLT Trigger path plotted with a fitted function on run 305112}
+    \caption{Rates for an HLT Trigger plotted with a fitted function on run 305112}
     \label{fig:ratemon_hlt}
 \end{figure}
 
@@ -122,7 +118,7 @@
 
 		\paragraph{Building a new dataset to aid automated Anomaly Detection approaches}
 
-		Trying to fit traditional Machine Learning (ML) pipelines and models in this task is not a novel idea: an elaborated research study has been conducted on Anomaly Detection and Machine Learning approaches to similar problems at CERN, from Variational Auto Encoders solutions \cite{adpol-cvae}aiming to improve the analytical models to fit and predict trigger rates to isolation forest and gaussian mixture models \cite{Halilovic:2665985} to detect anomalies in the LHC injection magnets.
+		Trying to fit traditional Machine Learning (ML) pipelines and models in this task is not a novel idea: an elaborated research study has been conducted on Anomaly Detection and Machine Learning approaches to similar problems at CERN, from Variational Auto Encoders solutions \cite{adpol-cvae} aiming to improve the analytical models to fit and predict trigger rates to isolation forest and gaussian mixture models \cite{Halilovic:2665985} to detect anomalies in the LHC injection magnets.
 
 		Similar papers and state of the art studies have been surveyed to frame and formally define our problem.
 
@@ -130,11 +126,11 @@
 
 		Therefore, we exploited the acquired knowledge on the software sources to produce a new integrated and labelled dataset.
 
-		Additional work has been done to properly export data from another important source at CMS, the new Run Registry \cite{cms_collaboration_2019_3599323}. It exposes the status over time of every part of the detector, including the ones for which the failures are identifiable from the monitoring of the trigger rates, the process currently carried out by humans by looking at trigger plots, reference fits and other detector diagnostic data.
+		Additional work has been done to properly export data from another important source at CMS, the new Run Registry \cite{cms_collaboration_2019_3599323}. It describes the status over time of every part of the detector, including the ones for which the failures are identifiable from the monitoring of the trigger rates, the process currently carried out by humans by looking at trigger plots, reference fits and other detector diagnostic data.
 
-		These improvements enabled trigger rates time series and detector data to be properly exported and integrated in a new, rich dataset of genuine and labeled anomalous runs, possibily providing a new starting point for novel approaches to automatize this task.
+		These improvements enabled trigger rates time series and detector data to be properly exported and integrated in a new, rich dataset of genuine and labeled anomalous runs, possibily providing a new starting point for new approaches to automatize this task.
 
-\begin{figure}
+\begin{figure}[H]
     \centerline{
         \includegraphics[width=0.9\paperwidth]{figures/ratemon-ui0.png}}
     \caption{Main RateMon UI application view, showing interactive trigger rate plots and relative fit functions}
