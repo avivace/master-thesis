@@ -1,5 +1,5 @@
 \documentclass[a4, oneside, 10pt, nobib]{memoir}
-
+\usepackage{graphicx}
 \usepackage{fontspec}
 	% Numbers={OldStyle,Proportional},Ligatures=TeX
 	\setmainfont[]{Minion Pro}
@@ -24,29 +24,37 @@
 \end{center}
 
 \pagebreak
+\setcounter{page}{1}
 
-		\paragraph{CERN, LHC and CMS} High Energy Physics experiments involve large amount of complex systems subject to anomalies and malfunctioning. They generate a lot of high dimensional data that must be monitored and analysed by various specialised teams to validate and deliver certified data for physics analysis. Most of these tasks are still carried out completely by humans, by looking at highly-contextual data and plots in complex workflows. Machine Learning techniques and approaches are being evaluated to aid and possibly automatise these processes.
+		\paragraph{CERN, LHC and CMS} High Energy Physics experiments involve large amount of complex systems subject to anomalies and malfunctioning. They generate a lot of high dimensional data that must be monitored and analysed by various specialised teams to validate and deliver certified data for physics analysis. Most of these tasks are still carried out completely by humans, by looking at highly-contextual data and plots in complex workflows. Machine Learning techniques and approaches are being evaluated to aid and possibly automatize these processes.
 
 		CERN, the European Organization for Nuclear Research, operates the Large Hadron Collider (LHC), the world's largest and highest-energy particle collider, one the largest machine in the world.
 
 		2500 staff members design, construct and operate the research infrastructure, in addition to more than 17500 users and scientists of 110 nationalities, from institutes in more than 70 countries.
 
-		The Compact Moun Solenoid (CMS) detector in the LHC is a complex system which needs fast and reliable monitoring. Quick feedback on each of the subsystems is essential to spot and solve problems or the data taken might not be interesting for physics analysis. Experts from different systems need to correlate information to investigate underlying problems.
+		The Compact Moun Solenoid (CMS) detector in the LHC is a complex system which needs fast and reliable monitoring. Quick feedback on each of the subsystems is essential to spot and solve problems or the data taken might be unusable or not interesting for physics analysis. Experts from different systems need to correlate information to investigate underlying problems.
 
 		A centralized monitoring solution must expose real time data, historical information, summaries and reports from a series of heterogeneous sources. The Web Based Monitoring (WBM) software covered this role since the commissioning of the CMS experiment (2008), evolving and integrating new services into a growing framework during LHC Run 1 (2010-2013) and Run 2 (2015-2018).
 
 
 		\paragraph{Monitoring the Trigger System}
 
-		A Trigger system is responsible of filtering the large majority of events, spotting the potentially interesting ones, triggering the detector's read-out system to actually record data from the selected collissions.
+		A Trigger system is responsible of filtering the large majority of events, spotting the potentially interesting ones, triggering the detector's read-out system to actually record data from the selected collisions.
 
-		One of the major challenges for te CMS experiment, is the task of reducing event rate from roughly 40 MHz down to a more manageable 1 kHz while keeping as many interesting physics events as possible. This is accomplished through the use of a Level-1 (L1) hardware based trigger as well as a software based High-Level Trigger (HLT). 
+		One of the major challenges for te CMS experiment, is the task of reducing event rate from roughly 40 MHz down to a more manageable 1 kHz while keeping as many interesting physics events as possible. This is accomplished through the use of a Level-1 (L1) \cite{Bayatyan:706847} hardware based trigger as well as a software based High-Level Trigger (HLT) \cite{Khachatryan_2017}. 
 
 		This crucial phase is also sensible to malfunctions of many of the underlying parts, from sub detectors to the trigger algorithms configurations: monitoring the rates of such filters is essential to spot any anomalous behaviour in the underlying (sub)systems, software and/or hardware configurations, network and detector malfunctions.
 
 		Monitoring and understanding the output rates of the L1 and HLT triggers is of key importance for determining the overall performance of the trigger system and is intimately tied to what type of data is being recorded for physics analyses.
 
-		This work concerns RateMon, the software framework providing the monitoring data on this Trigger system: it exposes Trigger Rates data, querying the OMDS database and carrying out \textbf{normalisations} and \textbf{corrections} for a number of different configurations and conditions, allowing consistent comparisons.
+		\begin{figure}
+    \centerline{
+        \includegraphics[width=0.6\paperwidth]{figures/RMT_305112_HLT_PFMET110_PFMHT110_IDTight.pdf}}
+    \caption{HLT Trigger path plotted with a fitted function on run 305112}
+    \label{fig:ratemon_hlt}
+\end{figure}
+
+		This work concerns RateMon, the software framework providing the monitoring data on this Trigger system: it exposes Trigger Rates data, querying the OMDS database and carrying out \textbf{normalisations} and \textbf{corrections} for a number of different configurations and conditions, allowing consistent comparisons. It is powered by ROOT \cite{Brun:1997pa}, an open-source data analysis framework developed by CERN, and its Python interface, PyROOT.
 
 		Trigger Rates are presented in the form of \textit{Rates VS PU} \textbf{plots}. It is also responsible of \textbf{alerting} the Trigger Shifters staff when rates deviate too much from the \textbf{predicted} values. Those predictions are based on analytical models fitted on data collected in previous runs.
 
@@ -54,7 +62,7 @@
 		
 		\paragraph{Upgrading the monitoring framework} 
 
-		During the second Long Shutdown of the LHC (2018-2021) the CMS detector will be upgraded and many CMS sub-systems will drastically change. WBM started to show its age and problems: it unexpectedly and heavily grew with new features, arriving at a point where services were using vastly different technologies and it became harder and harder to mantain and expand. It has been decided to deprecate WBM in favor of a new software framework, called OMS, decoupling the UI from the Aggregation (Data) Layer.
+		During the second Long Shutdown of the LHC (2018-2021) the CMS detector will be upgraded and many CMS sub-systems will drastically change. WBM started to show its age and problems: it unexpectedly and heavily grew with new features, arriving at a point where services were using vastly different technologies and it became harder and harder to mantain and expand. It has been decided to deprecate WBM in favor of a new software framework, called Online Monitoring System (OMS), decoupling the User Interface (UI) from the Aggregation (Data) Layer.
 
 		\paragraph{Overview}
 
@@ -75,9 +83,8 @@
 		\item Enabled the tools to export trigger rates data also in a agnostic format, not tied to ROOT.
 		\item Updated the documentation adding a a way to consistently prepare any machine to run RateMon tools, without being tied to a particular machine cluster at CERN.
 		\item Enabled any user to import the RateMon software as a Python module, adding some external-facing and transparent methods to get Trigger Rates as raw data or plots.
-		\item Investigated a solution to integrate RateMon into the new CMS Online Monitoring System, replacing the old Web Based Monitoring, now in deprecation.
-		\item Implemented an API exposing the exporting, processing and plotting functionalities of the RateMon software. This API is formally defined with an OpenAPI 3 Schema and an auto generated Swagger interface is available as documentation to users.
-		\item 
+		\item Investigated a solution to integrate RateMon into the new CMS OMS, replacing the old Web Based Monitoring, now deprecated.
+		\item Implemented an API exposing the exporting, processing and plotting functionalities of the RateMon software. This API is formally defined with an OpenAPI 3 Schema and an auto generated Swagger interface is available as documentation to users. This API can be plugged into the OMS stack to provide the old plots and many new features.
 		\item Implemented a reactive web application in VueJS to demonstrate and showcase the API capabilities, plotting Trigger Rates (and their predicted values, based on the fits) in the browser with interactive and scalable plots (powered by JSROOT) instead of static image exports, consuming the new API.
 		\item Implemented a Trigger Selection interface on the UI, a feature requested by Trigger shifters and coordinators.
 		\item Reported a series of bugs happening in the data processing phase of the scripts, detailing scenarios triggering them, to allow future work on them.
@@ -88,17 +95,19 @@
 
 		\paragraph{Building a new dataset to aid automated Anomaly Detection approaches}
 
-		Trying to fit traditional Machine Learning pipelines and techniques in this task is not a novel idea: an elaborated research study has been conducted on Anomaly Detection and Machine Learning approaches to similar problems at CERN, from Variational Auto Encoders solutions (PhD thesis, \cite{adpol-cvae}) aiming to improve the analytical models to fit and predict trigger rates to isolation forest and gaussian mixture models to detect anomalies in the LHC injection magnets.
+		Trying to fit traditional Machine Learning (ML) pipelines and models in this task is not a novel idea: an elaborated research study has been conducted on Anomaly Detection and Machine Learning approaches to similar problems at CERN, from Variational Auto Encoders solutions \cite{adpol-cvae}aiming to improve the analytical models to fit and predict trigger rates to isolation forest and gaussian mixture models \cite{Halilovic:2665985} to detect anomalies in the LHC injection magnets.
 
 		Similar papers and state of the art studies have been surveyed to frame and formally define our problem.
 
-		Obtaining large, proportionally labeled datasets and the intrinsic difficulty to codify and formalise the expertise in a "consumable" form for traditional ML pipelines are the most critical points of these attemps.
+		Obtaining large, proportionally labeled datasets and the intrinsic difficulty to codify and formalise the human expertise in a "consumable" form for traditional ML pipelines appeared as the most critical points of these attemps.
 
 		Therefore, we exploited the acquired knowledge on the software sources to produce a new integrated and labelled dataset.
 
-		Additional work has been done to properly export data from another important source at CMS, the Run Registry. It exposes the status over time of every part of the detector, including the ones for which the failures are identifiable from the monitoring of the trigger rates, the process currently carried out by humans by looking at trigger plots and fits.
+		Additional work has been done to properly export data from another important source at CMS, the new Run Registry \cite{cms_collaboration_2019_3599323}. It exposes the status over time of every part of the detector, including the ones for which the failures are identifiable from the monitoring of the trigger rates, the process currently carried out by humans by looking at trigger plots, reference fits and other detector diagnostic data.
 
-		These improvements enabled trigger rates time series and detector data to be properly exported and integrated in a new, rich dataset of genuine and labeled anomalous runs, possibily providing a new starting point for novel approaches to automatising this task.
+		These improvements enabled trigger rates time series and detector data to be properly exported and integrated in a new, rich dataset of genuine and labeled anomalous runs, possibily providing a new starting point for novel approaches to automatize this task.
 
+\thispagestyle{empty}
+ 
 \printbibliography
 \end{document}
