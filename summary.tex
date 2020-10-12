@@ -37,29 +37,32 @@
 		A centralized monitoring solution must expose real time data, historical information, summaries and reports from a series of heterogeneous sources. The Web Based Monitoring (WBM) software covered this role since the commissioning of the CMS experiment (2008), evolving and integrating new services into a growing framework during LHC Run 1 (2010-2013) and Run 2 (2015-2018).
 
 
+
 		\paragraph{Monitoring the Trigger System}
 
 		A Trigger system is responsible of filtering the large majority of events, spotting the potentially interesting ones, triggering the detector's read-out system to actually record data from the selected collisions.
 
-		One of the major challenges for te CMS experiment, is the task of reducing event rate from roughly 40 MHz down to a more manageable 1 kHz while keeping as many interesting physics events as possible. This is accomplished through the use of a Level-1 (L1) \cite{Bayatyan:706847} hardware based trigger as well as a software based High-Level Trigger (HLT) \cite{Khachatryan_2017}. 
+		The CMS experiment generates milions of events per second, each one carrying payloads averaging \~{}1.5 MB \cite{smdaqatlhc2016v3pdf-2020-10-12}. One of the major challenges is the task of reducing event rate from roughly 40 MHz down to a more manageable 1 kHz while keeping as many interesting physics events as possible. This is accomplished through the use of a Level-1 (L1) \cite{Bayatyan:706847} hardware based trigger as well as a software based High-Level Trigger (HLT) \cite{Khachatryan_2017}. 
+
+
 
 		This crucial phase is also sensible to malfunctions of many of the underlying parts, from sub detectors to the trigger algorithms configurations: monitoring the rates of such filters is essential to spot any anomalous behaviour in the underlying (sub)systems, software and/or hardware configurations, network and detector malfunctions.
 
+
+
 		Monitoring and understanding the output rates of the L1 and HLT triggers is of key importance for determining the overall performance of the trigger system and is intimately tied to what type of data is being recorded for physics analyses.
 
-		\begin{figure}
-    \centerline{
-        \includegraphics[width=0.6\paperwidth]{figures/RMT_305112_HLT_PFMET110_PFMHT110_IDTight.pdf}}
-    \caption{HLT Trigger path plotted with a fitted function on run 305112}
-    \label{fig:ratemon_hlt}
-\end{figure}
+
+
+
 
 		This work concerns RateMon, the software framework providing the monitoring data on this Trigger system: it exposes Trigger Rates data, querying the OMDS database and carrying out \textbf{normalisations} and \textbf{corrections} for a number of different configurations and conditions, allowing consistent comparisons. It is powered by ROOT \cite{Brun:1997pa}, an open-source data analysis framework developed by CERN, and its Python interface, PyROOT.
+
 
 		Trigger Rates are presented in the form of \textit{Rates VS PU} \textbf{plots}. It is also responsible of \textbf{alerting} the Trigger Shifters staff when rates deviate too much from the \textbf{predicted} values. Those predictions are based on analytical models fitted on data collected in previous runs.
 
 		This software is also used by shifters in the CMS Control Room to monitor Trigger Rates and spot potential problems during the LHC runs.
-		
+
 		\paragraph{Upgrading the monitoring framework} 
 
 		During the second Long Shutdown of the LHC (2018-2021) the CMS detector will be upgraded and many CMS sub-systems will drastically change. WBM started to show its age and problems: it unexpectedly and heavily grew with new features, arriving at a point where services were using vastly different technologies and it became harder and harder to mantain and expand. It has been decided to deprecate WBM in favor of a new software framework, called Online Monitoring System (OMS), decoupling the User Interface (UI) from the Aggregation (Data) Layer.
@@ -72,10 +75,10 @@
 
 		\begin{itemize}
 
-		\item Upgraded the tools to run on a recent and supported version of Python.
-		\item Moved the database connection configuration class to an actual configuration file.
+		\item Upgraded the tools to run on a recent and supported version of Python and PyROOT.
+		\item Moved the database connection configuration class to an configuration file.
 		\item Formally defined the environment and the dependencies needed to run the software.
-		\item Prepared scripts to package the software with the RPM package format. Prepared a basic systemd service to include in the package, to allow running the software as a system service.
+		\item To be compliant (and integrate) with control room deployment procedures, prepared scripts to package the software with the RPM package format. Prepared a basic systemd service to include in the package, to allow running the software as a system service.
 		\item Prepared a Continuos Integration and Deployment pipeline running on the CERN infrastructure.
 		\item Upgraded the CI/CD pipeline to use the CMS Cactus auto DevOps tools.
 		\item Upgraded the exporting feature of the tools, previously limited to shell output and small PNG image renders.
