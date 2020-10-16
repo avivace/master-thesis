@@ -29,7 +29,7 @@ This happens in two steps:
 
 \begin{enumerate}
 
-    \item The first level (L1) \cite{Bayatyan:706847} brings the 40 MHz to a 100 kHz rate. Here, N TODO Trigger Algorithms are implemented on custom electronics (FPGAs and ASICs) exploiting informations from sub-detector components.
+    \item The first level (L1) \cite{Bayatyan:706847} brings the 40 MHz to a 100 kHz rate. Here, 350-400 \cite{Sirunyan:2721198} Trigger Algorithms are implemented on custom electronics (FPGAs and ASICs) exploiting informations from sub-detector components.
 
     \item A configurable set of L1 Trigger Nodes seeds Triggers in the second level (HLT), implemented in software. The event stream is further refined, selecting an average rate of 400 Hz for offline event storage and certification \cite{Khachatryan_2017}. HLT runs 600 of these independent Trigger Paths.
 
@@ -92,23 +92,25 @@ A series of improvements and new features have been implemented on the Rate Moni
 
 \begin{enumerate}
 
-\item Upgraded the tools to run on a recent and supported version of Python.
-\item Moved the database connection configuration class to an actual configuration file.
-\item Formally defined the environment and the dependencies needed to run the software.
-\item Prepared scripts to package the software with the RPM package format. Prepared a basic systemd service to include in the package, to allow running the software as a system service.
-\item Prepared a Continuos Integration and Deployment pipeline running on the CERN infrastructure.
-\item Upgraded the CI/CD pipeline to use the CMS Cactus auto DevOps tools.
-\item Upgraded the exporting feature of the tools, previously limited to shell output and small PNG image renders.
-\item Enabled the tools to export trigger rates data in a agnostic format, not tied to ROOT.
-\item Enabled the tools to export trigger rates data in ROOT files, allowing ROOT clients to read them.
-\item Updated the documentation adding a a way to consistently prepare P5, LXPLUS and personal machines to run RateMon tools, without being tied to a particular machine cluster at CERN.
-\item Enabled any user to import the RateMon software as a Python module, adding some external-facing and transparent methods to get Trigger Rates as raw data or plots.
-\item Investigated a solution to integrate RateMon into the new CMS Online Monitoring System, replacing the old Web Based Monitoring, now in deprecation.
-\item Since a proper integration was not possible, implemented an API exposing the exporting, processing and plotting functionalities of the RateMon software. This API is formally defined with an OpenAPI 3 Schema and an auto generated Swagger interface is available to users.
-\item Implemented a web application to demonstrate and showcase the API capabilities, plotting Trigger Rates in the browser with interactive and scalable plots (powered by JSROOT) instead of static image exports, consuming the new API.
-\item Implemented a Trigger Selection interface on the UI, a feature requested by Trigger shifters and coordinators.
-\item Reported a series of bugs happening in the data processing phase of the scripts, detailing scenarios triggering them, to allow future work on them.
-\item Deployed the implemented stack in production. Set up a separate data storage solution to cache computed data, limiting the bottleneck effect of the CMS database on the API and offering faster responses.
+
+        \item Upgraded the tools to run on a recent and supported version of Python (3.6) and updated the ROOT bindings.
+        \item Moved the database connection configuration class to a separate and portable configuration file.
+        \item Formally defined the environment and the dependencies needed to run the software.
+        \item Prepared scripts to package the software with the RPM package format, to be compliant (and integrate) with the Control Room deployment procedures. Prepared a basic systemd service to include in the package, to allow running the software as a system service.
+        \item Prepared a Continuos Integration and Deployment pipeline running on the CERN infrastructure.
+        \item Upgraded the CI/CD pipeline to use the CMS Cactus \cite{DirkxCactus} auto DevOps tools.
+        \item Upgraded the exporting feature of the tools, previously limited to shell output and small PNG image renders.
+        \item Enabled the tools to export trigger rates data in ROOT binary files, allowing ROOT clients to read them.
+        \item Enabled the tools to export trigger rates data also in a agnostic format, not tied to ROOT.
+        \item Updated the documentation adding a way to consistently prepare any machine to run RateMon tools, without being tied to a particular machine cluster at CERN.
+        \item Enabled any user to import the RateMon software as a Python module, adding some external-facing and transparent methods to get Trigger Rates as raw data or plots.
+        \item Investigated a solution to integrate RateMon into the new CMS OMS, replacing the old WBM, now deprecated.
+        \item Implemented an API exposing the exporting, processing and plotting functionalities of the RateMon software. This API is formally defined with an OpenAPI 3 Schema and an auto generated Swagger interface is available as documentation to users. This API can be plugged into the OMS stack to provide the old plots and many new features.
+        \item Implemented a reactive web application in VueJS to demonstrate and showcase the API capabilities, plotting Trigger Rates (and their predicted values, based on the fits) in the browser with interactive and scalable plots (powered by JSROOT) instead of static image exports.
+        \item Implemented a Trigger Selection interface on the UI, a feature requested by Trigger shifters and coordinators.
+        \item Reported a series of bugs happening in the data querying and processing phase of the scripts, detailing test cases and scenarios triggering them, allowing future bug fixing work.
+        \item Deployed the implemented stack in production and in the CMS Control Room. Set up a separate data storage solution to cache computed data, limiting the bottleneck effect of the CMS database on the API and offering faster responses.
+
 
 \end{enumerate}
 
@@ -153,17 +155,17 @@ $ proxychains ./sqldeveloper.sh
 
 GitLab is a DevOps lifecycle tool, providing Git hosting, a wiki, issue-tracking, continuos integration and deployment features. There's a public instance running at GitLab.com, but the software is licensed with an "open-core" business model, so everyone can self-host the entire stack, provided they have the infrastructure.
 
-GitLab business model is defined as "open core" (and not "open source"): core functionalities are offered as free and open source software, while additional commercial features are offered in the paid plans, developed in a closed-source modality.
+GitLab business model is defined as "open core" (and not "open source"): core functionalities are offered as free and open source software, while additional commercial features, offered in the paid plans, are released under non-permissive license terms (source is still public).
 
 In 2017, CERN chose GitLab as their code hosting solution and moved to a self-hosted GitLab instance. From now on, with "GitLab" we will refer to the CERN GitLab instance.
 
 \paragraph{Docker containers}
 
-Docker can package an application and its dependencies in a virtual container that can run on any Linux server. This enables the application to run in a variety of locations, mostly isolated from the host machine. Docker containers are defined by a single file, called Dockerfile.
+Docker can package an application and its dependencies in a virtual container that can run on any Linux server. This enables the application to run in a variety of locations, mostly isolated from the host machine. Docker containers are defined by a single file, a Dockerfile.
 
 \paragraph{Container Registry}
 
-A registry a stateless, highly scalable server side application that offers a storage and content delivery system, holding named Docker images, available in different tagged versions. With the Docker Container Registry integrated into GitLab, every GitLab project can have its own space to store its Docker images. Users interact with a registry by using docker push and pull commands.
+A stateless, highly scalable server side application that offers a storage and content delivery system, holding named Docker images, available in different tagged versions. With the Docker Container Registry integrated into GitLab, every GitLab project can have its own space to store its Docker images. Users interact with a registry by using docker push and pull commands.
 
 \paragraph{EOS}
 
@@ -241,10 +243,10 @@ ${RPM_NAME}:
 Previously, the RateMon tools had to be installed checking out the code from the git repository, running a preparatory script, configuring the database connection and then running the script. Now, the system package manager can just install the packaged software:
 
 \begin{textcode}
-P5 $ dnf -i ratemon_0.1.rpm
+P5 $ yum install ratemon_0.1.rpm
 \end{textcode}
 
-RPM packages can be obtained on public CERNBox or Dropbox folders or automatically installed in Puppet-managed machines, depending on the environment and system administration policy.
+RPM packages can be obtained on the repository "Releases" page, on public CERNBox or Dropbox folders or automatically installed in Puppet-managed machines, depending on the environment and system administration policy.
 
 \subsection{Builder Docker image}
 
@@ -321,10 +323,10 @@ As an additional improvement, we moved the CI/CD and packaging pipeline from van
 \begin{listing}[ht]
 \begin{yamlcode}
 
-# include all templates in https://gitlab.cern.ch/cms-cactus/ops/auto-devops/-/tree/0.0.3
+# include all templates in https://gitlab.cern.ch/cms-cactus/ops/auto-devops/-/tree/0.0.7
 include:
   - project: cms-cactus/ops/auto-devops
-    ref: 0.0.4
+    ref: 0.0.7
     file: templates/all.yml
 
 # Only run when a branch or git tag is defined
