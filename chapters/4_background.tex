@@ -38,20 +38,20 @@ CERN Openlab, a collaboration between CERN and industrial partners (Intel, Oracl
 
 \subsection{Open Source, Open Science}
 
-TODO
+CERN is a primary actor in pushing science forward and donates most of its data, software and hardware designs to the community, releasing them under permissive licenses. It has continuously been a pioneer and first adopter of the Open Science and Open Source philosophy.
 
-Initiatives:
+Among the most important initiatives in this regard, we mention:
 
 \begin{itemize}
-	\item www as open source (1994), mention the licence
-	\item open-source hardware (with the CERN Open Hardware Licence)
-	\item open access (with the Sponsoring Consortium for Open Access Publishing in Particle Physics)
-	\item open data (with the Open Data Portal for the LHC experiments).
-	\item MAlt
-	\item Digital Memory, OAIS
+	\item The World Wide Web software was immediatly (1993) licensed as free and open source software. On 30 April 1993 CERN issued a public statement stating that the three components of Web software (the basic line-mode client, the basic server and the library of common code) were put in the Public Domain \cite{LicensingtheWebCERN-2020-10-16}.
+	\item The CERN Open Hardware Licence (CERN–OHL) is to hardware what the free and open-source licences are to software. It defines the conditions under which a licensee will be able to use or modify the licensed material. It shares the same principles as free software or open-source software: anyone should be able to see the source – the design documentation in the case of hardware – study it, modify it and share it \cite{HomeWikiProjectsCERNOpenHardwareLicenceOpenHardwareRepository-2020-10-16}.
+	\item CERN Open access commitment: the Sponsoring Consortium for Open Access Publishing in Particle Physics is an international collaboration promoted by CERN in the high-energy physics community to convert traditional closed access physics journals to open access \cite{OpensourceforopenscienceCERN-2020-10-16}.
+	\item CERN Open data commitment: The CERN Open Data portal allows the LHC experiments to share their data with a double focus: for the scientific community, including researchers outside the CERN experimental teams, as well as citizen scientists, and for the purposes of training and education through specially curated resources \cite{OpensourceforopenscienceCERN-2020-10-16}.
+	\item MAlt, a CERN initiative to investigate the migration from commercial software products (Microsoft and others) to open-source solutions, to minimise CERN’s exposure to the risks of unsustainable commercial conditions, vendor lock-ins and to keep the data in own control. CERN is first-hand undergoing these migrations in its huge and complex IT infrastructure. Public research institutions are facing the same dilemma and can make use of CERN experience in those migrations to follow similar paths \cite{MigratingtoopensourcetechnologiesCERN-2020-10-16}.
+	\item The CERN Digital Memory project is investigating the creation of an OAIS \cite{oais1} \cite{HomeOAISReferenceModelISO14721-2020-10-16} compliant “Archive as a Service” that enables researchers to conveniently preserve their valuable research in the long term \cite{vanKemenade:2728246}.
 \end{itemize}
 
-Tools and technologies:
+Furthermore, these are some of tools and technologies directed and funded by CERN (or related European Union grants) that are being released and developed under an Open Source model:
 
 \begin{itemize}
 	\item Invenio
@@ -60,6 +60,7 @@ Tools and technologies:
 	\item Zenodo
 	\item ROOT
 \end{itemize}
+
 \section{Statistics in Physics}
 
 Many problems in physics are described or can be approximated by a small group of probability distributions. We will briefly describe them, focusing on important features exploited by Physics and Particle Physics \cite{leo2012techniques} analyses.
@@ -91,13 +92,15 @@ where $p$ is the probability of success in a single trial.
 Mean:
 
 \begin{equation}
-	\mu = \sum_{r}rP(r) = Np
+	\mu = \sum_{r}r\:\:\:\:P(r) = Np
 \end{equation}
 
 Variance:
 
 \begin{equation}
-	\sigma^2=\sum_r(r-\mu)^2P(r) = Np(1-p)
+	\sigma^2=\sum_r(r-\mu)^2
+\:\:\:\:\:\:
+	P(r) = Np(1-p)
 \end{equation}
 
 For many practical calculations \cite{leo2012techniques}, using a Gaussian (\ref{eqn:gaussian}) is a good approximation of a Binomial when $N$ is greater than 30 and $p\geq0.05$ (taking into consideration that we are replacing a discrete distribution by a continuous one). When $p\leq0.05$ and the product $Np$ is finite, we can use a Poisson distribution.
@@ -126,9 +129,8 @@ If the mean is expressed as the mean per unit dimension ($\mu = \lambda t$) we c
 	\caption{Poisson distribution with various values of $\mu$ \cite{leo2012techniques}}
 \end{figure}
 
-% FIXME: The probability for a single nucleus to decay -> Probability per time unit
 
-As an example, consider the \textit{radioactive decay} phenomena: a radioactive source such as $^{137}$Cs has a half-life of 27 years. The probability for a single nucleus to decay is $8.2 \times 10^{-10}s^{-1}$. However, even a \SI{1}{\micro\gram} contains $10^{15}$ nuclei. Since each nucleus acts as a \textit{trial}, the mean number of decay events will be $\mu = N p = 8.2 \times 10^5$, satisfying the limiting conditions. The probability of observing an event is given by \ref{eqn:poisson}.
+As an example, consider the \textit{radioactive decay} phenomena: a radioactive source such as $^{137}$Cs has a half-life of 27 years. The probability for a single nucleus to decay (per time unit) is $8.2 \times 10^{-10}s^{-1}$. However, even a \SI{1}{\micro\gram} contains $10^{15}$ nuclei. Since each nucleus acts as a \textit{trial}, the mean number of decay events will be $\mu = N p = 8.2 \times 10^5$, satisfying the limiting conditions. The probability of observing an event is given by \ref{eqn:poisson}.
 
 The Poisson distribution exhibits two interesting features:
 
@@ -141,9 +143,7 @@ The Poisson distribution exhibits two interesting features:
 \subsection{Gaussian}
 \label{eqn:gaussian}
 
-%TODO: Define densiti
-
-The \textit{Gaussian} (or \textit{Normal}) is a continuos, symmetric distribution. Density is defined as
+The \textit{Gaussian} (or \textit{Normal}) is a continuos, symmetric distribution. We define the density as the function whose value at any given sample in the sample space (the set of possible values for the variable) can be interpreted as the relative likelihood that the value of the random variable would assume that sample \cite{Grinstead1997IntroductionTP}. In this case:
 
 \begin{equation}
 	P(x) = \frac{1}{{\sigma \sqrt {2\pi } }}e^{{{ - \left( {x - \mu } \right)^2 } \mathord{\left/ {\vphantom {{ - \left( {x - \mu } \right)^2 } {2\sigma ^2 }}} \right. \kern-\nulldelimiterspace} {2\sigma ^2 }}}
@@ -174,9 +174,9 @@ Particle physics researches the nature of the fundamental parts of matter and ho
 Interactions between fermions are mediated by bosons:
 
 \begin{enumerate}
-	\item Strong interaction, mediated by gluons
-	\item Weak interaction, mediated by Z and W bosons
-	\item Electromagnetic interaction, mediated by photons
+	\item Strong interaction, mediated by gluons.
+	\item Weak interaction, mediated by Z and W bosons.
+	\item Electromagnetic interaction, mediated by photons.
 \end{enumerate}
 
 Gravitational force is not taken into account. Quarks interact with all three forces, leptons are not sensitive to the strong force and neutrinos are subject only to the weak force.
@@ -190,23 +190,23 @@ Current High Energy Physics research includes:
 	\item Explanation of gravitational physics in terms of quantum mechanics (e.g. \cite{Rovelli:2011eq});
 \end{enumerate}
 
-\section{Large Hadron Collider}
+\section{Accelerators and the Large Hadron Collider}
 
-%%
+A particle accelerator is a machine in which beams of charged particles are accelerated to high energies. Electric fields are used to accelerate the particles while magnets steer and focus them. Beams can be made to collide with a static target or with each other \cite{CERNGlossary}.
 
-TODO LHC
-
-A machine in which beams of charged particles are accelerated to high energies. Electric fields are used to accelerate the particles while magnets steer and focus them. Beams can be made to collide with a static target or with each other \cite{CERNGlossary}.
+There different are types of accelerators:
 
 \begin{itemize}
 
 \item A collider is a special type of circular accelerator where beams travelling in opposite directions are accelerated and made to interact at designated collision points.
 
-\item A linear accelerator (or linac) is often used asthe first stage in an accelerator chain.
+\item A linear accelerator (or linac) is often used as the first stage in an accelerator chain.
 
 \item A synchrotron is an accelerator in which the magnetic field bending the orbits of the particles increases with the energy of the particles. This makes the particles move in a circular path.
 
 \end{itemize}
+
+LHC is the highest-energy particle \textit{collider} in the world. It reached 6.5 TeV per beam (13 TeV total collision energy). At four crossing points, seven detectors are positioned (CMS is one of the them, positioned at Point 5), each designed for certain kinds of research. LHC collides proton beams, but it can also use beams of heavy ions: \textit{lead–lead} collisions and \textit{proton–lead } collisions are typically done for one month per year.
 
 \subsection{Run, Fill}
 
@@ -226,11 +226,9 @@ For the experiments, a "run" is a discrete interval of data-taking. Usually run 
 
 Cross section ($\sigma$) is one of the most important quantity in particle physics: it measures the probability that a specific process occurs in a collision of two particles. It is expressed in terms of the transverse area that the particle must hit to for that process to occur and it's measured in \textit{Barn}: $1\, b = 10^{-24} \,cm^2$.
 
-E.g. the \textit{Rutherford cross-section} represents the probability of an alpha-particle to be deflected by a given angle during a collision with an atomic nucleus.
+E.g. the \textit{Rutherford cross-section} represents the probability of an alpha-particle to be deflected by a given angle during a collision with an atomic nucleus ($2.7 \times 10^{-14} \,m^2$, 0.27 $b$).
 
-%TODO: Add cross section value for this example
-
-Figure \ref{fig:cross_sections} shows $\sigma$ values for different processes. Notice how the value increments with the collision energy $\sqrt s$ (13 TeV during LHC Run 2).
+Figure \ref{fig:cross_sections} shows $\sigma$ values for different processes searched by accelerators like LHC. Notice how the value increments with the collision energy $\sqrt s$ (13 TeV during LHC Run 2).
 
 \subsection{Luminosity}
 
@@ -246,11 +244,26 @@ Where $N$ is the number of protons in each bunch, $t$ is time between bunches, $
 
 In the LHC, $\sigma _c= 16\times 10^{-4}\, cm$, $N = 1.15\times10^{11}$, $t = 25 \times 10^{-9}\, s$, leading to a design luminosity of $10^{34}\, cm^{-2}s^{-1}$.
 
+Pile up can be defined as thhe total number of interactions per bunch crossing \cite{CMSDataAnalysisSchool2529August2015OverviewIndico-2020-10-16}.
+
+\begin{figure}
+	\centerline{
+		\includegraphics[width=0.35\paperwidth]{lhcpu1}}
+	\caption{Bunch crossing rate and Pile Up values for LHC \cite{CMSDataAnalysisSchool2529August2015OverviewIndico-2020-10-16}}
+\end{figure}
+
+\begin{figure}
+	\centerline{
+		\includegraphics[width=0.5\paperwidth]{lhcpu2}}
+	\caption{LHC performance in 2010, 2011 and 2012 runs \cite{CMSDataAnalysisSchool2529August2015OverviewIndico-2020-10-16}}
+\end{figure}
+
+
 \subsection{Delivered Luminosity}
 
 The actual luminosity value reached in the points of collision and recorded by the detectors is called Delivered Luminosity.
 
-A number of factors influence this value (TO CHECK):
+A number of factors influence this value:
 
 \begin{enumerate}
 	\item Adjustments of the LHC beam-optics (emittance scan);
@@ -296,11 +309,14 @@ One inverse femtobarn is equal to approximately 100 trillion proton-proton colli
 
 Searches in Particle Physics are done looking for an excess above background: a discovery of a particle involves knowing the amount of background events to except and being confident that the excess is not the result of a statistical fluctuation of this background.
 
-% TODO: qui serve che tu richiami esplicitamente il fatto che stai trattando la produzione e la selezione di eventi con una gaussiana. Io non citerei il numero di sigma ma bensi’ la probabilita’ delle code: 68%, 95% etc. etc.  Alla fine poi puoi spiegare che corrispondono ad integrare la gaussiana in intervalli di 1, 2, 3 standard deviations
-% https://en.wikipedia.org/wiki/Normal_distribution#/media/File:Standard_deviation_diagram.svg
-
 The scientific process requires quantification of the probability that excesses are genuine: this is why the "number of $\sigma$" is crucial in validating discoveries: it represents the width of the Gaussian distribution, as we explained in \ref{eqn:gaussian}. The greater number of $\sigma$, the minor will be the probability that the observed excess can be explained by a background fluctuation.
 At $3\sigma$ we talk about an evidence, while at $5\sigma$ we are in front of a discovery.
+
+\begin{figure}
+	\centerline{
+		\includegraphics[width=0.4\paperwidth]{Standard_deviation_diagram}}
+	\caption{Normal distribution curve that illustrates standard deviations. Each band has 1 standard deviation, and the labels indicate the approximate proportion of area \cite{FileStandarddeviationdiagramsvgWikimediaCommons-2020-10-07}}
+\end{figure}
 
 \begin{figure}
 	\centerline{
@@ -316,9 +332,6 @@ At $3\sigma$ we talk about an evidence, while at $5\sigma$ we are in front of a 
 
 
 Usually, the background follows a pattern, for which it's possible to fit a function (in this case a fourth order polynomial).
-
-TODO
-
 
 \section{Compact Muon Solenoid}
 

@@ -69,16 +69,19 @@ This happens in two steps:
     \label{fig:ratemon_hlt}
 \end{figure}
 
-TODO:
 These systems are continuosly monitored and their performance thoroughly evaluated. A survey of conferences, papers and technical reports on the tuning and performance evalution of the L1 Trigger is available in \cite{L1TriggerDPGResultsCMSPublicTWiki-2020-10-16}.
 
 \section{Rate Monitoring software}
 
-\subsection{Shift Monitor tool}
+\subsection{Online Monitoring}
 
 The High Level Trigger (HLT) rate monitoring tool is a python script that reports the rates of a selected list of triggers, primary datasets, and streams. It is run in the CMS control room and gives valuable real-time feedback of trigger rates to the shift crew: it updates every minute and averages the rates recorded in the last 3 lumisections, and, if possible, compares them to the predicted rate. Predictions are based on functions previously fitted on the same Trigger (\textit{fit functions}).
 
+A list of \~{} 20 triggers is used for real-time online monitoring at point 5. This list is selected such that all CMS subdetectors are monitored and all physics objects are represented.
+
 If a trigger path deviates by a specified amount from the prediction, or exceeds a fixed rate, the corresponding line is highlighted in a yellow colour. The scripts also displays other information that could be useful for the shifter, such as the run number and last lumisections, the LHC status, HLT key, deadtime, instantaneous luminosity and index of the prescale column in use.
+
+When trigger rate exceeds the error band on the fit for a significant period of time (6 minutes, configurable), audible alarms are activated in the control room. Email warnings are sent to on-call experts.
 
 \begin{figure}
     \centerline{
@@ -87,7 +90,7 @@ If a trigger path deviates by a specified amount from the prediction, or exceeds
     \label{fig:ratemon_warnings}
 \end{figure}
 
-\subsection{Trigger Rates monitoring and plotting}
+\subsection{Plotting}
 
 Another part of the software offers plotting features, exposed with the \mcode{plotTriggerRates} command line tool: it is used for observing how trigger rates vary over a range of beam and detector conditions, in particular how the rates of individual triggers scale with event pile-up.
 
@@ -97,17 +100,25 @@ In general, \textit{deadtime} refers to a time period during normal data taking 
 
 A \textit{prescale} is a way of scaling back the rate of L1 and HLT triggers. For example, if a certain trigger has a prescale of 5, then the data corresponding to the event the trigger fired on is only recorded once out of every five times that the trigger fired. So if the prescale is 1, the data will be recorded every time the trigger fires. A prescale of 0 means that no data will be recorded for the trigger in question: the trigger is essentially just turned off. Rates can be reported before this prescaling operation (\textit{unprescaled} or BP, before prescale) or after (\textit{prescaled}). Considering unprescaled rates enables comparisons across (different) pre scale columns.
 
-\subsection{Alerting and fitting}
+\subsection{Alerting}
 
-TODO: REWRITE THIS PART
+The trigger system regulates the massive data deluge coming from the observed collisions: its role is critical since any problem could result in a severe data loss. For this reason, the sub-detectors providing input to the trigger system and its output rates of accepted events need continuous "online" monitorng.
 
-The trigger system regulates the massive data deluge coming from the observed collisions: its role is critical since any problem could result in a severe data loss. For this reason, the sub-detectors providing input to the trigger system and its output rates of accepted events need continuous monitorng.
+These rates affected by several issues: detector malfunctions, network or software problems, bad configurations. Examples of problems found by monitoring rates include: a failed  subdetector trigger hardware link, beam spot mis-alignment, luminometer calibration errors.
 
-The event acceptance rate can be affected by several issues e.g., detector malfunctions, network and software problems, etc.
+The current alerting strategy is based on the comparison between the observed per-node rate and its reference (predicted) value for the measured PU value. These references are derived from fitting previously collected data with analytical models.
 
-The current alerting strategy is based on the comparison between the observed per-node rate and its reference value for the measured PU value.
+\subsection{Fitting}
 
-These references are derived from fitting previously collected data with analytical models.
+First, fits are made to the trigger rate in previous runs as a function of average pile-up (average number of collisions in an LHC bunch crossing). Runs to be fit are selected from a list of known good runs, and the fits are computed using ROOT. Before fitting, the raw trigger rate is first corrected for deadtime, prescales, and the the number of colliding bunches. Several fit functions are attempted, the final one is selected based on $\chi^2$ minimization \cite{Smith:2293136}.
+
+Rates \textit{should} depend linearly on instantaneous luminosity, but some nonlinear behavior is observed, mainly due to the effects of pile-up: candidates for multiple object triggers may be found in independent collisions, and triggers (see \cite{Sirunyan:2721198} for accurate description of L1 triggers and \cite{Gori_2014} for HLT) that rely on measuring calorimeter deposits (such as jets and jet sums) increase in rate as the number of contributions from independent collisions increase.
+
+Most triggers can be described with linear, quadratic, or exponential ($sinh$) functions.
+ 
+\subsection{Offline use}
+
+For a given list of runs and trigger paths, plots can be produced for an easy comparison by offline validators. A text summary reporting the deviating triggers is also produced.
 
 \subsection{Overview}
 
@@ -437,7 +448,7 @@ The plots used to be rendered in small PNG images, with the resolution of 900$\t
 
 \paragraph{Raw JSON}
 
-The \mcode{plotTriggerRates} class was modified \cite{RootexporttoggleJSONexportfunction6MergeRequestsCMSTSGFOGratemonGitLab-2020-10-07} to be able to dump any Trigger Rate plot as a raw time series of plain numeric values in JSON files conform with a known schema. Additional meta data are included in the exported file too, such as the run number, the trigger key, the plotted variables and their units (e.g. Lumisection or PU as X, prescaled or unprescaled rate in Hz as Y), the coefficients and the form (e.g. linear or quadratic) of the fitted function.
+The \mcode{plotTriggerRates} class was modified \cite{RootexporttoggleJSONexportfunction6MergeRequestsCMSTSGFOGratemonGitLab-2020-10-07} to be able to dump any Trigger Rate plot as a raw time series of plain numeric values in JSON files conform with a known \cite{avivacemasterthesisMyWIPmasterthesisinComputerScienceExperimentalAnomalyDetectiononCERNCMSTriggerRates-2020-10-16} schema. Additional meta data are included in the exported file too, such as the run number, the trigger key, the plotted variables and their units (e.g. Lumisection or PU as X, prescaled or unprescaled rate in Hz as Y), the coefficients and the form (e.g. linear or quadratic) of the fitted function.
 
 This feature enables any plotting library to reconstruct the original plots and possibily draw the fit functions on the top of the time series.
 
@@ -448,6 +459,19 @@ The export can be toggled by passing the \mcode{--exportJSON} command line optio
 The possibility to export the plot canvas as a ROOT file has been added. This allows any ROOT instance to render the full plot natively.
 
 This export functionality can be toggled by passing the \mcode{--exportRoot} command line option.
+
+Rates for run (or for a fill) can now be exported:
+
+\begin{itemize}
+    \item As raw data, before any correction.
+    \item With the corrections for deadtime applied.
+    \item With the corrections for the prescale applied.
+    \item With the corrections for colliding bunched applied.
+    \item Over LS.
+    \item Over the evolution of PU.
+\end{itemize}
+
+Some of these options can obviously be combined (e.g. \textit{pre-deadtime unprescaled}).
 
 \section{Python3 upgrade}
 

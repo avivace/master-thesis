@@ -29,20 +29,26 @@ During the second Long Shutdown of the LHC (2018-2021) the CMS detector will be 
 
 \paragraph{Monitoring the Trigger System}
 
-This work concerns one of the sources of monitored data: RateMon, the software providing Trigger Rates data, querying the OMDS database and carrying out \textbf{normalisations} and \textbf{corrections} for a number of different configurations and conditions, allowing consistent comparisons.
+The CMS Trigger System is responsible of filtering the large majority of events, spotting the potentially interesting ones, triggering the detector's read-out system to actually record data from the selected collisions. Monitoring the rates of such filters is essential to spot any anomalous behaviour in the underlying (sub)systems, software and/or hardware configurations, network and detector malfunctions. Without an effective and performant trigger system, physics analysis at CMS would not be possible.
 
-The Trigger system is responsible of filtering the large majority of events, spotting the potentially interesting ones, triggering the detector's read-out system to actually record data from the selected collisions. Monitoring the rates of such filters is essential to spot any anomalous behaviour in the underlying (sub)systems, software and/or hardware configurations, network and detector malfunctions.
+This work concerns one of the sources of monitored data: RateMon \cite{Smith:2293136}, the software providing Trigger Rates data developed by the Field Operation Group. It queries the OMDS database and carries out \textbf{normalisations} and \textbf{corrections} for a number of different configurations and conditions, allowing consistent comparisons.
 
-Trigger Rates are presented in the form of \textit{Rates VS PU} \textbf{plots}. It also responsible of \textbf{alerting} the Trigger Shifters staff when recorded rates deviate too much from the \textbf{predicted} values. Those predictions are based on analytical models fitted on data collected in previous runs.
+Trigger Rates are presented in the form of \textit{Rates VS PU} \textbf{plots}. Plots area automatically produced on an hourly basis and uploaded to a web area for inspection.
+
+RateMon is also responsible of \textbf{alerting} the Trigger Shifters staff when recorded rates deviate too much from the \textbf{predicted} values. Those predictions are based on analytical models (called fits) fitted on data collected in previous runs using linear and non-linear regression. These fits are then compared to the instantaneous trigger rate as data are being collected, in order to spot small (unexpected) deviations in rate. 
+
+The software also provides a variety of additional features that are used in offline analysis.
 
 \section{Scope}
 
-Two main tasks have been carried out during this experience:
+These main tasks have been carried out during this experience:
 
-\paragraph{Development and study of the Rate Monitoring Software} TODO
+\begin{itemize}
 
-\paragraph{Experimental Anomaly Detection approaches} TODO
+	\item Background study on CMS, the Trigger System and their related monitoring software. Upgrade, maintenance and further development on the Rate Monitoring Software. Prepare the software to be integrated into the new monitoring framework.
+	\item Survey and study existing Anomaly Detection approaches, generic and specific to CERN applications, focusing on the ones with comparable characteristics to our problem. Using the improvements on the Rate Monitoring software and the new CMS Run Registry (a new, still in development, tool) build a proper dataset to tackle the the problem of detecting faults on the CMS detector by looking at anomalies at the Trigger Rates and other related data. 
 
+\end{itemize}
 
 \section{Structure}
 
@@ -54,14 +60,14 @@ Finally, some background on Anomaly Detection and Machine Learning is given, sur
 
 Chapter \ref{ratemon} gives a detailed report of the context, the research and development work done on the Rate Monitoring tools, outlining the achieved results and how they improve the user experience and enable new features and possibilities.
 
-In chapter \ref{dataset} we introduce some Anomaly Detection applications to similar challenges at CERN, evaluating their results and practical effects to the current workflows. One of the common problems in such attempts is the inherent difficulty to obtain usable datasets encompassing enough features to encode the phenomena and the contextual knowledge and data considered in the current pipelines.
+In chapter \ref{dataset} we introduce some Anomaly Detection applications to similar challenges at CERN, evaluating their results and possible practical improvements to the current workflows. One of the common problems in such attempts appears to be the inherent difficulty to obtain usable datasets encompassing enough features to encode the phenomena and the contextual knowledge and data considered in the current pipelines.
 
-We exploit the acquired knowledge and the new developed features on the Rate Monitoring software to tackle exactly this issue: we integrate Trigger Rates data with another dataset, (hopefully) providing a new starting point to enable future experimentations on this matter.
+We exploit the acquired knowledge and the new developed features on the Rate Monitoring software to tackle exactly this issue: we integrate Trigger Rates data with another dataset, potentially providing a new starting point to enable future experimentations on this matter.
 
 
 \section{Conventions}
 
-Implementation work on existing software was done trough Merge Requests to the main codebase. Each described task is accompanied with a corresponding sitography entry.
+Implementation work on existing software was done through Merge Requests to the main codebase, triggering discussions and code reviews. Each described task is accompanied with a corresponding sitography entry.
 
 Code snippets (called "listings", from now on) demonstrating the execution of commands in a shell are noted with the \mcode{\$} character. Preceding the \mcode{\$} character you sometimes notice a string specifying the hostname of the machine (as specified in CERN OpenStack) or the general infrastructure/service in which that commands must run to have effect. E.g. \mcode{lxplus \$ command} shows the command execution on one of the machine from LXPLUS \cite{LXPLUSServiceITDepartment-2020-10-01}, the CERN service offering access to machines running Linux CERN CentOS 7. If there's no specification before \mcode{\$}, the environment is not relevant. With \mcode{P5} we refer to the machines installed in Point 5 of the LHC, in Cessy (France), home to the CMS detector.
 
