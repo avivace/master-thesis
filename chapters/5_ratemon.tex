@@ -1,4 +1,5 @@
 \chapter{Modernising Rate Monitoring Tools}
+\label{ratemon}
 
 One of the major challenges for the Compact Muon Solenoid (CMS) experiment, is the task of reducing event rate from roughly 40 MHz down to a more manageable 1 kHz while keeping as many interesting physics events as possible. This is accomplished through the use of a Level-1 (L1) hardware based trigger as well as a software based High-Level Trigger (HLT). Monitoring and understanding the output rates of the L1 and HLT triggers is of key importance for determining the overall performance of the trigger system and is intimately tied to what type of data is being recorded for physics analyses.
 
@@ -29,11 +30,30 @@ This happens in two steps:
 
 \begin{enumerate}
 
-    \item The first level (L1) \cite{Bayatyan:706847} brings the 40 MHz to a 100 kHz rate. Here, 350-400 \cite{Sirunyan:2721198} Trigger Algorithms are implemented on custom electronics (FPGAs and ASICs) exploiting informations from sub-detector components.
+    \item The first level (L1) \cite{Bayatyan:706847} brings the 40 MHz to a 100 kHz rate. Here, 350-400 \cite{Sirunyan:2721198} Trigger Algorithms (or "seeds") are implemented on custom electronics (FPGAs and ASICs) exploiting informations from sub-detector components.
 
-    \item A configurable set of L1 Trigger Nodes seeds Triggers in the second level (HLT), implemented in software. The event stream is further refined, selecting an average rate of 400 Hz for offline event storage and certification \cite{Khachatryan_2017}. HLT runs 600 of these independent Trigger Paths.
+    \item A configurable set of L1 Trigger Nodes seeds Triggers in the second level (HLT), implemented in software. The event stream is further refined, selecting an average rate of 400 Hz for offline event storage and certification \cite{Khachatryan_2017}. HLT runs 400-500 of these independent Trigger Paths.
 
 \end{enumerate}
+
+
+\begin{table}
+\begin{center}
+ \begin{tabular}{||c c||} 
+ \hline
+ Algorithm & Requirements (GeV)\\ [0.5ex] 
+ \hline\hline
+ Single jet & $p_T > 180$ \\ 
+ \hline
+ Single tau lepton ($\mu$)      & $p_T > 22$ \& Tight Quality \\ 
+  \hline
+ Single electron/photon (e/$\gamma$) & $p_T > 36$ \& $|\eta| < 2.5$ \\ [1ex] 
+ \hline
+\end{tabular}
+\caption{Some examples of unprescaled Level-1 trigger algorithms (seeds) used during Run 2 and their requirements \cite{Sirunyan:2721198}}
+\end{center}
+\end{table}
+
 
 \begin{figure}
     \centerline{
@@ -48,6 +68,9 @@ This happens in two steps:
     \caption{HLT Trigger path plotted with a fitted function on run 305112}
     \label{fig:ratemon_hlt}
 \end{figure}
+
+TODO:
+These systems are continuosly monitored and their performance thoroughly evaluated. A survey of conferences, papers and technical reports on the tuning and performance evalution of the L1 Trigger is available in \cite{L1TriggerDPGResultsCMSPublicTWiki-2020-10-16}.
 
 \section{Rate Monitoring software}
 
