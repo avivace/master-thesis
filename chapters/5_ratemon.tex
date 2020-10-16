@@ -211,10 +211,18 @@ CERNBox \cite{Mascetti_2015} is the cloud data storage service available to all 
 
 \paragraph{WBM} The CMS Web Based Monitoring \cite{badgett2014web} is the old web portal that developed to present CMS monitoring and status information from many underlying heterogeneous sources, from real time messaging systems to relational database. In this being deprecated in favor of CMS OMS.
 
+\begin{figure}
+    \centerline{
+        \includegraphics[width=0.9\paperwidth]{figures/wbm.png}}
+    \caption{Old Trigger Rates page in WBM}
+    \label{fig:ratemon_ui0}
+\end{figure}
+
 \paragraph{OMS} The CMS Online Monitoring System \cite{Andre2649402} is an upgrade and successor to the CMS Web-Based Monitoring (WBM) system, which is an essential tool for shift crew members, detector subsystem experts, operations coordinators, and those performing physics analyses. The CMS OMS is divided into aggregation and presentation layers. Communication between layers uses RESTful JSON:API compliant requests. The aggregation layer is responsible for collecting data from heterogeneous sources, storage of transformed and pre-calculated (aggregated) values and exposure of data via the RESTful API.The presentation layer displays detector information via a modern, user-friendly and customizable web interface.
 
 \paragraph{ROOT} ROOT \cite{Brun:1997pa} is an open-source data analysis framework developed by CERN. It was originally designed for particle physics data analysis and contains several features specific to this field, but it is also used in other applications such as astronomy and data mining. It is used - through a Python interface, PyROOT \cite{PythoninterfacePyROOTROOT-2020-10-02} - in the RateMon software to process, normalise and plot trigger data.
 
+\paragraph{OpenAPI Schema} The OpenAPI Specification (OAS) defines a standard, language-agnostic interface to RESTful APIs which allows both humans and computers to discover and understand the capabilities of the service without access to source code, documentation, or through network traffic inspection. When properly defined, a consumer can understand and interact with the remote service with a minimal amount of implementation logic \cite{OpenAPISpecificationVersion303Swagger-2020-10-16}.
 
 \section{DevOps}
 
@@ -409,7 +417,7 @@ docker:
 
 \section{Configuration}
 
-A connection to the CMS OMDS database is required to run the software. Previously, the credentials needed to establish such connections had to be filled directly inside a python file imported by the application entry point.
+A connection to the CMS OMDS database is required to run the software. Previously, the credentials needed to establish such connections had to be filled directly inside a python file imported by the application entry point. Following some connections issues, a basic reconnection routine has been introduced.
 
 The configuration file was moved to a YAML file, loaded using the \mcode{safe\_load} method offered by the PyYAML package \cite{pyyaml-2020-06-18}:
 
@@ -460,7 +468,7 @@ The possibility to export the plot canvas as a ROOT file has been added. This al
 
 This export functionality can be toggled by passing the \mcode{--exportRoot} command line option.
 
-Rates for run (or for a fill) can now be exported:
+Rates for run (or for a fill) can now be exported \label{expoptions}:
 
 \begin{itemize}
     \item As raw data, before any correction.
@@ -475,11 +483,11 @@ Some of these options can obviously be combined (e.g. \textit{pre-deadtime unpre
 
 \section{Python3 upgrade}
 
-Python 2.7 reached the end of life on the 1st January 2020. We made sure \cite{Python3migration4MergeRequestsCMSTSGFOGratemonGitLab-2020-10-07} that the tools could run under a recent and supported version of Python 3.
+Python 2.7 reached the end of life on the 1st January 2020. We made sure \cite{Python3migration4MergeRequestsCMSTSGFOGratemonGitLab-2020-10-07} that the tools could run under a recent and supported version of Python 3. This step was critical because the ROOT installation must be configured for the Python library and bindings. Additional environment variables must be set inside the Python virtual environment.
 
 \section{From a CLI tool to a proper module}
 
-The runstandalone method \cite{RestructuretheplotTriggerRatescripttobeusedasamodule7MergeRequestsCMSTSGFOGratemonGitLab-2020-10-07}
+The \mcode{runstandalone} method \cite{RestructuretheplotTriggerRatescripttobeusedasamodule7MergeRequestsCMSTSGFOGratemonGitLab-2020-10-07} exposes the trigger rates in a transparent way. Users can now import the RateMon tools, configure the database connection and get Trigger Rates from any run or fill in any of the available units (and corrections, see \ref{expoptions}) as time series in Python objects.
 
 
 \begin{listing}[ht]
@@ -517,7 +525,11 @@ print(triggerrates)
 
 \section{API}
 
-\cite{ExposefunctionalitieswithaRestfulAPI8MergeRequestsCMSTSGFOGratemonGitLab-2020-10-07}
+Since running RateMon requires a (now clearly defined) environment, database privileges and some time (computation for a single trigger path can reach 20 seconds), a simple API \cite{ExposefunctionalitieswithaRestfulAPI8MergeRequestsCMSTSGFOGratemonGitLab-2020-10-07} server has been developed to allow anyone to query the software without waiting for the ROOT computations, configuring the database and running the actual RateMon software on local machines. With a simple HTTP GET request, ROOT or JSON files (with known schemas) can be obtained, containing the Trigger Rate time series for the requested run and trigger path(s). Additionally a proper API surface can be used as data source by the OMS aggregation layer, facilitating the migration from WBM to OMS.
+
+The API is developed using Connexion\cite{zalandoconnexionSwaggerOpenAPIFirstframeworkforPythonontopofFlaskwithautomaticendpointvalidationOAuth2support-2020-10-16}, a Python web framework (based on Flask) that handles HTTP requests based on OpenAPI specification. It maps the described endpoints to the application logic, according to the given schema definition.
+
+Physicists can simply consult the dynamic Swagger UI page for an interactive documentation of the API, offering examples (and demos) of every possible option. Routes can be called directly from there.
 
 \begin{figure}
     \centerline{
@@ -527,6 +539,8 @@ print(triggerrates)
 \end{figure}
 
 \subsection{OpenAPI 3 Schema}
+
+The API provides two routes, one for obtaining JSON files exports of Trigger Rates and the other one for the ROOT files. OpenAPI 3.0 schemas are provided. They are used by the API framework to validate parameters and by Swagger to automatically generate the dynamic documentation.
 
 \begin{listing}[ht]
 \begin{yamlcode}
@@ -567,9 +581,10 @@ paths:
 \caption{OpenAPI schema definition of the \texttt{/ratesROOT} API endpoint}
 \end{listing}
 
-Connexion, OpenAPI 3 schema, Swagger UI
-
 \subsection{Implementation}
+
+The actual application logic makes use of the previously implemented standalone methods to transparently pass the parameters from the request to the Rate Mon plotting class.
+
 
 \begin{listing}[ht]
 \begin{pythoncode}
@@ -593,33 +608,66 @@ def getRatesROOT(runNumber: int, triggerKey: str):
 \end{listing}
 
 \subsection{Running}
+
+Previously, the software expected a very specific CERN environment, with an Oracle client (and its Python bindings), database configuration, database connection configuration, configured ROOT bindings, etc. The process of preparing the environment to run the Rate Monitoring software was detailed and made reproducible.
+
+\begin{listing}[ht]
 \begin{textcode}
 yum install libnsl
-
 export LD_LIBRARY_PATH=/usr/lib/oracle/19.6/client64/lib:LD_LIBRARY_PATH
-
 copy tnsnames.ora
-
 wget https://download.oracle.com/otn_software/linux/instantclient/19600/oracle-instantclient19.6-basic-19.6.0.0.0-1.x86_64.rpm
-
 yum install oracle-instantclient19.6-basic-19.6.0.0.0-1.x86_64.rpm
 \end{textcode}
+\caption{Preparing any CentOS machine to run the Oracle Client (and its Python bindings) to the CMS OMDS database.}
+\end{listing}
+
+The system requirements have ben exposed, while a Python virtual environment was prepared to list and lock the required python dependendecies, making sure that the software could run in a reproducible way.
+
+Another virtual environment provides the additional dependencies for running also the API layer on the top of the RateMon scripts.
 
 \section{Integration with OMS}
 
-Highcharts, React, Panel
+A big part of the work consisted in evaluating the capabilities of OMS to realise a proper integration with the Rate Monitoring tools, trying to deploy the whole OMS stack and working on its Aggregation Layer to provide Trigger Rates as a source.
+
+OMS chose as its drawing plotting library HighCharts, so we had to produce datasets consumable by this tool.
+
+The main encountered issues were:
+
+\begin{itemize}
+    \item Very long render time even for single plots, since a single plot have ten of thousands of entries in its time series. Trigger Shifters expects tens of plots in the same page.
+    \item Impossibility to render fit functions. This meant we had to implement a pre-render routine and hijack HighCharts capabilities to try to simulate the ROOT plots.
+\end{itemize}
+
+Contributing to this tool upstream, to add the support for another plotting solution was considered a infeasible effort, due to the lack of time, documentation/examples and the complexity of the OMS stack. After implementing proof of concepts and prototypes, this tool was judged inadequate for our scope.
+
+Fortunately, OMS natively supports plugging in restful APIs as sources so we opted for this solution, developing a full featured API layer on the top of RateMon to expose the plotting (and exporting) functionalities.
+
 
 \section{Run Registry}
 
-CMS Run Registry \cite{cms_collaboration_2019_3599323} is a in-development tool giving access to a lot of DQM datasets. TODO: describe bug reports, HTTPS auth problems and various contributions done upstream to this tool.
+CMS Run Registry \cite{cms_collaboration_2019_3599323} is a in-development tool giving access to a lot of DQM datasets.
 
-\cite{FixingtheBreakagefromtheAddTrustExternalCARootExpiration-2020-10-03} \cite{ErrorSSLCERTIFICATEVERIFYFAILEDIssue1CMSTrackerDPGcernrequests-2020-10-03} \cite{SSLerrorraisedbytheclientIssue1fabioespinosarunregistryapiclient-2020-10-03} \cite{WorkaroundskipSSLverificationbyavivacePullRequest2fabioespinosarunregistryapiclient-2020-10-03}
+\begin{figure}
+    \centerline{
+        \includegraphics[width=0.9\paperwidth]{figures/rr0.png}}
+    \caption{New CMS Run Registry showing sub detector data for some Cosmics 18 runs.}
+    \label{fig:rr0}
+\end{figure}
+
+Since this tool was not in a production state, various tasks have been carried out to make it usable for our \ref{dataset} scopes. Some bugs were reported and fixed, proposing Pull Requests on the upstream source \cite{FixingtheBreakagefromtheAddTrustExternalCARootExpiration-2020-10-03} \cite{ErrorSSLCERTIFICATEVERIFYFAILEDIssue1CMSTrackerDPGcernrequests-2020-10-03} \cite{SSLerrorraisedbytheclientIssue1fabioespinosarunregistryapiclient-2020-10-03} \cite{WorkaroundskipSSLverificationbyavivacePullRequest2fabioespinosarunregistryapiclient-2020-10-03}. Those patches were accepted and enabled the API client to function.
 
 \section{API server deployment}
 
+This section describes how the RateMon API server has been deployed in a production, public facing environment. A cache mechanism has also been added to improve response times and reactivity of the service.
+
+\subsection{NGINX as reverse proxy and cache server}
+
+Since ROOT computations are expensive and a single Trigger Rate export can last for 10-20 seconds, NGINX has been configured to cache every request. The same software also reverse proxies the API software.
+
 \subsection{Attaching a volume for caching}
 
-To offer more disk space to the caching mechanism, a new volume has been created through the CERN Openstack infrastructure.
+To offer disk space to the caching mechanism, a new volume has been created through the CERN Openstack infrastructure.
 
 \begin{textcode}
 lxplus $ # activate the correct OpenStack project
@@ -687,19 +735,16 @@ Filesystem      Size  Used Avail Use% Mounted on
 /dev/vdb        590G   73M  560G   1% /cache
 \end{textcode}
 
-\subsection{NGINX as reverse proxy and cache server}
-
-
+\begin{listing}
 \begin{textcode}
 sudo cat /var/log/audit/audit.log | grep nginx | grep denied
-\end{textcode}
-
-
-\begin{textcode}
 $ setsebool -P httpd_can_network_connect 1
 $ chown nginx:nginx /cache/
 \end{textcode}
+\caption{SELinux troubleshooting and configuration}
+\end{listing}
 
+Listing \ref{nginx} describes how we are exposing the API server using the reverse proxy feature and how the proxy is configure to retain data for 200 days for a maximum total size of 500G (as the volume we configured).
 
 \begin{listing}[ht]
 \begin{nginxcode}
@@ -734,18 +779,26 @@ server {
     listen 80;
 }
 \end{nginxcode}
-\caption{NGINX configuration for reverse proxying and caching}
+\caption{NGINX configuration for reverse proxying and caching\label{nginx}}
 \end{listing}
 
 \section{A new User Interface}
 
-VueJS \cite{Vuejs-2020-10-04}, Vuetify \cite{VuetifyAMaterialDesignFrameworkforVuejs-2020-10-04} ROOT, Plotly, Plotly -> JSROOT \cite{JavaScriptROOT-2020-05-07}
+After having investigated HighCharts and Plotly (and judged them inadequate for their performances), JSROOT, a project implemententing ROOT graphics in web browsers, was tested to plot dynamic Trigger Rates plots exported by our tools directly in the browser: it managed to plots tens of RateMon plots in the same browser tab, without any preprocessing or tuning on the exported binary files. Since the project is now mature and maintained, we decided to use it to provide our own UI, consuming the API we developed, to trigger shifters.
+
+This UI is developed using a reactive web framework, VueJS \cite{Vuejs-2020-10-04} making use of Vuetify \cite{VuetifyAMaterialDesignFrameworkforVuejs-2020-10-04} as CSS framework. ROOT, and JSROOT \cite{JavaScriptROOT-2020-05-07} is included as dependency. It also serves to showcase how trivial and simple is using the new API.
+
+Configuring a single configuration variable to plug the endpoint exposing an instance of the RateMon API, it is possible to deploy the application just by installing the NodeJS dependencies and the running a single \mcode{npm run start} command.
+
+The application can plot (Figure \ref{fig:ratemon_ui1}) any available trigger from any available run, querying the API for the ROOT binary files with GET requests. The resulting plots are interactive and scalable, since the full ROOT viewer is running on the browser. PNG or SVG exports can be requested directly on the UI.
+
+The user can select the trigger paths to plot directly on the UI, by ticking the corresponding checkboxes in the Trigger Selection view (Figure \ref{fig:ratemon_ui0}).
 
 \begin{figure}
     \centerline{
         \includegraphics[width=0.9\paperwidth]{figures/ratemon-ui0.png}}
     \caption{Main RateMon UI application view, showing interactive trigger rate plots and relative fit functions}
-    \label{fig:ratemon_ui0}
+    \label{fig:ratemon_ui1}
 \end{figure}
 
 \begin{figure}

@@ -1,18 +1,27 @@
 \chapter{Integrating data}
 \label{dataset}
-\section{Problem Statement}
 
-\section{Data}
+\section{Preliminary Anomaly Detection Survey}
 
-\subsection{Dataset A: Detector state over time}
+We report two works on existing approaches on Anomaly Detection at CERN. 
 
-This dataset describes the status of the CMS detector and its sub-systems over the progress of the Run, for every Run since the experiment is active.
+The first one is a master thesis trying to build an Isolaton Forest model to detect anomalies on the LHC injection magnets \cite{Halilovic:2665985}. An extensive preprocessing and feature extraction steps are carried out, reaching a dataset of hundreds of features. 
+The final anomaly detection pipeline resulted in an unsatisfactory area under the PR curve of 0.423. Too many anomalies will be ignored and many false positives will be predicted in new scenarios: low precision and recall means that the current applicaton is not usable.
 
-The time progress of the Run is expressed in LS (Lumi Sections) units (\ref{ls_def}).
+The second one, a PhD thesis at CMS \cite{Pol:2020weg}, revolves around a custom Conditional Variational Autoencoders architecture to assess the quality of the data acquired by the CMS experiment. A key advantage of this approach over other traditional machine learning technologies is the great interpretability of the results, which can be further used to describe the origin of the problems in the data to a specific sub-detector or physics objects. This work aims to aid the offline phase, the certification. While isolated problems on HLT paths are spotted (Type A), the limitation of this approach is the lack of data in problems falling into Type B category (HLT paths seeding the same L1 Trigger path). It still needs to be extended for the full trigger configuration, verified for scaling on higher luminosity runs and actually deployed in production.
 
-More than 25 thousands Run are available, starting from the 2009 collisions to the 2018 cosmics.
+We decide to tackle our problem from the start, getting insights from the trigger shifters and preparing a novel way to extract Trigger Rates data, integrating it with the status over time of the CMS detector.
 
-It's been generated using the CMS Run Registry API, with the DQM Offline Datasets as source.
+\section{New dataset}
+
+Here we present the final result of the data integration process, introducing the dataset entry for LHC 316361, described by hundreds of Trigger Rates (B) and the corresponding detector state over time (A). Using the developed scripts, such dataset can be produced by any of the available run in OMDS and DQM Offline Datasets.
+
+
+\subsection{A: Detector state over time}
+
+This part of the dataset describes the status of the CMS detector and its sub-systems over the progress of the Run, for every Run since the experiment is active.
+
+The time progress of the Run is expressed in LS (Lumi Sections) units. More than 25 thousands Run are available, starting from the 2009 collisions to the 2018 cosmics. It's been generated using the CMS Run Registry API, with the DQM Offline Datasets as source.
 
 \begin{listing}[H]
 \begin{jsoncode}
@@ -68,13 +77,13 @@ It's been generated using the CMS Run Registry API, with the DQM Offline Dataset
 \caption{JSON export of the Run Registry data for Run 316361}
 \end{listing}
 
-\subsection{Dataset B: Trigger Rates}
+\subsection{B: Trigger Rates}
 
-For each Run we then exported the Trigger Rates in the form of "pre-deadtime unprescaled rate / num colliding bx" (Hz) values over LS time series.
+For each Run we then exported the Trigger Rates in the form of "pre-deadtime unprescaled rate / num colliding bx" (Hz) values over LS time series. It is also possible to export the time series over the evolution of the Pile Up.
 
 There are hundreds of Triggers available, we selected the ones normally considered by shifters during Collision runs, which includes 17 HLT and 12 L1 Trigger Paths.
 
-This data is generated querying data from the CMS OMDS database by the Rate Monitoring tools, which operates a series of normalisations to make the plots comparable across runs and configurations. A fitted function is also computed and included in the object describing the rates.
+This data is generated querying data from the CMS OMDS database by the Rate Monitoring tools, which operates a series of normalisations to make the plots comparable across runs and configurations. The scripts can be configured to choose which of these normalisation have to be applied. A fitted function is also computed and included in the object describing the rates.
 
 \begin{listing}[H]
 \begin{jsoncode}
@@ -110,7 +119,3 @@ This data is generated querying data from the CMS OMDS database by the Rate Moni
 \end{jsoncode}
 \caption{JSON export of Trigger Rates vs LS time series for Run 316361}
 \end{listing}
-
-\section{Anomaly Detection Pipeline}
-
-\section{Results}

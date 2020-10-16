@@ -1,1 +1,21 @@
 \chapter{Conclusions}
+
+\paragraph{Software} The results obtained on the renovated software have been appreciated by the community of final users at CMS. Some of the added features are already in production, while other are waiting for further refinements and tuning.
+
+During talks and meetings, the UI was considered an upgrade over the old solution and a number of new feature have been requested by Trigger shifters and coordinators. Some of them are enables by the improvements and architectural changes we introduced, such ass cross comparisons of trigger plots, custom views and layouts, user provided "playlists" of trigger paths.
+
+The possibility to use the tool as a module and the API allowing to use "RateMon as a service" was acknowledged as a very useful possibility.
+
+The OMS integration was not formally completed due to lack of time. The API instance deployed in production can however be plugged into the OMS Aggregation Layer. Additional work on the UI part of OMS must be done to be able to plot the rates without slowing down the browser, possibly preprocessing and prescaling the data.
+
+The new RateMon architecture constitute a documented starting point for future development work on Trigger Rate monitoring, to bring new quality of life improvements for Trigger Shifters.
+
+\paragraph{Anomaly Detection}
+
+The experimental approach to formally define an Anomaly Detection problem, describing the task currently carried out by humans, was crippled by un-obtainable datasets, difficult to use software tools and a inherent difficulty to encode the process, having to ask experts to transcribe their workflows and contextual knowledge.
+
+According to our research, even in scenarios when the datasets are rich, comprising hundreds of features, the result is not necessarily considerable.
+
+After investigating the Trigger System, having interviewed shifters and coordinators, we tackled the first of those issues, directly contributing on the two software providing the data interested in this process and working on producing a new dataset.
+
+We believe that the integrated dataset and the improvements on the two tools will provide a framework and a starting point for novel Anomaly Detection approaches to this challenge.
