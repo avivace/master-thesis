@@ -14,40 +14,54 @@ A centralized monitoring solution exposes real time data, historical information
 	\item Sub-system specific information stored in relational databases.
 	\item DAQ.
 	\item DQM.
-	\item Experimental running conditions indatabase.
+	\item Experimental running conditions in database.
 	\item Hardware.
 	\item Other non event data.
 \end{itemize}
 
-Such system is different from the Data Quality Monitoring services, which look at actual \textit{event} data.
+Such system is different from the Data Quality Monitoring service, which look at actual \textit{event} data.
 
 The WBM software covered this role since the commissioning of the CMS experiment (2008), evolving and integrating new services into a growing framework during LHC Run 1 (2010-2013) and Run 2 (2015-2018).
 
 \paragraph{Upgrading the monitoring framework} 
 
-During the second Long Shutdown of the LHC (2018-2021) the CMS detector will be upgraded and many CMS sub-systems will drastically change. WBM started to show its age and problems: it unexpectedly and heavily grew with new features, arriving at a point where services were using vastly different technologies and it became harder and harder to mantain and expand \cite{CMSWBMreview}. It has been decided to deprecate \cite{upgradewbmoms} WBM in favor of a new software framework, called OMS, decoupling the UI from the Aggregation (Data) Layer.
+During the second Long Shutdown of the LHC (2018-2021) the CMS detector will be upgraded and many CMS sub-systems will drastically change. WBM started to show its age and problems: it unexpectedly and heavily grew with new features, arriving at a point where services were using vastly different technologies and it became harder and harder to maintain and expand \cite{CMSWBMreview}. It has been decided to deprecate \cite{upgradewbmoms} WBM in favour of a new software framework, called OMS, decoupling the UI from the Aggregation (Data) Layer.
 
 \paragraph{Monitoring the Trigger System}
 
 This work concerns one of the sources of monitored data: RateMon, the software providing Trigger Rates data, querying the OMDS database and carrying out \textbf{normalisations} and \textbf{corrections} for a number of different configurations and conditions, allowing consistent comparisons.
 
-The Trigger system is responsible of filtering the large majority of events, spotting the potentially interesting ones, triggering the detector's read-out system to actually record data from the selected collissions. Monitoring the rates of such filters is essential to spot any anomalous behaviour in the underlying (sub)systems, software and/or hardware configurations, network and detector malfunctions.
+The Trigger system is responsible of filtering the large majority of events, spotting the potentially interesting ones, triggering the detector's read-out system to actually record data from the selected collisions. Monitoring the rates of such filters is essential to spot any anomalous behaviour in the underlying (sub)systems, software and/or hardware configurations, network and detector malfunctions.
 
 Trigger Rates are presented in the form of \textit{Rates VS PU} \textbf{plots}. It also responsible of \textbf{alerting} the Trigger Shifters staff when recorded rates deviate too much from the \textbf{predicted} values. Those predictions are based on analytical models fitted on data collected in previous runs.
 
 \section{Scope}
 
-TODO
+Two main tasks have been carried out during this experience:
+
+\paragraph{Development and study of the Rate Monitoring Software} TODO
+
+\paragraph{Experimental Anomaly Detection approaches} TODO
+
 
 \section{Structure}
 
-We will start by introducing CERN, the research institute operating the LHC, outlining why such an experiment is needed and how it enables particle physics research.
+We will start by introducing CERN in Chapter \ref{background}, the research institute operating the LHC, briefly describing its relevance and its achievements in science, software and computing, besides its major commitment in fundamental research.
 
-Since this etc etc EXPERIMENTAL PART
+To justify the motivations and the unique magnitude of the Large Hadron Collider particle accelerator, some basics notions and concepts in Particle Physics are explained and contextualised. In particular, how statistics plays a vital role in this research field, providing some of the main tools to validate theories. A brief description of LHC and the CMS detector follows, explaining some of the jargon used in this domain, essential to understand the context of our work.
+
+Finally, some background on Anomaly Detection and Machine Learning is given, surveying some applications and recent papers.
+
+Chapter \ref{ratemon} gives a detailed report of the context, the research and development work done on the Rate Monitoring tools, outlining the achieved results and how they improve the user experience and enable new features and possibilities.
+
+In chapter \ref{dataset} we introduce some Anomaly Detection applications to similar challenges at CERN, evaluating their results and practical effects to the current workflows. One of the common problems in such attempts is the inherent difficulty to obtain usable datasets encompassing enough features to encode the phenomena and the contextual knowledge and data considered in the current pipelines.
+
+We exploit the acquired knowledge and the new developed features on the Rate Monitoring software to tackle exactly this issue: we integrate Trigger Rates data with another dataset, (hopefully) providing a new starting point to enable future experimentations on this matter.
+
 
 \section{Conventions}
 
-Implementation work on existing software have been done with Merge Requests. Each described task is accompanied with a corresponding sitography entry. FIXME this phrase is horrible
+Implementation work on existing software was done trough Merge Requests to the main codebase. Each described task is accompanied with a corresponding sitography entry.
 
 Code snippets (called "listings", from now on) demonstrating the execution of commands in a shell are noted with the \mcode{\$} character. Preceding the \mcode{\$} character you sometimes notice a string specifying the hostname of the machine (as specified in CERN OpenStack) or the general infrastructure/service in which that commands must run to have effect. E.g. \mcode{lxplus \$ command} shows the command execution on one of the machine from LXPLUS \cite{LXPLUSServiceITDepartment-2020-10-01}, the CERN service offering access to machines running Linux CERN CentOS 7. If there's no specification before \mcode{\$}, the environment is not relevant. With \mcode{P5} we refer to the machines installed in Point 5 of the LHC, in Cessy (France), home to the CMS detector.
 
