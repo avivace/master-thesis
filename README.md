@@ -4,9 +4,11 @@ Source of my master thesis, typeset in LaTeX using the memoir class, for my [MSc
 
 Supervisors: Fabio Antonio Stella (**unimib**), Simone Gennai (**INFN**), Glenn Dirkx (**CERN**).
 
+The last [PDF build is here](https://github.com/avivace/master-thesis/releases/download/final-delivery/thesis.pdf).
+
 ### Building
 
-Run `make` to produce a PDF build. `make publish` updates the build at [avivace.com/thesis.pdf](https://avivace.com/thesis.pdf).
+Run `make` to produce a PDF build. `make publish` updates the build.
 
 Prerequisites: 
 
