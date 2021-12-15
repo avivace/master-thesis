@@ -4,7 +4,7 @@ Source of my master thesis, typeset in LaTeX using the memoir class, for my [MSc
 
 Supervisors: Fabio Antonio Stella (**unimib**), Simone Gennai (**INFN**), Glenn Dirkx (**CERN**).
 
-The last [PDF build is here](https://github.com/avivace/master-thesis/releases/download/final-delivery/thesis.pdf).
+Final version can be found on the [CERN Document Server](https://cds.cern.ch/record/2798105).
 
 ### Building
 
